@@ -64,9 +64,6 @@ struct PORT_C_ALIGN(ES_CPU_DEF_DATA_ALIGNMENT) heapMemBlock {
 static ES_MODULE_INFO_CREATE("HeapMem", "Heap Memory management", "Nenad Radulovic");
 
 /*======================================================  GLOBAL VARIABLES  ==*/
-
-struct esHeapMem esGlobalHeapMem;
-
 /*============================================  LOCAL FUNCTION DEFINITIONS  ==*/
 /*===================================  GLOBAL PRIVATE FUNCTION DEFINITIONS  ==*/
 /*====================================  GLOBAL PUBLIC FUNCTION DEFINITIONS  ==*/

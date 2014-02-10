@@ -76,12 +76,6 @@ struct esPoolMem {
 typedef struct esPoolMem esPoolMem;
 
 /*======================================================  GLOBAL VARIABLES  ==*/
-
-/**@brief       Default pool memory instance
- * @api
- */
-extern struct esPoolMem esGlobalPoolMem;
-
 /*===================================================  FUNCTION PROTOTYPES  ==*/
 
 /**@brief       Initializes pool memory instance

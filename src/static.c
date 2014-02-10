@@ -49,9 +49,6 @@
 static ES_MODULE_INFO_CREATE("StaticMem", "Static Memory management", "Nenad Radulovic");
 
 /*======================================================  GLOBAL VARIABLES  ==*/
-
-esStaticMem esGlobalStaticMem;
-
 /*============================================  LOCAL FUNCTION DEFINITIONS  ==*/
 /*===================================  GLOBAL PRIVATE FUNCTION DEFINITIONS  ==*/
 /*====================================  GLOBAL PUBLIC FUNCTION DEFINITIONS  ==*/

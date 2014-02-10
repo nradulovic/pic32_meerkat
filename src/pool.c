@@ -56,9 +56,6 @@ struct poolMemBlock {
 static ES_MODULE_INFO_CREATE("PoolMem", "Pool Memory management", "Nenad Radulovic");
 
 /*======================================================  GLOBAL VARIABLES  ==*/
-
-struct esPoolMem esGlobalPoolMem;
-
 /*============================================  LOCAL FUNCTION DEFINITIONS  ==*/
 /*===================================  GLOBAL PRIVATE FUNCTION DEFINITIONS  ==*/
 /*====================================  GLOBAL PUBLIC FUNCTION DEFINITIONS  ==*/

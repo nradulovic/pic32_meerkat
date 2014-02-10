@@ -72,12 +72,6 @@ struct esHeapMem {
 typedef struct esHeapMem esHeapMem;
 
 /*======================================================  GLOBAL VARIABLES  ==*/
-
-/**@brief       Default heap memory instance
- * @api
- */
-extern struct esHeapMem esGlobalHeapMem;
-
 /*===================================================  FUNCTION PROTOTYPES  ==*/
 
 /**

@@ -68,12 +68,6 @@ struct esStaticMem {
 typedef struct esStaticMem esStaticMem;
 
 /*======================================================  GLOBAL VARIABLES  ==*/
-
-/**@brief       Default static memory instance
- * @api
- */
-extern struct esStaticMem esGlobalStaticMem;
-
 /*===================================================  FUNCTION PROTOTYPES  ==*/
 
 /**@brief       Initializes static memory instance
