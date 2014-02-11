@@ -46,7 +46,7 @@
 
 /**@brief       Module information
  */
-static ES_MODULE_INFO_CREATE("StaticMem", "Static Memory management", "Nenad Radulovic");
+static const ES_MODULE_INFO_CREATE("StaticMem", "Static Memory management", "Nenad Radulovic");
 
 /*======================================================  GLOBAL VARIABLES  ==*/
 /*============================================  LOCAL FUNCTION DEFINITIONS  ==*/

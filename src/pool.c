@@ -53,7 +53,7 @@ struct poolMemBlock {
 
 /**@brief       Module information
  */
-static ES_MODULE_INFO_CREATE("PoolMem", "Pool Memory management", "Nenad Radulovic");
+static const ES_MODULE_INFO_CREATE("PoolMem", "Pool Memory management", "Nenad Radulovic");
 
 /*======================================================  GLOBAL VARIABLES  ==*/
 /*============================================  LOCAL FUNCTION DEFINITIONS  ==*/
@@ -72,18 +72,10 @@ esError esPoolMemInit(
 
     blockSize = ES_ALIGN_UP(blockSize, sizeof(esAtomic));
 
-    ES_API_REQUIRE(
-        ES_API_POINTER,
-        poolMem != NULL);
-    ES_API_REQUIRE(
-        ES_API_POINTER,
-        array != NULL);
-    ES_API_REQUIRE(
-        ES_API_RANGE,
-        blockSize != 0u);
-    ES_API_REQUIRE(
-        ES_API_RANGE,
-        blockSize <= arraySize);
+    ES_API_REQUIRE(ES_API_POINTER, poolMem != NULL);
+    ES_API_REQUIRE(ES_API_POINTER, array != NULL);
+    ES_API_REQUIRE(ES_API_RANGE,   blockSize != 0u);
+    ES_API_REQUIRE(ES_API_RANGE,   blockSize <= arraySize);
 
     nBlocks = arraySize / blockSize;
     poolMem->size = arraySize;

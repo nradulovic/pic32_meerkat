@@ -89,22 +89,43 @@ esError esMemInit(
 esError esMemTerm(
     struct esMem *      object);
 
+esError esMemAllocI(
+    struct esMem *      object,
+    size_t              size,
+    void **             mem);
+
 esError esMemAlloc(
     struct esMem *      object,
     size_t              size,
     void **             mem);
 
+esError esMemFreeI(
+    struct esMem *      object,
+    void *              mem);
+
 esError esMemFree(
     struct esMem *      object,
     void *              mem);
+
+esError esMemGetSizeI(
+    struct esMem *      object,
+    size_t *            size);
 
 esError esMemGetSize(
     struct esMem *      object,
     size_t *            size);
 
+esError esMemGetFreeI(
+    struct esMem *      object,
+    size_t *            free);
+
 esError esMemGetFree(
     struct esMem *      object,
     size_t *            free);
+
+esError esMemGetBlockSizeI(
+    struct esMem *      object,
+    size_t *            blockSize);
 
 esError esMemGetBlockSize(
     struct esMem *      object,

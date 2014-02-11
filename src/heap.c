@@ -61,7 +61,7 @@ struct PORT_C_ALIGN(ES_CPU_DEF_DATA_ALIGNMENT) heapMemBlock {
 
 /**@brief       Module information
  */
-static ES_MODULE_INFO_CREATE("HeapMem", "Heap Memory management", "Nenad Radulovic");
+static const ES_MODULE_INFO_CREATE("HeapMem", "Heap Memory management", "Nenad Radulovic");
 
 /*======================================================  GLOBAL VARIABLES  ==*/
 /*============================================  LOCAL FUNCTION DEFINITIONS  ==*/
@@ -245,7 +245,7 @@ esError esHeapMemFree(
     return (error);
 }
 
-esError esHeapGetSize(
+esError esHeapGetSizeI(
     struct esHeapMem *  heapMem,
     size_t *            size) {
 
@@ -257,6 +257,14 @@ esError esHeapGetSize(
 
     return (ES_ERROR_NONE);
 }
+
+esError esHeapGetSize(
+    struct esHeapMem *  heapMem,
+    size_t *            size) {
+
+    return (esHeapGetSizeI(heapMem, size));
+}
+
 #if 0
 void esDMemUpdateStatusI(
     esHeapMem *    handle,

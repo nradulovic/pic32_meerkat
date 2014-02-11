@@ -75,16 +75,16 @@ static esError wrapStaticInit(
 
 /*=======================================================  LOCAL VARIABLES  ==*/
 
-static ES_MODULE_INFO_CREATE("mem class", "Memory classes", "Nenad Radulovic");
+static const ES_MODULE_INFO_CREATE("mem class", "Memory classes", "Nenad Radulovic");
 
 /*======================================================  GLOBAL VARIABLES  ==*/
 
 const PORT_C_ROM struct esMemClass esGlobalHeapMemClass = {
     wrapHeapInit,
     (esError (*)(void *))esHeapMemTerm,
-    (esError (*)(void *, size_t, void **))esHeapMemAlloc,
-    (esError (*)(void *, void *))esHeapMemFree,
-    (esError (*)(void *, size_t *))esHeapGetSize,
+    (esError (*)(void *, size_t, void **))esHeapMemAllocI,
+    (esError (*)(void *, void *))esHeapMemFreeI,
+    (esError (*)(void *, size_t *))esHeapGetSizeI,
     NULL,
     NULL
 #if (CONFIG_API_VALIDATION) || defined(__DOXYGEN__)
@@ -95,8 +95,8 @@ const PORT_C_ROM struct esMemClass esGlobalHeapMemClass = {
 const PORT_C_ROM struct esMemClass esGlobalPoolMemClass = {
     wrapPoolInit,
     NULL,
-    (esError (*)(void *, size_t, void **))esPoolMemAlloc,
-    (esError (*)(void *, void *))esPoolMemFree,
+    (esError (*)(void *, size_t, void **))esPoolMemAllocI,
+    (esError (*)(void *, void *))esPoolMemFreeI,
     NULL,
     NULL,
     NULL
@@ -108,7 +108,7 @@ const PORT_C_ROM struct esMemClass esGlobalPoolMemClass = {
 const PORT_C_ROM struct esMemClass esGlobalStaticMemClass = {
     wrapStaticInit,
     NULL,
-    (esError (*)(void *, size_t, void **))esStaticMemAlloc,
+    (esError (*)(void *, size_t, void **))esStaticMemAllocI,
     NULL,
     NULL,
     NULL,
@@ -208,8 +208,8 @@ esError esMemTerm(
     return (error);
 }
 
-esError esMemAlloc(
-    struct esMem * object,
+esError esMemAllocI(
+    struct esMem *      object,
     size_t              size,
     void **             mem) {
 
@@ -223,8 +223,23 @@ esError esMemAlloc(
     return (error);
 }
 
-esError esMemFree(
-    struct esMem * object,
+esError esMemAlloc(
+    struct esMem *      object,
+    size_t              size,
+    void **             mem) {
+
+    esError             error;
+    esLockCtx           lockCtx;
+
+    ES_CRITICAL_LOCK_ENTER(&lockCtx);
+    error = esMemAllocI(object, size, mem);
+    ES_CRITICAL_LOCK_EXIT(lockCtx);
+
+    return (error);
+}
+
+esError esMemFreeI(
+    struct esMem *      object,
     void *              mem) {
 
     esError             error;
@@ -241,8 +256,22 @@ esError esMemFree(
     return (error);
 }
 
-esError esMemGetSize(
-    struct esMem * object,
+esError esMemFree(
+    struct esMem *      object,
+    void *              mem) {
+
+    esError             error;
+    esLockCtx           lockCtx;
+
+    ES_CRITICAL_LOCK_ENTER(&lockCtx);
+    error = esMemFreeI(object, mem);
+    ES_CRITICAL_LOCK_EXIT(lockCtx);
+
+    return (error);
+}
+
+esError esMemGetSizeI(
+    struct esMem *      object,
     size_t *            size) {
 
     esError             error;
@@ -259,7 +288,21 @@ esError esMemGetSize(
     return (error);
 }
 
-esError esMemGetFree(
+esError esMemGetSize(
+    struct esMem *      object,
+    size_t *            size) {
+
+    esError             error;
+    esLockCtx           lockCtx;
+
+    ES_CRITICAL_LOCK_ENTER(&lockCtx);
+    error = esMemGetSizeI(object, size);
+    ES_CRITICAL_LOCK_EXIT(lockCtx);
+
+    return (error);
+}
+
+esError esMemGetFreeI(
     struct esMem * object,
     size_t *            free) {
 
@@ -278,8 +321,23 @@ esError esMemGetFree(
 
 }
 
-esError esMemGetBlockSize(
-    struct esMem * object,
+esError esMemGetFree(
+    struct esMem *      object,
+    size_t *            free) {
+
+    esError             error;
+    esLockCtx           lockCtx;
+
+    ES_CRITICAL_LOCK_ENTER(&lockCtx);
+    error = esMemGetFreeI(object, free);
+    ES_CRITICAL_LOCK_EXIT(lockCtx);
+
+    return (error);
+
+}
+
+esError esMemGetBlockSizeI(
+    struct esMem *      object,
     size_t *            blockSize) {
 
     esError             error;
@@ -296,6 +354,19 @@ esError esMemGetBlockSize(
     return (error);
 }
 
+esError esMemGetBlockSize(
+    struct esMem *      object,
+    size_t *            blockSize) {
+
+    esError             error;
+    esLockCtx           lockCtx;
+
+    ES_CRITICAL_LOCK_ENTER(&lockCtx);
+    error = esMemGetBlockSizeI(object, blockSize);
+    ES_CRITICAL_LOCK_EXIT(lockCtx);
+
+    return (error);
+}
 
 /*================================*//** @cond *//*==  CONFIGURATION ERRORS  ==*/
 /** @endcond *//** @} *//******************************************************

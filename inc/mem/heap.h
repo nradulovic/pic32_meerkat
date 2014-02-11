@@ -171,6 +171,10 @@ esError esHeapMemFree(
     struct esHeapMem *  heapMem,
     void *              mem);
 
+esError esHeapGetSizeI(
+    struct esHeapMem *  heapMem,
+    size_t *            size);
+
 esError esHeapGetSize(
     struct esHeapMem *  heapMem,
     size_t *            size);
