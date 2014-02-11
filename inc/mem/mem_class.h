@@ -69,7 +69,7 @@ struct esMem {
 #endif
 };
 
-typedef struct esMem esMemObject;
+typedef struct esMem esMem;
 
 /*======================================================  GLOBAL VARIABLES  ==*/
 
