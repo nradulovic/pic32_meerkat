@@ -1,0 +1,406 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<app name="project_name">
+    <module name="tcpip" LogicalPath="framework/tcpip">
+        <component name="TCPIP">
+            <File name="tcpip_config.h" Path="framework\tcpip\config">
+                <macro name="TCPIP_STACK_USE_IPV4" value=" " status="disable"/>
+                <macro name="TCPIP_STACK_USE_ICMP_SERVER" value=" " status="disable"/>
+                <macro name="TCPIP_STACK_USE_HTTP_SERVER" value=" " status="disable"/>
+                <macro name="TCPIP_STACK_USE_SSL_SERVER" value=" " status="disable"/>
+                <macro name="TCPIP_STACK_USE_SSL_CLIENT" value=" " status="disable"/>
+                <macro name="TCPIP_STACK_USE_DHCP_CLIENT" value=" " status="disable"/>
+                <macro name="TCPIP_STACK_USE_SMTP_CLIENT" value=" " status="disable"/>
+                <macro name="TCPIP_STACK_USE_TELNET_SERVER" value=" " status="disable"/>
+                <macro name="TCPIP_STACK_USE_ANNOUNCE" value=" " status="disable"/>
+                <macro name="TCPIP_STACK_USE_DNS" value=" " status="disable"/>
+                <macro name="TCPIP_STACK_USE_DNS_SERVER" value=" " status="disable"/>
+                <macro name="TCPIP_STACK_USE_NBNS" value=" " status="disable"/>
+                <macro name="TCPIP_STACK_USE_REBOOT_SERVER" value=" " status="disable"/>
+                <macro name="TCPIP_STACK_USE_SNTP_CLIENT" value=" " status="disable"/>
+                <macro name="TCPIP_STACK_USE_DYNAMICDNS_CLIENT" value=" " status="disable"/>
+                <macro name="TCPIP_STACK_USE_BERKELEY_API" value=" " status="disable"/>
+                <macro name="TCPIP_STACK_USE_IPV6" value=" " status="disable"/>
+                <macro name="TCPIP_STACK_USE_TCP" value=" " status="disable"/>
+                <macro name="TCPIP_STACK_USE_UDP" value=" " status="disable"/>
+                <macro name="TCPIP_STACK_USE_ZEROCONF_LINK_LOCAL" value=" " status="disable"/>
+                <macro name="TCPIP_STACK_USE_ZEROCONF_MDNS_SD" value=" " status="disable"/>
+                <macro name="TCPIP_STACK_COMMAND_ENABLE" value=" " status="disable"/>
+                <macro name="TCPIP_STACK_USE_IPERF" value=" " status="disable"/>
+                <macro name="TCPIP_STACK_USE_SNMP_SERVER" value=" " status="disable"/>
+                <macro name="TCPIP_STACK_USE_SNMPV3_SERVER" value=" " status="disable"/>
+                <macro name="TCPIP_STACK_USE_FTP_SERVER" value=" " status="disable"/>
+                <macro name="TCPIP_STACK_USE_DHCP_SERVER" value=" " status="disable"/>
+                <macro name="TCPIP_STACK_DRAM_SIZE" value="(39250)" status="enable"/>
+                <macro name="TCPIP_STACK_DRAM_RUN_LIMIT" value="(2048)" status="enable"/>
+                <macro name="TCPIP_STACK_DRAM_DEBUG_ENABLE" value=" " status="enable"/>
+                <macro name="TCPIP_STACK_DRAM_TRACE_ENABLE" value=" " status="disable"/>
+                <macro name="TCPIP_STACK_DRAM_TRACE_SLOTS" value=" " status="enable"/>
+                <macro name="TCPIP_STACK_USE_EVENT_NOTIFICATION" value=" " status="disable"/>
+                <macro name="TCPIP_EVENT_IPL" value="5" status="enable"/>
+                <macro name="TCPIP_EVENT_SIPL" value="1" status="enable"/>
+                <macro name="TCPIP_DEFAULT_CHECK_BOX" value=" " status="disable"/>
+            </File>
+        </component>
+        <component name="ARP">
+            <File name="arp_config.h" Path="framework\tcpip\config">
+                <macro name="ARP_CACHE_ENTRIES_DEFAULT" value="5" status="enable"/>
+                <macro name="ARP_CACHE_ENTRIES_PIC32INT" value="5" status="enable"/>
+                <macro name="ARP_CACHE_ENTRIES_MRF24W" value="5" status="enable"/>
+                <macro name="ARP_CACHE_ENTRIES_ENCJ600 " value="5" status="enable"/>
+                <macro name="ARP_CACHE_ENTRIES_ENCJ60" value="5" status="enable"/>
+                <macro name="ARP_CACHE_ENTRIES_97J60" value="5" status="enable"/>
+                <macro name="ARP_CACHE_SOLVED_ENTRY_TMO" value="(20 * 60)" status="enable"/>
+                <macro name="ARP_CACHE_PENDING_ENTRY_TMO" value="(1 * 60)" status="enable"/>
+                <macro name="ARP_CACHE_PENDING_RETRY_TMO" value="(2)" status="enable"/>
+                <macro name="ARP_CACHE_PERMANENT_QUOTA" value="50" status="enable"/>
+                <macro name="ARP_CACHE_PURGE_THRESHOLD" value="75" status="enable"/>
+                <macro name="ARP_CACHE_PURGE_QUANTA" value="3" status="enable"/>
+                <macro name="ARP_TASK_PROCESS_RATE" value="(2)" status="enable"/>
+            </File>
+        </component>
+        <component name="Berkeley">
+            <File name="berekely_api_config.h" Path="framework\tcpip\config">
+                <macro name="MAX_BSD_SERVER_CONNECTIONS" value="(2)" status="enable"/>
+                <macro name="MAX_BSD_CLIENT_CONNECTIONS" value="(2)" status="enable"/>
+            </File>
+        </component>
+        <component name="DNS Client">
+            <File name="dns_config.h" Path="framework\tcpip\config">
+                <macro name="DNS_CLIENT_PORT" value="53" status="enable"/>
+                <macro name="DNS_CLIENT_ARP_TMO" value="(1)" status="enable"/>
+                <macro name="DNS_CLIENT_OPEN_TMO" value="(1)" status="enable"/>
+                <macro name="DNS_CLIENT_SERVER_TMO " value="(1)" status="enable"/>
+                <macro name="DNS_CLIENT_TASK_PROCESS_RATE" value="(500)" status="enable"/>
+                <macro name="DNS_CLIENT_VERSION_NO" value="1" status="enable"/>
+            </File>
+        </component>
+        <component name="Dynamic DNS">
+            <File name="ddns_config.h" Path="framework\tcpip\config">
+                <macro name="DDNS_CHECKIP_SERVER" value="(const uint8_t*)&quot;checkip.dyndns.com&quot;" status="enable"/>
+                <macro name="DDNS_DEFAULT_PORT" value="(80u)" status="enable"/>
+            </File>
+        </component>
+        <component name="DHCP Client">
+            <File name="dhcp_config.h" Path="framework\tcpip\config">
+                <macro name="DHCP_TIMEOUT" value="(2ul)" status="enable"/>
+                <macro name="DHCP_CLIENT_PORT" value="(68u)" status="enable"/>
+                <macro name="DHCP_SERVER_PORT" value="(67u)" status="enable"/>
+                <macro name="DHCP_TASK_TICK_RATE" value="(5)" status="enable"/>
+                <macro name="DHCP_CLIENT_ENABLED" value="1" status="enable"/>
+            </File>
+        </component>
+        <component name="DHCP Server">
+            <File name="dhcps_config.h" Path="framework\tcpip\config">
+                <macro name="DHCPS_TASK_PROCESS_RATE" value="(1)" status="enable"/>
+                <macro name="DHCPS_LEASE_ENTRIES_DEFAULT" value="15" status="enable"/>
+                <macro name="DHCPS_LEASE_SOLVED_ENTRY_TMO" value="(20 * 60)" status="enable"/>
+                <macro name="DHCPS_LEASE_REMOVED_BEFORE_ACK " value="(5)" status="enable"/>
+                <macro name="DHCPS_LEASE_DURATION" value="DHCPS_LEASE_SOLVED_ENTRY_TMO" status="enable"/>
+                <macro name="DHCPS_IP_ADDRESS_RANGE_START" value="&quot;192.168.100.100&quot;" status="enable"/>
+                <macro name="DHCP_SERVER_IP_ADDRESS" value="&quot;192.168.100.1&quot;" status="enable"/>
+                <macro name="DHCP_SERVER_NETMASK_ADDRESS" value="&quot;255.255.255.0&quot;" status="enable"/>
+                <macro name="DHCP_SERVER_GATEWAY_ADDRESS" value="&quot;192.168.100.1&quot;" status="enable"/>
+                <macro name="DHCP_SERVER_PRIMARY_DNS_ADDRESS" value="&quot;192.168.100.1&quot;" status="enable"/>
+                <macro name="DHCP_SERVER_SECONDARY_DNS_ADDRESS" value="&quot;192.168.100.1&quot;" status="enable"/>
+            </File>
+        </component>
+        <component name="DNS Server">
+            <File name="dnss_config.h" Path="framework\tcpip\config">
+                <macro name="DNS_PORT" value="53u" status="enable"/>
+            </File>
+        </component>
+        <component name="FTP">
+            <File name="ftp_config.h" Path="framework\tcpip\config">
+                <macro name="FTP_USER_NAME_LEN" value="(10)" status="enable"/>
+                <macro name="FTP_COMMAND_PORT" value="(21u)" status="enable"/>
+                <macro name="FTP_DATA_PORT" value="(20u)" status="enable"/>
+                <macro name="FTP_TIMEOUT " value="(180ul)" status="enable"/>
+                <macro name="FTP_MAX_ARGS" value="(7u)" status="enable"/>
+                <macro name="FTP_MAX_CMD_STRING_LEN" value="(31u)" status="enable"/>
+                <macro name="FTP_PUT_ENABLED" value=" " status="enable"/>
+                <macro name="FTP_MAX_CONNECTIONS" value="(1)" status="enable"/>
+            </File>
+        </component>
+        <component name="HTTP">
+            <File name="http_config.h" Path="framework\tcpip\config">
+                <macro name="HTTP_MAX_HEADER_LEN" value="(15u)" status="enable"/>
+                <macro name="HTTP_CACHE_LEN" value="(600)" status="enable"/>
+                <macro name="HTTP_TIMEOUT" value="(45u)" status="enable"/>
+                <macro name="HTTP_PORT " value="(80u)" status="enable"/>
+                <macro name="HTTP_MAX_CONNECTIONS" value="(4)" status="enable"/>
+                <macro name="HTTP_DEFAULT_FILE" value="&quot;index.htm&quot;" status="enable"/>
+                <macro name="HTTP_DEFAULT_LEN" value="(10u)" status="enable"/>
+                <macro name="HTTP_FILE_UPLOAD" value="mpfsupload" status="enable"/>
+                <macro name="HTTP_FILE_UPLOAD_REQUIRES_AUTH" value=" " status="enable"/>
+                <macro name="HTTP_USE_POST" value=" " status="enable"/>
+                <macro name="HTTP_USE_COOKIES" value=" " status="enable"/>
+                <macro name="HTTP_USE_AUTHENTICATION" value=" " status="enable"/>
+                <macro name="HTTP_NO_AUTH_WITHOUT_SSL " value=" " status="enable"/>
+                <macro name="HTTP_SSL_ONLY_CHAR" value="(0xFF)" status="enable"/>
+                <macro name="HTTPS_PORT" value="(443u)" status="enable"/>
+                <macro name="HTTP_MAX_DATA_LEN" value="(100u)" status="enable"/>
+                <macro name="HTTP_MIN_CALLBACK_FREE" value="(16u)" status="enable"/>
+                <macro name="TCPIP_STACK_USE_BASE64_DECODE" value=" " status="enable"/>
+                <macro name="HTTP_SKT_TX_BUFF_SIZE " value="0" status="enable"/>
+                <macro name="HTTP_SKT_RX_BUFF_SIZE" value="0" status="enable"/>
+                <macro name="HTTP_CONFIG_FLAGS" value="0" status="enable"/>
+            </File>
+        </component>
+        <component name="ICMP Server">
+            <File name="icmp_config.h" Path="framework\tcpip\config">
+                <macro name="ICMP_TIMEOUT" value="(4ul*SYS_TICK_TicksPerSecondGet())" status="enable"/>
+            </File>
+        </component>
+        <component name="ICMPV6">
+            <File name="icmpv6_config.h" Path="framework\tcpip\config">
+                <macro name="ICMPV6_TIMEOUT" value="(4ul*SYS_TICK_ResolutionGet())" status="enable"/>
+                <macro name="ICMP_COUNT" value="5" status="disable"/>
+            </File>
+        </component>
+        <component name="IPV4">
+            <File name="ip_config.h" Path="framework\tcpip\config">
+                <macro name="IP_DEFAULT_TX_BUFFER_SIZE" value="(1500u)" status="disable"/>
+                <macro name="IP_DEFAULT_ALLOCATION_BLOCK_SIZE" value="(64u)" status="enable"/>
+                <macro name="IPV4_QUEUED_PACKET_LIMIT" value="4u" status="enable"/>
+                <macro name="IPV4_QUEUED_PACKET_TIMEOUT" value="10u" status="enable"/>
+                <macro name="IPV4_TASK_PROCESS_RATE" value="1000" status="enable"/>
+            </File>
+        </component>
+        <component name="IPV6">
+            <File name="ip_config.h" Path="framework\tcpip\config">
+                <macro name="IPV6_MINIMUM_LINK_MTU" value="1280u" status="enable"/>
+                <macro name="IPV6_DEFAULT_LINK_MTU " value="1500u" status="enable"/>
+                <macro name="IPV6_DEFAULT_CUR_HOP_LIMIT" value="64u" status="enable"/>
+                <macro name="IPV6_DEFAULT_BASE_REACHABLE_TIME" value="30u" status="enable"/>
+                <macro name="IPV6_DEFAULT_RETRANSMIT_TIME" value="1000u" status="enable"/>
+                <macro name="IPV6_QUEUE_NEIGHBOR_PACKET_LIMIT" value="1" status="enable"/>
+                <macro name="IPV6_NEIGHBOR_CACHE_ENTRY_STALE_TIMEOUT" value="600ul" status="enable"/>
+                <macro name="IPV6_QUEUE_MCAST_PACKET_LIMIT" value="4" status="enable"/>
+                <macro name="IPV6_QUEUED_MCAST_PACKET_TIMEOUT" value="10u" status="enable"/>
+                <macro name="IPV6_TASK_PROCESS_RATE" value="1000" status="enable"/>
+                <macro name="IPV6_INIT_TASK_PROCESS_RATE" value="(32)" status="enable"/>
+                <macro name="IPV6_ULA_NTP_ACCESS_TMO" value="(12000)" status="enable"/>
+                <macro name="IPV6_ULA_NTP_VALID_WINDOW " value="(1000)" status="enable"/>
+            </File>
+        </component>
+        <component name="Iperf">
+            <File name="iperf_config.h" Path="framework\tcpip\config">
+                <macro name="IPERF_SERVER_PORT" value="(5001)" status="enable"/>
+                <macro name="IPERF_TCP_LOCAL_PORT_START_NUMBER" value="(1024u)" status="enable"/>
+                <macro name="IPERF_TX_BUFFER_SIZE" value="4096" status="enable"/>
+                <macro name="IPERF_RX_BUFFER_SIZE " value="4096" status="enable"/>
+                <macro name="IPERF_TX_WAIT_TMO" value="100" status="enable"/>
+            </File>
+        </component>
+        <component name="NBNS">
+            <File name="nbns_config.h" Path="framework\tcpip\config">
+                <macro name="NBNS_PORT" value="(137u)" status="enable"/>
+            </File>
+        </component>
+        <component name="NDP">
+            <File name="ndp_config.h" Path="framework\tcpip\config">
+                <macro name="MAX_RTR_SOLICITATION_DELAY" value="1u" status="enable"/>
+                <macro name="RTR_SOLICITATION_INTERVAL" value="4u" status="enable"/>
+                <macro name="MAX_RTR_SOLICITATIONS" value="3u" status="enable"/>
+                <macro name="MAX_MULTICAST_SOLICIT " value="3u" status="enable"/>
+                <macro name="MAX_UNICAST_SOLICIT" value="3u" status="enable"/>
+                <macro name="MAX_ANYCAST_DELAY_TIME" value="1u" status="enable"/>
+                <macro name="MAX_NEIGHBOR_ADVERTISEMENT" value="3u" status="enable"/>
+                <macro name="REACHABLE_TIME" value="30u" status="enable"/>
+                <macro name="RETRANS_TIMER " value="1u" status="enable"/>
+                <macro name="DELAY_FIRST_PROBE_TIME" value="5u" status="enable"/>
+                <macro name="NDP_VALID_LIFETIME_TWO_HOURS" value="(60 * 60 * 2)" status="enable"/>
+                <macro name="IPV6_MTU_INCREASE_TIMEOUT" value="600ul" status="enable"/>
+                <macro name="NDP_TASK_TIMER_RATE" value="(32)" status="enable"/>
+            </File>
+        </component>
+        <component name="SMTP Client">
+            <File name="smtp_config.h" Path="framework\tcpip\config">
+                <macro name="SMTP_PORT" value="25" status="enable"/>
+                <macro name="SMTP_SERVER_REPLY_TIMEOUT" value="(8ul)" status="enable"/>
+                <macro name="MAX_SMTP_CONNECTIONS" value="(1)" status="enable"/>
+            </File>
+        </component>
+        <component name="SNMP">
+            <File name="snmp_config.h" Path="framework\tcpip\config">
+                <macro name="SNMP_TRAP_COMMUNITY_MAX_LEN_MEM_USE" value="(8)" status="enable"/>
+                <macro name="TRAP_TABLE_SIZE" value="(2)" status="enable"/>
+                <macro name="TRAP_COMMUNITY_MAX_LEN" value="(SNMP_TRAP_COMMUNITY_MAX_LEN_MEM_USE+1)" status="enable"/>
+                <macro name="MY_DEFAULT_SNMP_IF " value="PIC32INT" status="enable"/>
+                <macro name="SNMP_BIB_FILE_NAME" value="snmp.bib" status="enable"/>
+                <macro name="OID_MAX_LEN" value="(18)" status="enable"/>
+                <macro name="SNMP_MAX_MSG_SIZE" value="484" status="enable"/>
+                <macro name="SNMP_MAX_NON_REC_ID_OID" value="3" status="enable"/>
+                <macro name="SNMP_COMMUNITY_MAX_LEN" value="8u" status="enable"/>
+                <macro name="SNMP_MAX_COMMUNITY_SUPPORT" value="3u" status="enable"/>
+                <macro name="NOTIFY_COMMUNITY_LEN" value="(SNMP_COMMUNITY_MAX_LEN)" status="enable"/>
+                <macro name="SNMP_READ_COMMUNITIES" value="{&quot;public&quot;, &quot;read&quot;, &quot;&quot;}" status="enable"/>
+                <macro name="SNMP_WRITE_COMMUNITIES" value="{&quot;private&quot;,&quot;write&quot;,&quot;public&quot;}" status="enable"/>
+                <macro name="END_OF_SNMP_READ_COMMUNITIES" value=" " status="enable"/>
+                <macro name="END_OF_SNMP_WRITE_COMMUNITIES" value=" " status="enable"/>
+                <macro name="SNMP_TRAP_DISABLED" value=" " status="disable"/>
+                <macro name="SNMP_STACK_USE_V2_TRAP" value=" " status="disable"/>
+                <macro name="SNMP_V1_V2_TRAP_WITH_SNMPV3" value=" " status="disable"/>
+            </File>
+        </component>
+        <component name="SNMPV3">
+            <File name="SNMPV3_config.h" Path="framework\tcpip\config">
+                <macro name="SNMPV3_USM_MAX_USER" value="3" status="enable"/>
+                <macro name="USER_SECURITY_NAME_LEN" value="(16)" status="enable"/>
+                <macro name="SNMPV3_USER_SECURITY_NAME_LEN_MEM_USE" value="(USER_SECURITY_NAME_LEN+1)" status="enable"/>
+                <macro name="AUTH_LOCALIZED_PASSWORD_KEY_LEN " value="20" status="enable"/>
+                <macro name="SNMPV3_AUTH_LOCALIZED_PASSWORD_KEY_LEN_MEM_USE" value="(AUTH_LOCALIZED_PASSWORD_KEY_LEN+1)" status="enable"/>
+                <macro name="PRIV_LOCALIZED_PASSWORD_KEY_LEN" value="20" status="enable"/>
+                <macro name="SNMPV3_PRIV_LOCALIZED_PASSWORD_KEY_LEN_MEM_USE" value="(PRIV_LOCALIZED_PASSWORD_KEY_LEN+1)" status="enable"/>
+                <macro name="SNMPV3_USER_SECURITY_NAME_DB" value="{&quot;microchip&quot;,&quot;SnmpAdmin&quot;,&quot;root&quot;}" status="enable"/>
+                <macro name="SNMPV3_USER_AUTH_TYPE_DB " value="{SNMPV3_HAMC_MD5,SNMPV3_HMAC_SHA1,SNMPV3_NO_HMAC_AUTH}" status="enable"/>
+                <macro name="SNMPV3_USER_AUTH_PASSWD_DB" value="{&quot;auth12345&quot;,&quot;ChandlerUS&quot;,&quot;}" status="enable"/>
+                <macro name="SNMPV3_USER_PRIV_TYPE_DB" value="{SNMPV3_AES_PRIV,SNMPV3_NO_PRIV,SNMPV3_NO_PRIV}" status="enable"/>
+                <macro name="SNMPV3_USER_PRIV_PASSWD_DB " value="{&quot;priv12345&quot;,&quot;,&quot;}" status="enable"/>
+                <macro name="SNMPV3_TRAP_USER_SECURITY_NAME_DB" value="{&quot;microchip&quot;,&quot;SnmpAdmin&quot;,&quot;root&quot;}" status="enable"/>
+                <macro name="SNMPV3_TRAP_MSG_PROCESS_MODEL_DB" value="{SNMPV3_MSG_PROCESSING_MODEL,SNMPV3_MSG_PROCESSING_MODEL,SNMPV3_MSG_PROCESSING_MODEL}" status="enable"/>
+                <macro name="SNMPV3_TRAP_SECURITY_MODEL_TYPE_DB " value="{SNMPV3_USM_SECURITY_MODEL,SNMPV3_USM_SECURITY_MODEL,SNMPV3_USM_SECURITY_MODEL}" status="enable"/>
+                <macro name="SNMPV3_TRAP_SECURITY_LEVEL_DB" value="{AUTH_PRIV,AUTH_NO_PRIV,NO_AUTH_NO_PRIV}" status="enable"/>
+            </File>
+        </component>
+        <component name="Telnet Server">
+            <File name="telnet_config.h" Path="framework\tcpip\config">
+                <macro name="MAX_TELNET_CONNECTIONS" value="(2u)" status="enable"/>
+                <macro name="TELNET_PORT" value="23" status="enable"/>
+                <macro name="TELNETS_PORT" value="992" status="enable"/>
+                <macro name="TELNET_USERNAME" value="&quot;admin&quot;" status="enable"/>
+                <macro name="TELNET_PASSWORD" value="&quot;microchip&quot;" status="enable"/>
+            </File>
+        </component>
+        <component name="SNTP Client">
+            <File name="sntp_config.h" Path="framework\tcpip\config">
+                <macro name="NTP_DEFAULT_IF" value="&quot;PIC32INT&quot;" status="enable"/>
+                <macro name="NTP_SERVER_PORT" value="(123ul)" status="enable"/>
+                <macro name="NTP_VERSION" value="(4)" status="enable"/>
+                <macro name="NTP_DEFAULT_CONNECTION_TYPE " value="(IP_ADDRESS_TYPE_IPV4)" status="enable"/>
+                <macro name="NTP_EPOCH" value="(86400ul * (365ul * 70ul + 17ul))" status="enable"/>
+                <macro name="NTP_REPLY_TIMEOUT" value="(6ul)" status="enable"/>
+                <macro name="NTP_MAX_RETRIES" value="3" status="enable"/>
+                <macro name="NTP_MAX_STRATUM" value="(15)" status="enable"/>
+                <macro name="NTP_TIME_STAMP_TMO " value="(11 * 60)" status="enable"/>
+                <macro name="NTP_SERVER" value="pool.ntp.org" status="enable"/>
+                <macro name="NTP_SERVER" value="europe.pool.ntp.org" status="disable"/>
+                <macro name="NTP_SERVER" value="asia.pool.ntp.org" status="disable"/>
+                <macro name="NTP_SERVER" value="oceania.pool.ntp.org" status="disable"/>
+                <macro name="NTP_SERVER" value="north-america.pool.ntp.org" status="disable"/>
+                <macro name="NTP_SERVER" value="south-america.pool.ntp.org" status="disable"/>
+                <macro name="NTP_SERVER" value="africa.pool.ntp.org" status="disable"/>
+                <macro name="NTP_QUERY_INTERVAL" value="(10ul*60ul)" status="disable"/>
+                <macro name="NTP_FAST_QUERY_INTERVAL" value="(14ul)" status="disable"/>
+            </File>
+        </component>
+        <component name="SSL">
+            <File name="ssl_config.h" Path="framework\tcpip\config">
+                <macro name="SSL_VERSION" value="(0x0300u)" status="enable"/>
+                <macro name="SSL_VERSION_HI" value="(0x03u)" status="enable"/>
+                <macro name="SSL_VERSION_LO" value="(0x00u)" status="enable"/>
+                <macro name="SSL_MIN_SESSION_LIFETIME " value="(1ul)" status="enable"/>
+                <macro name="SSL_RSA_LIFETIME_EXTENSION" value="(8ul)" status="enable"/>
+                <macro name="SSL_MAX_CONNECTIONS" value="(2)" status="enable"/>
+                <macro name="SSL_MAX_SESSIONS" value="(2)" status="enable"/>
+                <macro name="SSL_MULTIPLE_INTERFACES" value="1" status="enable"/>
+                <macro name="SSL_MAX_BUFFERS " value="(4)" status="enable"/>
+                <macro name="SSL_MAX_HASHES" value="(5)" status="enable"/>
+                <macro name="SSL_RSA_KEY_SIZE" value="(1024ul)" status="disable"/>
+                <macro name="SSL_RSA_CLIENT_SIZE" value="(1024ul)" status="disable"/>
+            </File>
+        </component>
+        <component name="TCP">
+            <File name="tcp_config.h" Path="framework\tcpip\config">
+                <macro name="LOCAL_TCP_PORT_START_NUMBER" value="(49152)" status="enable"/>
+                <macro name="LOCAL_TCP_PORT_END_NUMBER" value="(65535)" status="enable"/>
+                <macro name="TCP_MAX_SEG_SIZE_TX" value="(1460u)" status="enable"/>
+                <macro name="TCP_MAX_SEG_SIZE_RX_LOCAL" value="(1460)" status="enable"/>
+                <macro name="TCP_MAX_SEG_SIZE_RX_NON_LOCAL" value="(536)" status="enable"/>
+                <macro name="TCP_SOCKET_DEFAULT_TX_SIZE" value="512" status="enable"/>
+                <macro name="TCP_SOCKET_DEFAULT_RX_SIZE" value="512" status="enable"/>
+                <macro name="TCP_START_TIMEOUT_VAL" value="(1000ul)" status="enable"/>
+                <macro name="TCP_DELAYED_ACK_TIMEOUT " value="(100ul)" status="enable"/>
+                <macro name="TCP_FIN_WAIT_2_TIMEOUT" value="(5000ul)" status="enable"/>
+                <macro name="TCP_KEEP_ALIVE_TIMEOUT" value="(10000ul)" status="enable"/>
+                <macro name="TCP_CLOSE_WAIT_TIMEOUT" value="(200ul)" status="enable"/>
+                <macro name="TCP_MAX_RETRIES" value="(5u)" status="enable"/>
+                <macro name="TCP_MAX_UNACKED_KEEP_ALIVES" value="(6u)" status="enable"/>
+                <macro name="TCP_MAX_SYN_RETRIES" value="(2u)" status="enable"/>
+                <macro name="TCP_AUTO_TRANSMIT_TIMEOUT_VAL" value="(40ul)" status="enable"/>
+                <macro name="TCP_WINDOW_UPDATE_TIMEOUT_VAL" value="(200ul)" status="enable"/>
+                <macro name="TCP_MAX_SOCKETS" value="(10)" status="enable"/>
+                <macro name="TCP_TASK_TICK_RATE" value="(5)" status="enable"/>
+            </File>
+        </component>
+        <component name="Announce">
+            <File name="tcpip_announce_config.h" Path="framework\tcpip\config">
+                <macro name="ANNOUNCE_PORT" value="30303" status="enable"/>
+                <macro name="ANNOUNCE_MAX_PAYLOAD" value="(512)" status="enable"/>
+            </File>
+        </component>
+        <component name="Command">
+            <File name="tcpip_cmd_config.h" Path="framework\tcpip\config">
+                <macro name="TCPIP_STACK_COMMANDS_WIFI_ENABLE" value=" " status="enable"/>
+                <macro name="TCPIP_STACK_COMMANDS_STORAGE_ENABLE" value=" " status="enable"/>
+            </File>
+        </component>
+        <component name="MAC">
+            <File name="tcpip_mac_config.h" Path="framework\tcpip\config">
+                <macro name="ETH_CFG_LINK" value="0" status="enable"/>
+                <macro name="ETH_CFG_AUTO" value="1" status="enable"/>
+                <macro name="ETH_CFG_10" value="1" status="enable"/>
+                <macro name="ETH_CFG_100" value="1" status="enable"/>
+                <macro name="ETH_CFG_HDUPLEX" value="1" status="enable"/>
+                <macro name="ETH_CFG_FDUPLEX" value="1" status="enable"/>
+                <macro name="ETH_CFG_AUTO_MDIX" value="1" status="enable"/>
+                <macro name="ETH_CFG_SWAP_MDIX" value="1" status="enable"/>
+                <macro name="ETH_CFG_LINK_INIT_DELAY " value="200" status="enable"/>
+                <macro name="EMAC_TX_DESCRIPTORS" value="2" status="enable"/>
+                <macro name="EMAC_TX_BUFF_SIZE" value="(1514ul)" status="enable"/>
+                <macro name="MAX_PACKET_SIZE" value="(1514ul)" status="enable"/>
+                <macro name="EMAC_RX_DESCRIPTORS" value="6" status="enable"/>
+                <macro name="EMAC_RX_BUFF_SIZE" value="1536" status="enable"/>
+            </File>
+        </component>
+    </module>
+    <module name="usbDevice" LogicalPath="framework/usb">
+        <component name="CDC">
+            <File name="system_config.h" Path="usb/device/cdc">
+                <macro name="DRV_USB_DEVICE_SUPPORT" value="true" status="enable"/>
+                <macro name="DRV_USB_HOST_SUPPORT" value="false" status="enable"/>
+                <macro name="DRV_USB_ENDPOINTS_NUMBER" value="3" status="enable"/>
+                <macro name="DRV_USB_INSTANCES_NUMBER " value="1" status="enable"/>
+                <macro name="DRV_USB_INTERRUPT_MODE" value="1" status="enable"/>
+                <macro name="USB_DEVICE_MAX_INSTANCES" value="1" status="enable"/>
+                <macro name="USB_DEVICE_MAX_CLIENTS" value="2" status="enable"/>
+                <macro name="USB_DEVICE_MAX_CLIENTS" value="2" status="enable"/>
+                <macro name="USB_DEVICE_MAX_FUNCTION_DRIVER" value="1" status="enable"/>
+                <macro name="USB_DEVICE_EP0_BUFFER_SIZE" value="64" status="enable"/>
+                <macro name="USB_DEVICE_CDC_INSTANCES_NUMBER" value="1" status="enable"/>
+                <macro name="USB_DEVICE_CDC_QUEUE_DEPTH_COMBINED_1" value="1" status="enable"/>
+                <macro name="USB_DEVICE_CDC_QUEUE_DEPTH_COMBINED_2" value="1" status="enable"/>
+                <macro name="USB_DEVICE_CDC_QUEUE_DEPTH_COMBINED_3" value="1" status="enable"/>
+                <macro name="USB_DEVICE_CDC_STATE" value=" " status="disable"/>
+            </File>
+        </component>
+        <component name="HID">
+            <File name="system_config.h" Path="usb/device/hid">
+                <macro name="DRV_USB_DEVICE_SUPPORT" value="true" status="enable"/>
+                <macro name="DRV_USB_HOST_SUPPORT" value="false" status="enable"/>
+                <macro name="DRV_USB_ENDPOINTS_NUMBER" value="2" status="enable"/>
+                <macro name="DRV_USB_INTERRUPT_MODE" value="1" status="enable"/>
+                <macro name="USB_DEVICE_MAX_INSTANCES" value="1" status="enable"/>
+                <macro name="DRV_USB_CLIENTS_NUMBER" value="1" status="enable"/>
+                <macro name="USB_DEVICE_MAX_CLIENTS" value="2" status="enable"/>
+                <macro name="USB_DEVICE_MAX_FUNCTION_DRIVER" value="1" status="enable"/>
+                <macro name="USB_DEVICE_EP0_BUFFER_SIZE" value="64" status="enable"/>
+                <macro name="USB_DEVICE_HID_INSTANCES_NUMBER" value="1" status="enable"/>
+                <macro name="USB_DEVICE_HID_FUNC_INDEX" value="0" status="enable"/>
+                <macro name="USB_DEVICE_HID_QUEUE_DEPTH_COMBINED_1" value="1" status="enable"/>
+                <macro name="USB_DEVICE_HID_QUEUE_DEPTH_COMBINED_2" value="1" status="enable"/>
+                <macro name="USB_DEVICE_HID_BASIC_STATE" value=" " status="disable"/>
+            </File>
+        </component>
+    </module>
+</app>

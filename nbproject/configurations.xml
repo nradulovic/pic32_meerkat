@@ -1,0 +1,362 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configurationDescriptor version="62">
+  <logicalFolder name="root" displayName="root" projectFiles="true">
+    <logicalFolder name="HeaderFiles"
+                   displayName="Header Files"
+                   projectFiles="true">
+      <logicalFolder name="driver" displayName="driver" projectFiles="true">
+        <itemPath>include/driver/spi.h</itemPath>
+        <itemPath>include/driver/lld_spi1.h</itemPath>
+        <itemPath>include/driver/uart.h</itemPath>
+      </logicalFolder>
+      <logicalFolder name="esolid-base" displayName="esolid-base" projectFiles="true">
+        <logicalFolder name="inc" displayName="inc" projectFiles="true">
+          <logicalFolder name="base" displayName="base" projectFiles="true">
+            <itemPath>esolid-base/inc/base/base.h</itemPath>
+            <itemPath>esolid-base/inc/base/queue.h</itemPath>
+            <itemPath>esolid-base/inc/base/error.h</itemPath>
+            <itemPath>esolid-base/inc/base/prio_queue.h</itemPath>
+            <itemPath>esolid-base/inc/base/debug.h</itemPath>
+            <itemPath>esolid-base/inc/base/bitop.h</itemPath>
+            <itemPath>esolid-base/inc/base/debug_config.h</itemPath>
+            <itemPath>esolid-base/inc/base/prio_queue_config.h</itemPath>
+            <itemPath>esolid-base/inc/base/list.h</itemPath>
+          </logicalFolder>
+        </logicalFolder>
+        <logicalFolder name="port" displayName="port" projectFiles="true">
+          <logicalFolder name="pic32-none-gcc"
+                         displayName="pic32-none-gcc"
+                         projectFiles="true">
+            <logicalFolder name="common" displayName="common" projectFiles="true">
+              <logicalFolder name="plat" displayName="plat" projectFiles="true">
+                <itemPath>esolid-base/port/pic32-none-gcc/common/plat/critical.h</itemPath>
+                <itemPath>esolid-base/port/pic32-none-gcc/common/plat/compiler.h</itemPath>
+              </logicalFolder>
+            </logicalFolder>
+            <logicalFolder name="mips-m4k" displayName="mips-m4k" projectFiles="true">
+              <logicalFolder name="arch" displayName="arch" projectFiles="true">
+                <itemPath>esolid-base/port/pic32-none-gcc/mips-m4k/arch/intr_config.h</itemPath>
+                <itemPath>esolid-base/port/pic32-none-gcc/mips-m4k/arch/systimer_config.h</itemPath>
+                <itemPath>esolid-base/port/pic32-none-gcc/mips-m4k/arch/intr.h</itemPath>
+                <itemPath>esolid-base/port/pic32-none-gcc/mips-m4k/arch/cpu.h</itemPath>
+                <itemPath>esolid-base/port/pic32-none-gcc/mips-m4k/arch/systimer.h</itemPath>
+              </logicalFolder>
+            </logicalFolder>
+            <logicalFolder name="pic32mx150f128d"
+                           displayName="pic32mx150f128d"
+                           projectFiles="true">
+              <logicalFolder name="family" displayName="family" projectFiles="true">
+                <itemPath>esolid-base/port/pic32-none-gcc/pic32mx150f128d/family/profile.h</itemPath>
+              </logicalFolder>
+            </logicalFolder>
+          </logicalFolder>
+        </logicalFolder>
+      </logicalFolder>
+      <logicalFolder name="esolid-eds" displayName="esolid-eds" projectFiles="true">
+        <logicalFolder name="inc" displayName="inc" projectFiles="true">
+          <logicalFolder name="eds" displayName="eds" projectFiles="true">
+            <itemPath>esolid-eds/inc/eds/smp.h</itemPath>
+            <itemPath>esolid-eds/inc/eds/epa_config.h</itemPath>
+            <itemPath>esolid-eds/inc/eds/epa.h</itemPath>
+            <itemPath>esolid-eds/inc/eds/event_config.h</itemPath>
+            <itemPath>esolid-eds/inc/eds/event.h</itemPath>
+            <itemPath>esolid-eds/inc/eds/smp_config.h</itemPath>
+          </logicalFolder>
+        </logicalFolder>
+      </logicalFolder>
+      <logicalFolder name="esolid-mem" displayName="esolid-mem" projectFiles="true">
+        <logicalFolder name="inc" displayName="inc" projectFiles="true">
+          <logicalFolder name="mem" displayName="mem" projectFiles="true">
+            <itemPath>esolid-mem/inc/mem/pool.h</itemPath>
+            <itemPath>esolid-mem/inc/mem/mem_class.h</itemPath>
+            <itemPath>esolid-mem/inc/mem/heap.h</itemPath>
+            <itemPath>esolid-mem/inc/mem/static.h</itemPath>
+          </logicalFolder>
+        </logicalFolder>
+      </logicalFolder>
+      <logicalFolder name="esolid-vtimer"
+                     displayName="esolid-vtimer"
+                     projectFiles="true">
+        <logicalFolder name="inc" displayName="inc" projectFiles="true">
+          <logicalFolder name="vtimer" displayName="vtimer" projectFiles="true">
+            <itemPath>esolid-vtimer/inc/vtimer/vtimer.h</itemPath>
+          </logicalFolder>
+        </logicalFolder>
+      </logicalFolder>
+      <itemPath>include/bsp.h</itemPath>
+    </logicalFolder>
+    <logicalFolder name="LinkerScript"
+                   displayName="Linker Files"
+                   projectFiles="true">
+    </logicalFolder>
+    <logicalFolder name="SourceFiles"
+                   displayName="Source Files"
+                   projectFiles="true">
+      <logicalFolder name="driver" displayName="driver" projectFiles="true">
+        <itemPath>source/driver/lld_spi1.c</itemPath>
+        <itemPath>source/driver/spi.c</itemPath>
+        <itemPath>source/driver/uart.c</itemPath>
+      </logicalFolder>
+      <logicalFolder name="esolid-base" displayName="esolid-base" projectFiles="true">
+        <logicalFolder name="port" displayName="port" projectFiles="true">
+          <logicalFolder name="pic32-none-gcc"
+                         displayName="pic32-none-gcc"
+                         projectFiles="true">
+            <logicalFolder name="common" displayName="common" projectFiles="true">
+              <logicalFolder name="plat" displayName="plat" projectFiles="true">
+              </logicalFolder>
+            </logicalFolder>
+            <logicalFolder name="mips-m4k" displayName="mips-m4k" projectFiles="true">
+              <logicalFolder name="arch" displayName="arch" projectFiles="true">
+              </logicalFolder>
+              <itemPath>esolid-base/port/pic32-none-gcc/mips-m4k/cpu.c</itemPath>
+              <itemPath>esolid-base/port/pic32-none-gcc/mips-m4k/intr.c</itemPath>
+            </logicalFolder>
+            <logicalFolder name="pic32mx150f128d"
+                           displayName="pic32mx150f128d"
+                           projectFiles="true">
+              <logicalFolder name="family" displayName="family" projectFiles="true">
+              </logicalFolder>
+            </logicalFolder>
+          </logicalFolder>
+        </logicalFolder>
+        <logicalFolder name="src" displayName="src" projectFiles="true">
+          <itemPath>esolid-base/src/debug.c</itemPath>
+          <itemPath>esolid-base/src/base.c</itemPath>
+          <itemPath>esolid-base/src/error.c</itemPath>
+          <itemPath>esolid-base/src/prio_queue.c</itemPath>
+        </logicalFolder>
+      </logicalFolder>
+      <logicalFolder name="esolid-eds" displayName="esolid-eds" projectFiles="true">
+        <logicalFolder name="src" displayName="src" projectFiles="true">
+          <itemPath>esolid-eds/src/smp.c</itemPath>
+          <itemPath>esolid-eds/src/event.c</itemPath>
+          <itemPath>esolid-eds/src/epa.c</itemPath>
+        </logicalFolder>
+      </logicalFolder>
+      <logicalFolder name="esolid-mem" displayName="esolid-mem" projectFiles="true">
+        <logicalFolder name="src" displayName="src" projectFiles="true">
+          <itemPath>esolid-mem/src/mem_class.c</itemPath>
+          <itemPath>esolid-mem/src/heap.c</itemPath>
+          <itemPath>esolid-mem/src/static.c</itemPath>
+          <itemPath>esolid-mem/src/pool.c</itemPath>
+        </logicalFolder>
+      </logicalFolder>
+      <logicalFolder name="esolid-vtimer"
+                     displayName="esolid-vtimer"
+                     projectFiles="true">
+        <logicalFolder name="src" displayName="src" projectFiles="true">
+          <itemPath>esolid-vtimer/src/vtimer.c</itemPath>
+        </logicalFolder>
+      </logicalFolder>
+      <itemPath>source/main.c</itemPath>
+      <itemPath>source/bsp.c</itemPath>
+      <itemPath>source/support.c</itemPath>
+    </logicalFolder>
+    <logicalFolder name="ExternalFiles"
+                   displayName="Important Files"
+                   projectFiles="false">
+      <itemPath>Makefile</itemPath>
+    </logicalFolder>
+  </logicalFolder>
+  <sourceRootList>
+    <Elem>esolid-base</Elem>
+    <Elem>esolid-mem</Elem>
+    <Elem>esolid-vtimer</Elem>
+    <Elem>esolid-eds</Elem>
+    <Elem>lld</Elem>
+    <Elem>source/driver</Elem>
+    <Elem>include/driver</Elem>
+  </sourceRootList>
+  <projectmakefile>Makefile</projectmakefile>
+  <confs>
+    <conf name="default" type="2">
+      <toolsSet>
+        <developmentServer>localhost</developmentServer>
+        <targetDevice>PIC32MX150F128D</targetDevice>
+        <targetHeader></targetHeader>
+        <targetPluginBoard></targetPluginBoard>
+        <platformTool>ICD3PlatformTool</platformTool>
+        <languageToolchain>XC32</languageToolchain>
+        <languageToolchainVersion>1.31</languageToolchainVersion>
+        <platform>2</platform>
+      </toolsSet>
+      <compileType>
+        <linkerTool>
+          <linkerLibItems>
+          </linkerLibItems>
+        </linkerTool>
+        <loading>
+          <useAlternateLoadableFile>false</useAlternateLoadableFile>
+          <alternateLoadableFile></alternateLoadableFile>
+        </loading>
+      </compileType>
+      <makeCustomizationType>
+        <makeCustomizationPreStepEnabled>false</makeCustomizationPreStepEnabled>
+        <makeCustomizationPreStep></makeCustomizationPreStep>
+        <makeCustomizationPostStepEnabled>false</makeCustomizationPostStepEnabled>
+        <makeCustomizationPostStep></makeCustomizationPostStep>
+        <makeCustomizationPutChecksumInUserID>false</makeCustomizationPutChecksumInUserID>
+        <makeCustomizationEnableLongLines>false</makeCustomizationEnableLongLines>
+        <makeCustomizationNormalizeHexFile>false</makeCustomizationNormalizeHexFile>
+      </makeCustomizationType>
+      <C32>
+        <property key="additional-warnings" value="true"/>
+        <property key="enable-app-io" value="false"/>
+        <property key="enable-omit-frame-pointer" value="false"/>
+        <property key="enable-symbols" value="true"/>
+        <property key="enable-unroll-loops" value="false"/>
+        <property key="exclude-floating-point" value="false"/>
+        <property key="extra-include-directories"
+                  value=".;/opt/microchip/harmony/0.70.01b/framework;/opt/microchip/harmony/0.70.01b/framework/system;esolid-base/inc;esolid-base/port/pic32-none-gcc/common;esolid-base/port/pic32-none-gcc/mips-m4k;esolid-base/port/pic32-none-gcc/pic32mx150f128d;esolid-mem/inc;esolid-vtimer/inc;esolid-eds/inc;lld/inc;include"/>
+        <property key="generate-16-bit-code" value="false"/>
+        <property key="generate-micro-compressed-code" value="false"/>
+        <property key="isolate-each-function" value="true"/>
+        <property key="make-warnings-into-errors" value="false"/>
+        <property key="optimization-level" value=""/>
+        <property key="place-data-into-section" value="true"/>
+        <property key="post-instruction-scheduling" value="default"/>
+        <property key="pre-instruction-scheduling" value="default"/>
+        <property key="preprocessor-macros"
+                  value="INLINE_API=&quot;static inline&quot;;INLINE=&quot;static inline&quot;;USE_CRYPTO_HW;_PLIB_DISABLE_LEGACY"/>
+        <property key="strict-ansi" value="true"/>
+        <property key="support-ansi" value="false"/>
+        <property key="use-cci" value="false"/>
+        <property key="use-iar" value="false"/>
+        <property key="use-indirect-calls" value="false"/>
+      </C32>
+      <C32-AS>
+        <property key="assembler-symbols" value=""/>
+        <property key="enable-symbols" value="true"/>
+        <property key="exclude-floating-point-library" value="false"/>
+        <property key="expand-macros" value="false"/>
+        <property key="extra-include-directories-for-assembler" value=""/>
+        <property key="extra-include-directories-for-preprocessor" value=""/>
+        <property key="false-conditionals" value="false"/>
+        <property key="keep-locals" value="false"/>
+        <property key="list-assembly" value="false"/>
+        <property key="list-source" value="false"/>
+        <property key="list-symbols" value="false"/>
+        <property key="oXC32asm-list-to-file" value="false"/>
+        <property key="omit-debug-dirs" value="false"/>
+        <property key="omit-forms" value="false"/>
+        <property key="preprocessor-macros" value=""/>
+        <property key="warning-level" value=""/>
+      </C32-AS>
+      <C32-LD>
+        <property key="additional-options-use-response-files" value="false"/>
+        <property key="enable-check-sections" value="false"/>
+        <property key="exclude-floating-point-library" value="false"/>
+        <property key="exclude-standard-libraries" value="false"/>
+        <property key="extra-lib-directories" value=""/>
+        <property key="generate-16-bit-code" value="false"/>
+        <property key="generate-cross-reference-file" value="false"/>
+        <property key="generate-micro-compressed-code" value="false"/>
+        <property key="heap-size" value=""/>
+        <property key="input-libraries" value=""/>
+        <property key="linker-symbols" value=""/>
+        <property key="map-file" value="${DISTDIR}/${PROJECTNAME}.${IMAGE_TYPE}.map"/>
+        <property key="no-startup-files" value="false"/>
+        <property key="oXC32ld-extra-opts" value=""/>
+        <property key="optimization-level" value="-Os"/>
+        <property key="preprocessor-macros" value=""/>
+        <property key="remove-unused-sections" value="false"/>
+        <property key="report-memory-usage" value="true"/>
+        <property key="stack-size" value=""/>
+        <property key="symbol-stripping" value=""/>
+        <property key="trace-symbols" value=""/>
+        <property key="warn-section-align" value="true"/>
+      </C32-LD>
+      <C32CPP>
+        <property key="additional-warnings" value="false"/>
+        <property key="check-new" value="false"/>
+        <property key="eh-specs" value="true"/>
+        <property key="enable-app-io" value="false"/>
+        <property key="enable-omit-frame-pointer" value="false"/>
+        <property key="enable-symbols" value="true"/>
+        <property key="enable-unroll-loops" value="false"/>
+        <property key="exceptions" value="true"/>
+        <property key="exclude-floating-point" value="false"/>
+        <property key="extra-include-directories" value=""/>
+        <property key="generate-16-bit-code" value="false"/>
+        <property key="generate-micro-compressed-code" value="false"/>
+        <property key="isolate-each-function" value="false"/>
+        <property key="make-warnings-into-errors" value="false"/>
+        <property key="optimization-level" value=""/>
+        <property key="place-data-into-section" value="false"/>
+        <property key="post-instruction-scheduling" value="default"/>
+        <property key="pre-instruction-scheduling" value="default"/>
+        <property key="preprocessor-macros" value=""/>
+        <property key="rtti" value="true"/>
+        <property key="strict-ansi" value="false"/>
+        <property key="use-cci" value="false"/>
+        <property key="use-iar" value="false"/>
+        <property key="use-indirect-calls" value="false"/>
+      </C32CPP>
+      <C32Global>
+        <property key="legacy-libc" value="false"/>
+        <property key="save-temps" value="true"/>
+        <property key="wpo-lto" value="false"/>
+      </C32Global>
+      <ICD3PlatformTool>
+        <property key="ADC 1" value="true"/>
+        <property key="AutoSelectMemRanges" value="auto"/>
+        <property key="CHANGE NOTICE" value="true"/>
+        <property key="COMPARATOR" value="true"/>
+        <property key="CTMU" value="true"/>
+        <property key="DMA" value="true"/>
+        <property key="Freeze All Other Peripherals" value="true"/>
+        <property key="I2C1" value="true"/>
+        <property key="I2C2" value="true"/>
+        <property key="INPUT CAPTURE 1" value="true"/>
+        <property key="INPUT CAPTURE 2" value="true"/>
+        <property key="INPUT CAPTURE 3" value="true"/>
+        <property key="INPUT CAPTURE 4" value="true"/>
+        <property key="INPUT CAPTURE 5" value="true"/>
+        <property key="INTERRUPT CONTROL" value="true"/>
+        <property key="OUTPUT COMPARE 1" value="true"/>
+        <property key="OUTPUT COMPARE 2" value="true"/>
+        <property key="OUTPUT COMPARE 3" value="true"/>
+        <property key="OUTPUT COMPARE 4" value="true"/>
+        <property key="OUTPUT COMPARE 5" value="true"/>
+        <property key="PARALLEL MASTER/SLAVE PORT" value="true"/>
+        <property key="REAL TIME CLOCK" value="true"/>
+        <property key="SPI/I2S 1" value="true"/>
+        <property key="SPI/I2S 2" value="true"/>
+        <property key="SecureSegment.SegmentProgramming" value="FullChipProgramming"/>
+        <property key="TIMER1" value="true"/>
+        <property key="TIMER2" value="true"/>
+        <property key="TIMER3" value="true"/>
+        <property key="TIMER4" value="true"/>
+        <property key="TIMER5" value="true"/>
+        <property key="ToolFirmwareFilePath"
+                  value="Press to browse for a specific firmware version"/>
+        <property key="ToolFirmwareOption.UseLatestFirmware" value="true"/>
+        <property key="UART1" value="true"/>
+        <property key="UART2" value="true"/>
+        <property key="debugoptions.useswbreakpoints" value="false"/>
+        <property key="hwtoolclock.frcindebug" value="false"/>
+        <property key="memories.aux" value="false"/>
+        <property key="memories.bootflash" value="false"/>
+        <property key="memories.configurationmemory" value="true"/>
+        <property key="memories.eeprom" value="true"/>
+        <property key="memories.flashdata" value="true"/>
+        <property key="memories.id" value="true"/>
+        <property key="memories.programmemory" value="true"/>
+        <property key="memories.programmemory.end" value="0x1d01ffff"/>
+        <property key="memories.programmemory.start" value="0x1d000000"/>
+        <property key="poweroptions.powerenable" value="false"/>
+        <property key="programoptions.eraseb4program" value="true"/>
+        <property key="programoptions.preserveeeprom" value="false"/>
+        <property key="programoptions.preserveprogramrange" value="false"/>
+        <property key="programoptions.preserveprogramrange.end" value="0x1d01ffff"/>
+        <property key="programoptions.preserveprogramrange.start" value="0x1d000000"/>
+        <property key="programoptions.preserveuserid" value="false"/>
+        <property key="programoptions.testmodeentrymethod" value="VPPFirst"/>
+        <property key="programoptions.usehighvoltageonmclr" value="false"/>
+        <property key="programoptions.uselvpprogramming" value="false"/>
+        <property key="voltagevalue" value="3.25"/>
+      </ICD3PlatformTool>
+    </conf>
+  </confs>
+</configurationDescriptor>
