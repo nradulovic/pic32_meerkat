@@ -179,6 +179,14 @@ esError esHeapGetSize(
     struct esHeapMem *  heapMem,
     size_t *            size);
 
+esError esHeapGetBlockSizeI(
+    struct esHeapMem *  heapMem,
+    size_t *            size);
+
+esError esHeapGetBlockSize(
+    struct esHeapMem *  heapMem,
+    size_t *            size);
+
 /*--------------------------------------------------------  C++ extern end  --*/
 #ifdef __cplusplus
 }

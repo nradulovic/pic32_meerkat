@@ -86,7 +86,7 @@ const PORT_C_ROM struct esMemClass esGlobalHeapMemClass = {
     (esError (*)(void *, void *))esHeapMemFreeI,
     (esError (*)(void *, size_t *))esHeapGetSizeI,
     NULL,
-    NULL
+    (esError (*)(void *, size_t *))esHeapGetBlockSizeI
 #if (CONFIG_API_VALIDATION) || defined(__DOXYGEN__)
     , MEM_CLASS_SIGNATURE
 #endif

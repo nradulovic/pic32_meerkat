@@ -95,6 +95,8 @@ esError esHeapMemInit(
     heapMem->sentinel->phy.prev  = begin;
     heapMem->sentinel->free.next = begin;
     heapMem->sentinel->free.prev = begin;
+    heapMem->size = begin->phy.size;
+    heapMem->free = heapMem->size;
 
     ES_API_OBLIGATION(heapMem->signature = HEAP_MEM_SIGNATURE);
 
@@ -263,6 +265,26 @@ esError esHeapGetSize(
     size_t *            size) {
 
     return (esHeapGetSizeI(heapMem, size));
+}
+
+esError esHeapGetBlockSizeI(
+    struct esHeapMem *  heapMem,
+    size_t *            size) {
+
+    ES_API_REQUIRE(ES_API_POINTER, heapMem != NULL);
+    ES_API_REQUIRE(ES_API_OBJECT,  heapMem->signature == HEAP_MEM_SIGNATURE);
+    ES_API_REQUIRE(ES_API_POINTER, size != NULL);
+
+    *size = heapMem->size;
+
+    return (ES_ERROR_NONE);
+}
+
+esError esHeapGetBlockSize(
+    struct esHeapMem *  heapMem,
+    size_t *            size) {
+
+    return (esHeapGetBlockSizeI(heapMem, size));
 }
 
 #if 0

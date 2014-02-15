@@ -77,21 +77,20 @@ esError esStaticMemAllocI(
     void **             mem) {
 
     ES_API_REQUIRE(ES_API_POINTER, staticMem != NULL);
-    ES_API_REQUIRE(ES_API_OBJECT,  staticMem->signature != STATIC_MEM_SIGNATURE);
+    ES_API_REQUIRE(ES_API_OBJECT,  staticMem->signature == STATIC_MEM_SIGNATURE);
     ES_API_REQUIRE(ES_API_RANGE,   size != 0u);
     ES_API_REQUIRE(ES_API_POINTER, mem != NULL);
 
     size = ES_DIVISION_ROUNDUP(size, sizeof(esAtomic));
 
-    if (size > staticMem->free) {
-
-        return (ES_ERROR_NO_MEMORY);
-    } else {
+    if (size <= staticMem->free) {
         staticMem->free -= size;
         *mem = (void *)&staticMem->base[staticMem->free];
 
         return (ES_ERROR_NONE);
     }
+
+    return (ES_ERROR_NO_MEMORY);
 }
 
 esError esStaticMemAlloc(
