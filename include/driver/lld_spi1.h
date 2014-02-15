@@ -14,12 +14,20 @@
 
 /*===============================================================  MACRO's  ==*/
 
-#define REMAP_SPI1_SDI_RPA1             0x00
-#define REMAP_SPI1_SDI_RPB5             0x01
+#if   (((__PIC32_FEATURE_SET__ >= 100) && (__PIC32_FEATURE_SET__ <= 299)) || defined(__32MXGENERIC__))
+#define SPI1_PIN_TABLE(entry)                                                   \
+    entry(SPI1_SDI_RPA1,            0x00,           NULL)                       \
+    entry(SPI1_SDI_RPB5,            0x01,           NULL)                       \
+    entry(SPI1_SDO_RPA2,            0,              &RPA2R)                     \
+    entry(SPI1_SS_EXAMPLE,          0,              &RPA2R)
+#elif (((__PIC32_FEATURE_SET__ >= 300) && (__PIC32_FEATURE_SET__ <= 499)) || defined(__32MXGENERIC__))
+#elif (((__PIC32_FEATURE_SET__ >= 500) && (__PIC32_FEATURE_SET__ <= 799)))
+#define SPI1_PIN_TABLE(entry)                                                   \
+    entry(SPI1_SCK,                 0,              &PORTC)
+#endif
 
-#define REMAP_SPI1_SDO_RPA2             &RPA2R
-
-#define REMAP_SPI1_SS_RPA0              &RPA0R
+#define SPI1_PIN_ID(id, value, address)                                         \
+    id,
 
 /*------------------------------------------------------  C++ extern begin  --*/
 #ifdef	__cplusplus
@@ -27,6 +35,12 @@ extern "C" {
 #endif
 
 /*============================================================  DATA TYPES  ==*/
+
+enum spi1PinId {
+    SPI1_PIN_TABLE(SPI1_PIN_ID)
+    SPI1_LAST_PIN_ID
+};
+
 /*======================================================  GLOBAL VARIABLES  ==*/
 
 extern const struct spiId GlobalSpi1;

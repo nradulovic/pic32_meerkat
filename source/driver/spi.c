@@ -7,8 +7,6 @@
 
 /*=========================================================  INCLUDE FILES  ==*/
 
-#include <peripheral/system.h>
-
 #include "vtimer/vtimer.h"
 #include "driver/spi.h"
 #include "bsp.h"
@@ -43,12 +41,12 @@ static void spiTimeout(void * arg) {
 
 void spiOpen(
     struct spiHandle *        handle,
-    const struct spiConfig *  config,
-    const struct spiId *      id) {
+    const struct spiConfig *  config) {
 
-    handle->id = id;
+    handle->id     = config->id;
+    handle->config = config;
     handle->id->open(config);
-    handle->state = SPI_INACTIVE;
+    handle->state  = SPI_INACTIVE;
 }
 
 
@@ -169,9 +167,9 @@ enum spiError spiWrite(
     size_t              transmitted;
     volatile esAtomic   timerIsFinished;
     enum spiError       error;
-    esVTimer            timerTimeout;
+    esVTimer            timerTimeout = ES_VTIMER_INITIALIZER();
 
-    timerIsFinished = true;
+    timerIsFinished = false;
     esVTimerInit(&timerTimeout);
 
     if (handle->config->relTimeout != 0) {
@@ -180,7 +178,6 @@ enum spiError spiWrite(
             handle->config->relTimeout * nElements,
             spiTimeout,
             (void *)&timerIsFinished);
-        timerIsFinished = false;
     }
     while ((handle->state != SPI_INACTIVE) && (timerIsFinished == false));
 
@@ -198,7 +195,7 @@ enum spiError spiWrite(
 
             while ((timerIsFinished == false) && (transmitted < nElements)) {
                 if (handle->id->isWriteBuffFull() != true) {
-                    handle->id->write(buffer_[transmitted]);
+                    buffer_[transmitted] = handle->id->write(buffer_[transmitted]);
                     transmitted++;
                 }
             }
@@ -209,7 +206,7 @@ enum spiError spiWrite(
 
             while ((timerIsFinished == false) && (transmitted < nElements)) {
                 if (handle->id->isWriteBuffFull() != true) {
-                    handle->id->write(buffer_[transmitted]);
+                    buffer_[transmitted] = handle->id->write(buffer_[transmitted]);
                     transmitted++;
                 }
             }
@@ -220,7 +217,7 @@ enum spiError spiWrite(
 
             while ((timerIsFinished == false) && (transmitted < nElements)) {
                 if (handle->id->isWriteBuffFull() != true) {
-                    handle->id->write(buffer_[transmitted]);
+                    buffer_[transmitted] = handle->id->write(buffer_[transmitted]);
                     transmitted++;
                 }
             }

@@ -1,8 +1,8 @@
 /*
- * File:   spi.c
+ * File:   lld_spi1.c
  * Author: nenad
  *
- * Created on February 11, 2014, 22:32 PM
+ * Created on February 11, 2014, 10:32 PM
  */
 
 /*=========================================================  INCLUDE FILES  ==*/
@@ -37,6 +37,12 @@
 #define SPI1STAT_SPIROV                 (0x1u << 6)
 #define SPI1STAT_SPITUR                 (0x1u << 8)
 
+#define SPI1_PIN_ADDRESS(id, value, address)                                  \
+    address,
+
+#define SPI1_PIN_VALUE(id, value, address)                                    \
+    value,
+
 /*======================================================  LOCAL DATA TYPES  ==*/
 /*=============================================  LOCAL FUNCTION PROTOTYPES  ==*/
 
@@ -50,10 +56,19 @@ static bool lldSpiIsWriteBuffFull(
     void);
 static uint32_t lldSpiRead(
     void);
-static void lldSpiWrite(
+static uint32_t lldSpiWrite(
     uint32_t);
 
 /*=======================================================  LOCAL VARIABLES  ==*/
+
+static volatile unsigned int * const spiPinAddress[SPI1_LAST_PIN_ID] = {
+    SPI1_PIN_TABLE(SPI1_PIN_ADDRESS)
+};
+
+static const unsigned int spiPinValue[SPI1_LAST_PIN_ID] = {
+    SPI1_PIN_TABLE(SPI1_PIN_VALUE)
+};
+
 /*======================================================  GLOBAL VARIABLES  ==*/
 
 const struct spiId GlobalSpi1 = {
@@ -69,6 +84,7 @@ const struct spiId GlobalSpi1 = {
 
 static void lldSpiOpen(
     const struct spiConfig * config) {
+#if   (((__PIC32_FEATURE_SET__ >= 100) && (__PIC32_FEATURE_SET__ <= 299)) || defined(__32MXGENERIC__))
 
     unsigned int data;
     
@@ -96,18 +112,20 @@ static void lldSpiOpen(
     SPI1CONSET          = SPI1CON_ON;                                           /* Start SPI module                                         */
     
     /*--  Remap port pins  ---------------------------------------------------*/
-    SDI1Rbits.SDI1R     = config->remap.sdi;
-    SS1Rbits.SS1R       = config->remap.ssi;
-    *config->remap.sdo  = 0x03u;
-    *config->remap.sso  = 0x03u;
+    SDI1Rbits.SDI1R     = spiPinValue[config->remap.sdi];
+    SS1Rbits.SS1R       = spiPinValue[config->remap.ss];
+    *spiPinAddress[config->remap.sdo] = 0x03u;
+    *spiPinAddress[config->remap.ss]  = 0x03u;
+#endif
 }
 
 static void lldSpiClose(
     void) {
-
+#if   (((__PIC32_FEATURE_SET__ >= 100) && (__PIC32_FEATURE_SET__ <= 299)) || defined(__32MXGENERIC__))
     SPI1CON             = 0;
     IEC1CLR             = IEC1_SPI1TX | IEC1_SPI1RX | IEC1_SPI1E;               /* Disable all interrupts                                   */
     IFS1CLR             = IFS1_SPI1TX | IFS1_SPI1RX | IFS1_SPI1E;               /* Clear all interrupts                                     */
+#endif
 }
 
 static bool lldSpiIsReadBuffEmpty(
@@ -140,15 +158,17 @@ static uint32_t lldSpiRead(
     return (SPI1BUF);
 }
 
-static void lldSpiWrite(
+static uint32_t lldSpiWrite(
     uint32_t            data) {
 
     SPI1BUF = data;
+
+    return (SPI1BUF);
 }
 
 /*===================================  GLOBAL PRIVATE FUNCTION DEFINITIONS  ==*/
 /*====================================  GLOBAL PUBLIC FUNCTION DEFINITIONS  ==*/
 /*================================*//** @cond *//*==  CONFIGURATION ERRORS  ==*/
 /** @endcond *//** @} *//******************************************************
- * END of spi.c
+ * END of lld_spi1.c
  ******************************************************************************/

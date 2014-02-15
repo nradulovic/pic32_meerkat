@@ -16,11 +16,12 @@
 
 #include "plat/compiler.h"
 #include "driver/lld_spi1.h"
+#include "driver/lld_spis.h"
 
 /*===============================================================  MACRO's  ==*/
 
-#define SPI_CONFIG_INITIALIZER(channel, flags, speed, priority, timeout, sdi, sdo, ssi, sso) \
-    {channel, flags, speed, priority, timeout, {sdo, sso, sdi, ssi}}
+#define SPI_CONFIG_INITIALIZER(channel, flags, speed, priority, timeout, sdi, sdo, sck, ss) \
+    {channel, flags, speed, priority, timeout, {sdi, sdo, sck, ss}}
 
 #define CONFIG_SPI_CLOSE_WAIT_TICKS     100
 
@@ -65,10 +66,10 @@ struct spiConfig {
     uint32_t            isrPrio;
     uint32_t            relTimeout;
     struct spiRemap {
-        volatile unsigned int * sdo;
-        volatile unsigned int * sso;
-        uint8_t             ssi;
         uint8_t             sdi;
+        uint8_t             sdo;
+        uint8_t             sck;
+        uint8_t             ss;
     }                   remap;
 };
 
@@ -84,7 +85,7 @@ struct spiId {
     bool             (* isReadBuffEmpty)(void);
     bool             (* isWriteBuffFull)(void);
     uint32_t         (* read)();
-    void             (* write)(uint32_t);
+    uint32_t         (* write)(uint32_t);
 };
 
 /*======================================================  GLOBAL VARIABLES  ==*/
@@ -92,8 +93,7 @@ struct spiId {
 
 void spiOpen(
     struct spiHandle *        handle,
-    const struct spiConfig *  config,
-    const struct spiId *      id);
+    const struct spiConfig *  config);
 
 enum spiError spiClose(
     struct spiHandle *  handle);

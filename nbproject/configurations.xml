@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configurationDescriptor version="62">
   <logicalFolder name="root" displayName="root" projectFiles="true">
+    <logicalFolder name="f1" displayName="config" projectFiles="true">
+      <itemPath>config/config_test.h</itemPath>
+      <itemPath>config/config_project.h</itemPath>
+      <itemPath>config/config_mcu.h</itemPath>
+    </logicalFolder>
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
                    projectFiles="true">
@@ -8,6 +13,8 @@
         <itemPath>include/driver/spi.h</itemPath>
         <itemPath>include/driver/lld_spi1.h</itemPath>
         <itemPath>include/driver/uart.h</itemPath>
+        <itemPath>include/driver/lld_spis.h</itemPath>
+        <itemPath>include/driver/codec.h</itemPath>
       </logicalFolder>
       <logicalFolder name="esolid-base" displayName="esolid-base" projectFiles="true">
         <logicalFolder name="inc" displayName="inc" projectFiles="true">
@@ -83,6 +90,9 @@
           </logicalFolder>
         </logicalFolder>
       </logicalFolder>
+      <logicalFolder name="f1" displayName="test" projectFiles="true">
+        <itemPath>include/test/test_spi.h</itemPath>
+      </logicalFolder>
       <itemPath>include/bsp.h</itemPath>
     </logicalFolder>
     <logicalFolder name="LinkerScript"
@@ -96,6 +106,8 @@
         <itemPath>source/driver/lld_spi1.c</itemPath>
         <itemPath>source/driver/spi.c</itemPath>
         <itemPath>source/driver/uart.c</itemPath>
+        <itemPath>source/driver/lld_spis.c</itemPath>
+        <itemPath>source/driver/codec.c</itemPath>
       </logicalFolder>
       <logicalFolder name="esolid-base" displayName="esolid-base" projectFiles="true">
         <logicalFolder name="port" displayName="port" projectFiles="true">
@@ -149,6 +161,9 @@
           <itemPath>esolid-vtimer/src/vtimer.c</itemPath>
         </logicalFolder>
       </logicalFolder>
+      <logicalFolder name="f1" displayName="test" projectFiles="true">
+        <itemPath>source/test/test_spi.c</itemPath>
+      </logicalFolder>
       <itemPath>source/main.c</itemPath>
       <itemPath>source/bsp.c</itemPath>
       <itemPath>source/support.c</itemPath>
@@ -167,6 +182,7 @@
     <Elem>lld</Elem>
     <Elem>source/driver</Elem>
     <Elem>include/driver</Elem>
+    <Elem>source/test</Elem>
   </sourceRootList>
   <projectmakefile>Makefile</projectmakefile>
   <confs>
@@ -208,7 +224,7 @@
         <property key="enable-unroll-loops" value="false"/>
         <property key="exclude-floating-point" value="false"/>
         <property key="extra-include-directories"
-                  value=".;/opt/microchip/harmony/0.70.01b/framework;/opt/microchip/harmony/0.70.01b/framework/system;esolid-base/inc;esolid-base/port/pic32-none-gcc/common;esolid-base/port/pic32-none-gcc/mips-m4k;esolid-base/port/pic32-none-gcc/pic32mx150f128d;esolid-mem/inc;esolid-vtimer/inc;esolid-eds/inc;lld/inc;include"/>
+                  value=".;esolid-base/inc;esolid-base/port/pic32-none-gcc/common;esolid-base/port/pic32-none-gcc/mips-m4k;esolid-base/port/pic32-none-gcc/pic32mx150f128d;esolid-mem/inc;esolid-vtimer/inc;esolid-eds/inc;include;include/test"/>
         <property key="generate-16-bit-code" value="false"/>
         <property key="generate-micro-compressed-code" value="false"/>
         <property key="isolate-each-function" value="true"/>
@@ -258,7 +274,7 @@
         <property key="map-file" value="${DISTDIR}/${PROJECTNAME}.${IMAGE_TYPE}.map"/>
         <property key="no-startup-files" value="false"/>
         <property key="oXC32ld-extra-opts" value=""/>
-        <property key="optimization-level" value="-Os"/>
+        <property key="optimization-level" value=""/>
         <property key="preprocessor-macros" value=""/>
         <property key="remove-unused-sections" value="false"/>
         <property key="report-memory-usage" value="true"/>
@@ -345,7 +361,7 @@
         <property key="memories.programmemory" value="true"/>
         <property key="memories.programmemory.end" value="0x1d01ffff"/>
         <property key="memories.programmemory.start" value="0x1d000000"/>
-        <property key="poweroptions.powerenable" value="false"/>
+        <property key="poweroptions.powerenable" value="true"/>
         <property key="programoptions.eraseb4program" value="true"/>
         <property key="programoptions.preserveeeprom" value="false"/>
         <property key="programoptions.preserveprogramrange" value="false"/>
