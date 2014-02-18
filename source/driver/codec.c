@@ -1,6 +1,7 @@
 /*
- * File:   codec.c
- * Author: nenad
+ * File:    codec.c
+ * Author:  nenad
+ * Details: Audio codec driver
  *
  * Created on February 15, 2014, 11:12 PM
  */
@@ -9,7 +10,6 @@
 
 #include "vtimer/vtimer.h"
 #include "driver/codec.h"
-#include "bsp.h"
 
 /*=========================================================  LOCAL MACRO's  ==*/
 /*======================================================  LOCAL DATA TYPES  ==*/
@@ -20,10 +20,18 @@
 /*===================================  GLOBAL PRIVATE FUNCTION DEFINITIONS  ==*/
 /*====================================  GLOBAL PUBLIC FUNCTION DEFINITIONS  ==*/
 
+void initCodec(
+    void) {
+    /*
+     * NOTE: This is the place to do general and system wide initializaion
+     */
+}
+
 enum codecError codecOpen(
     struct spiHandle *  spi) {
 
 
+    return (CODEC_ERROR_NONE);
 }
 
 /*================================*//** @cond *//*==  CONFIGURATION ERRORS  ==*/

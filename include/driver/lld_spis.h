@@ -1,6 +1,7 @@
 /*
- * File:   lld_spis.h
- * Author: nenad
+ * File:    lld_spis.h
+ * Author:  nenad
+ * Details: Low Level Driver for Software SPI
  *
  * Created on February 14, 2014, 8:27 PM
  */
@@ -14,7 +15,7 @@
 
 /*===============================================================  MACRO's  ==*/
 
-#if   (((__PIC32_FEATURE_SET__ >= 100) && (__PIC32_FEATURE_SET__ <= 299)) || defined(__32MXGENERIC__))
+#if   (((__PIC32_FEATURE_SET__ >= 100) && (__PIC32_FEATURE_SET__ <= 299)))
 #define SPIS_PIN_TABLE(entry)                                                   \
     entry(SPIS_SDI_C6,      6,  &PORTC,     &TRISC,     &PORTCCLR,  &PORTCSET)  \
     entry(SPIS_SDI_C7,      7,  &PORTC,     &TRISC,     &PORTCCLR,  &PORTCSET)  \
@@ -22,7 +23,7 @@
     entry(SPIS_SDO_B8,      8,  &PORTB,     &TRISB,     &PORTBCLR,  &PORTBSET)  \
     entry(SPIS_SCK_B9,      9,  &PORTB,     &TRISB,     &PORTBCLR,  &PORTBSET)  \
     entry(SPIS_SS_B10,      10, &PORTB,     &TRISB,     &PORTBCLR,  &PORTBSET)
-#elif (((__PIC32_FEATURE_SET__ >= 300) && (__PIC32_FEATURE_SET__ <= 499)) || defined(__32MXGENERIC__))
+#elif (((__PIC32_FEATURE_SET__ >= 300) && (__PIC32_FEATURE_SET__ <= 499)))
 #elif (((__PIC32_FEATURE_SET__ >= 500) && (__PIC32_FEATURE_SET__ <= 799)))
 #define SPIS_PIN_TABLE(entry)                                                   \
     entry(SPIS_SCK_A9,      9,  &PORTA,     &TRISA,     &PORTACLR,  &PORTASET)  \
@@ -58,6 +59,8 @@ enum spisPinId {
 
 /*======================================================  GLOBAL VARIABLES  ==*/
 
+/**@brief       Software SPI identifier
+ */
 extern const struct spiId GlobalSpis;
 
 /*===================================================  FUNCTION PROTOTYPES  ==*/

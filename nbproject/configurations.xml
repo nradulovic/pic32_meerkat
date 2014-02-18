@@ -15,6 +15,11 @@
         <itemPath>include/driver/uart.h</itemPath>
         <itemPath>include/driver/lld_spis.h</itemPath>
         <itemPath>include/driver/codec.h</itemPath>
+        <itemPath>include/driver/i2c.h</itemPath>
+        <itemPath>include/driver/lld_uart1.h</itemPath>
+        <itemPath>include/driver/gpio.h</itemPath>
+        <itemPath>include/driver/clock.h</itemPath>
+        <itemPath>include/driver/intr.h</itemPath>
       </logicalFolder>
       <logicalFolder name="esolid-base" displayName="esolid-base" projectFiles="true">
         <logicalFolder name="inc" displayName="inc" projectFiles="true">
@@ -92,6 +97,7 @@
       </logicalFolder>
       <logicalFolder name="f1" displayName="test" projectFiles="true">
         <itemPath>include/test/test_spi.h</itemPath>
+        <itemPath>include/test/test_uart.h</itemPath>
       </logicalFolder>
       <itemPath>include/bsp.h</itemPath>
     </logicalFolder>
@@ -108,6 +114,10 @@
         <itemPath>source/driver/uart.c</itemPath>
         <itemPath>source/driver/lld_spis.c</itemPath>
         <itemPath>source/driver/codec.c</itemPath>
+        <itemPath>source/driver/lld_uart1.c</itemPath>
+        <itemPath>source/driver/gpio.c</itemPath>
+        <itemPath>source/driver/clock.c</itemPath>
+        <itemPath>source/driver/intr.c</itemPath>
       </logicalFolder>
       <logicalFolder name="esolid-base" displayName="esolid-base" projectFiles="true">
         <logicalFolder name="port" displayName="port" projectFiles="true">
@@ -163,6 +173,7 @@
       </logicalFolder>
       <logicalFolder name="f1" displayName="test" projectFiles="true">
         <itemPath>source/test/test_spi.c</itemPath>
+        <itemPath>source/test/test_uart.c</itemPath>
       </logicalFolder>
       <itemPath>source/main.c</itemPath>
       <itemPath>source/bsp.c</itemPath>
@@ -233,8 +244,7 @@
         <property key="place-data-into-section" value="true"/>
         <property key="post-instruction-scheduling" value="default"/>
         <property key="pre-instruction-scheduling" value="default"/>
-        <property key="preprocessor-macros"
-                  value="INLINE_API=&quot;static inline&quot;;INLINE=&quot;static inline&quot;;USE_CRYPTO_HW;_PLIB_DISABLE_LEGACY"/>
+        <property key="preprocessor-macros" value="_PLIB_DISABLE_LEGACY"/>
         <property key="strict-ansi" value="true"/>
         <property key="support-ansi" value="false"/>
         <property key="use-cci" value="false"/>
@@ -361,7 +371,7 @@
         <property key="memories.programmemory" value="true"/>
         <property key="memories.programmemory.end" value="0x1d01ffff"/>
         <property key="memories.programmemory.start" value="0x1d000000"/>
-        <property key="poweroptions.powerenable" value="true"/>
+        <property key="poweroptions.powerenable" value="false"/>
         <property key="programoptions.eraseb4program" value="true"/>
         <property key="programoptions.preserveeeprom" value="false"/>
         <property key="programoptions.preserveprogramrange" value="false"/>

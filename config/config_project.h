@@ -12,7 +12,17 @@
 extern "C" {
 #endif
 
+/**@brief       Enable/disable SPI tests
+ * @details     0 - disable
+ *              1 - enable
+ */
 #define CONFIG_PROJ_TEST_SPI            0
+
+/**@brief       Enable/disable UART tests
+ * @details     0 - disable
+ *              1 - enable
+ */
+#define CONFIG_PROJ_TEST_UART           1
 
 #ifdef	__cplusplus
 }

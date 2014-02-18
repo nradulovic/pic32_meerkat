@@ -1,6 +1,7 @@
 /*
- * File:   bsp.c
- * Author: nenad
+ * File:    bsp.c
+ * Author:  nenad
+ * Details: Board Support Package
  *
  * Created on February 8, 2014, 11:12 AM
  */
@@ -9,42 +10,33 @@
 
 #include <peripheral/system.h>
 #include "bsp.h"
+#include "driver/intr.h"
+#include "driver/clock.h"
+#include "driver/gpio.h"
+#include "driver/i2c.h"
+#include "driver/spi.h"
+#include "driver/uart.h"
+#include "driver/codec.h"
+#include "driver/intr.h"
 
 /*=========================================================  LOCAL MACRO's  ==*/
-
-#define CONFIG_MAX_CPU_CLOCK            50000000ul
-
 /*======================================================  LOCAL DATA TYPES  ==*/
-
-struct systemInfo {
-    struct systemClocks {
-        uint32_t            cpu;
-        uint32_t            peripheralBus;
-    }                   clock;
-};
-
 /*=============================================  LOCAL FUNCTION PROTOTYPES  ==*/
 /*=======================================================  LOCAL VARIABLES  ==*/
-
-static struct systemInfo GlobalSystemInfo;
-
 /*======================================================  GLOBAL VARIABLES  ==*/
 /*============================================  LOCAL FUNCTION DEFINITIONS  ==*/
 /*===================================  GLOBAL PRIVATE FUNCTION DEFINITIONS  ==*/
 /*====================================  GLOBAL PUBLIC FUNCTION DEFINITIONS  ==*/
 
-void bspInit(
+void initBsp(
     void) {
 
-    GlobalSystemInfo.clock.cpu           = CONFIG_MAX_CPU_CLOCK;
-    GlobalSystemInfo.clock.peripheralBus = SYSTEMConfigPerformance(CONFIG_MAX_CPU_CLOCK);
-
-}
-
-uint32_t bspGetPBfclock (
-    void) {
-
-    return (GlobalSystemInfo.clock.peripheralBus);
+    initClock();
+    initIntr();
+    initGpio();                                                                 /* Initialize GPIO module                                   */
+    initSpi();
+    initUart();
+    initCodec();
 }
 
 /*================================*//** @cond *//*==  CONFIGURATION ERRORS  ==*/

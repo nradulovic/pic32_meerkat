@@ -1,6 +1,7 @@
 /* 
- * File:   spi.h
- * Author: nenad
+ * File:    spi.h
+ * Author:  nenad
+ * Details: Generic SPI driver
  *
  * Created on February 6, 2014, 7:27 PM
  */
@@ -15,6 +16,7 @@
 #include <stddef.h>
 
 #include "plat/compiler.h"
+#include "arch/systimer.h"
 #include "driver/lld_spi1.h"
 #include "driver/lld_spis.h"
 
@@ -64,7 +66,6 @@ struct spiConfig {
     enum spiConfigFlags flags;
     uint32_t            speed;
     uint32_t            isrPrio;
-    uint32_t            relTimeout;
     struct spiRemap {
         uint8_t             sdi;
         uint8_t             sdo;
@@ -80,16 +81,17 @@ struct spiHandle {
 };
 
 struct spiId {
-    void             (* open)(const struct spiConfig *);
-    void             (* close)(void);
-    bool             (* isReadBuffEmpty)(void);
-    bool             (* isWriteBuffFull)(void);
-    uint32_t         (* read)();
-    uint32_t         (* write)(uint32_t);
+    void             (* open)(struct spiHandle *);
+    void             (* close)(struct spiHandle *);
+    bool             (* isBuffFull)(struct spiHandle *);
+    uint32_t         (* exchange)(struct spiHandle *, uint32_t);
 };
 
 /*======================================================  GLOBAL VARIABLES  ==*/
 /*===================================================  FUNCTION PROTOTYPES  ==*/
+
+void initSpi(
+    void);
 
 void spiOpen(
     struct spiHandle *        handle,
@@ -98,15 +100,11 @@ void spiOpen(
 enum spiError spiClose(
     struct spiHandle *  handle);
 
-enum spiError spiRead(
+enum spiError spiExchange(
     struct spiHandle *  handle,
     void *              buffer,
-    size_t              nElements);
-
-enum spiError spiWrite(
-    struct spiHandle *  handle,
-    void *              buffer,
-    size_t              nElements);
+    size_t              nElements,
+    esSysTimerTick      timeout);
 
 /*--------------------------------------------------------  C++ extern end  --*/
 #ifdef __cplusplus

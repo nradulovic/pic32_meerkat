@@ -1,23 +1,24 @@
 /*
- * File:   spi.c
- * Author: nenad
+ * File:    spi.c
+ * Author:  nenad
+ * Details: Generic UART driver
  *
  * Created on February 6, 2014, 7:12 PM
  */
 
 /*=========================================================  INCLUDE FILES  ==*/
 
-#include <peripheral/system.h>
-
 #include "vtimer/vtimer.h"
 #include "driver/uart.h"
-#include "bsp.h"
 
 /*=========================================================  LOCAL MACRO's  ==*/
 
 #define UART_INACTIVE                   0
 #define UART_RX_ACTIVE                  (0x1u << 0)
 #define UART_TX_ACTIVE                  (0x1u << 1)
+
+#define UART_TIMER_COUNTING             0u
+#define UART_TIMER_FIRED                1u
 
 /*======================================================  LOCAL DATA TYPES  ==*/
 /*=============================================  LOCAL FUNCTION PROTOTYPES  ==*/
@@ -32,49 +33,38 @@ static void uartTimeout(
 static void uartTimeout(
     void *              arg) {
 
-    *(volatile esAtomic *)arg = true;
+    *(volatile esAtomic *)arg = UART_TIMER_FIRED;
 }
 
 /*===================================  GLOBAL PRIVATE FUNCTION DEFINITIONS  ==*/
 /*====================================  GLOBAL PUBLIC FUNCTION DEFINITIONS  ==*/
 
-void uartInit(
-    struct uartHandle *        handle,
-    const struct uartConfig *  config,
-    const struct uartId *      id) {
-
-    handle->id = id;
-    handle->id->open(config);
-    handle->state = UART_INACTIVE;
+void initUart(
+    void) {
+    /*
+     * NOTE: This is the place to do general and system wide initializaion
+     */
 }
 
-enum uartError uartTerm(
+void uartOpen(
+    struct uartHandle *        handle,
+    const struct uartConfig *  config) {
+
+    handle->id     = config->id;
+    handle->config = config;
+    handle->id->open(handle);
+    handle->state  = UART_INACTIVE;
+}
+
+enum uartError uartClose(
     struct uartHandle * handle) {
 
-    volatile esAtomic   timerIsFinished;
-    esVTimer            timerTimeout;
-
-    timerIsFinished = true;
-    esVTimerInit(&timerTimeout);
-
-    if (CONFIG_UART_CLOSE_WAIT_TICKS > 1) {
-        esVTimerStart(
-            &timerTimeout,
-            CONFIG_UART_CLOSE_WAIT_TICKS,
-            uartTimeout,
-            (void *)&timerIsFinished);
-        timerIsFinished = false;
-    }
-    while ((handle->state != UART_INACTIVE) && (timerIsFinished == false));
-
     if (handle->state != UART_INACTIVE) {
-        esVTimerTerm(&timerTimeout);
 
         return (UART_ERROR_BUSY);
     }
-    esVTimerTerm(&timerTimeout);
     handle->state = UART_INACTIVE;
-    (* handle->id->close)();
+    handle->id->close(handle);
 
     return (UART_ERROR_NONE);
 }
@@ -82,32 +72,89 @@ enum uartError uartTerm(
 enum uartError uartRead(
     struct uartHandle * handle,
     void *              buffer,
-    size_t              nElements);
+    size_t              nElements,
+    esSysTimerTick      timeout) {
+
+    size_t              received;
+    volatile esAtomic   timerState;
+    enum uartError      error;
+    esVTimer            timerTimeout = ES_VTIMER_INITIALIZER();
+
+    timerState = UART_TIMER_COUNTING;
+    esVTimerInit(&timerTimeout);
+
+    if (timeout != 0) {
+        esVTimerStart(
+            &timerTimeout,
+            timeout,
+            uartTimeout,
+            (void *)&timerState);
+    }
+    while (((handle->state & UART_RX_ACTIVE) != 0u) && (timerState == UART_TIMER_COUNTING));
+
+    if ((handle->state & UART_RX_ACTIVE) != 0u) {
+        esVTimerTerm(&timerTimeout);
+
+        return (UART_ERROR_BUSY);
+    }
+    handle->state |= UART_RX_ACTIVE;
+    received = 0u;
+
+    if (handle->config->flags & UART_DATA_BITS_9) {
+        uint16_t *  buffer_ = (uint16_t *)buffer;
+
+        while ((timerState == UART_TIMER_COUNTING) && (received < nElements)) {
+            if (handle->id->isReadBuffEmpty(handle) != true) {
+                buffer_[received] = handle->id->read(handle);
+                received++;
+            }
+        }
+    } else {
+        uint8_t *  buffer_ = (uint8_t *)buffer;
+
+        while ((timerState == UART_TIMER_COUNTING) && (received < nElements)) {
+            if (handle->id->isReadBuffEmpty(handle) != true) {
+                buffer_[received] = handle->id->read(handle);
+                received++;
+            }
+        }
+    }
+    esVTimerTerm(&timerTimeout);
+
+    if ((timerState == UART_TIMER_COUNTING)) {
+        error = UART_ERROR_NONE;
+    } else {
+        error = UART_ERROR_TIMEOUT;
+    }
+    handle->state &= ~UART_RX_ACTIVE;
+
+    return (error);
+}
 
 enum uartError uartWrite(
     struct uartHandle * handle,
     void *              buffer,
-    size_t              nElements) {
+    size_t              nElements,
+    esSysTimerTick      timeout) {
 
     size_t              transmitted;
-    volatile esAtomic   timerIsFinished;
+    volatile esAtomic   timerState;
     enum uartError      error;
-    esVTimer            timerTimeout;
+    esVTimer            timerTimeout = ES_VTIMER_INITIALIZER();
 
-    timerIsFinished = true;
+    timerState = UART_TIMER_COUNTING;
     esVTimerInit(&timerTimeout);
 
-    if (handle->config->relTimeout != 0) {
+    if (timeout != 0) {
         esVTimerStart(
             &timerTimeout,
-            handle->config->relTimeout * nElements,
+            timeout,
             uartTimeout,
-            (void *)&timerIsFinished);
-        timerIsFinished = false;
+            (void *)&timerState);
     }
-    while ((handle->state != UART_INACTIVE) && (timerIsFinished == false));
+    while (((handle->state & UART_TX_ACTIVE) != 0u) && (timerState == UART_TIMER_COUNTING));
 
-    if (handle->state != UART_INACTIVE) {
+    if ((handle->state & UART_TX_ACTIVE) != 0u) {
         esVTimerTerm(&timerTimeout);
 
         return (UART_ERROR_BUSY);
@@ -115,44 +162,28 @@ enum uartError uartWrite(
     handle->state |= UART_TX_ACTIVE;
     transmitted = 0u;
 
-    switch (1 /* TODO: change this*/) {
-        case 0: {
-            uint8_t *  buffer_ = (uint8_t *)buffer;
+    if (handle->config->flags & UART_DATA_BITS_9) {
+        uint16_t *  buffer_ = (uint16_t *)buffer;
 
-            while ((timerIsFinished == false) && (transmitted < nElements)) {
-                if (handle->id->isWriteBuffFull() != true) {
-                    handle->id->write(buffer_[transmitted]);
-                    transmitted++;
-                }
+        while ((timerState == UART_TIMER_COUNTING) && (transmitted < nElements)) {
+            if (handle->id->isWriteBuffFull(handle) != true) {
+                handle->id->write(handle, buffer_[transmitted]);
+                transmitted++;
             }
-            break;
         }
-        case 1 : {
-            uint16_t *  buffer_ = (uint16_t *)buffer;
+    } else {
+        uint8_t *  buffer_ = (uint8_t *)buffer;
 
-            while ((timerIsFinished == false) && (transmitted < nElements)) {
-                if (handle->id->isWriteBuffFull() != true) {
-                    handle->id->write(buffer_[transmitted]);
-                    transmitted++;
-                }
+        while ((timerState == UART_TIMER_COUNTING) && (transmitted < nElements)) {
+            if (handle->id->isWriteBuffFull(handle) != true) {
+                handle->id->write(handle, buffer_[transmitted]);
+                transmitted++;
             }
-            break;
-        }
-        default : {
-            uint32_t *  buffer_ = (uint32_t *)buffer;
-
-            while ((timerIsFinished == false) && (transmitted < nElements)) {
-                if (handle->id->isWriteBuffFull() != true) {
-                    handle->id->write(buffer_[transmitted]);
-                    transmitted++;
-                }
-            }
-            break;
         }
     }
     esVTimerTerm(&timerTimeout);
 
-    if ((timerIsFinished == false)) {
+    if ((timerState == UART_TIMER_COUNTING)) {
         error = UART_ERROR_NONE;
     } else {
         error = UART_ERROR_TIMEOUT;
@@ -176,21 +207,53 @@ void uartSetWriter(
     handle->writer = notify;
 }
 
-void uartReadStart(
+enum uartError uartReadStart(
     struct uartHandle * handle,
     void *              buffer,
-    size_t              nElements);
+    size_t              nElements) {
+
+    if ((handle->state & UART_RX_ACTIVE) != 0u) {
+
+        return (UART_ERROR_BUSY);
+    }
+    handle->state     |= UART_RX_ACTIVE;
+    handle->readBuffer = buffer;
+    handle->readSize   = nElements;
+    handle->id->readStart(handle);
+
+    return (UART_ERROR_NONE);
+}
 
 void uartReadStop(
-    struct uartHandle * handle);
+    struct uartHandle * handle) {
 
-void uartWriteStart(
+    handle->id->readStop(handle);
+    handle->state &= ~UART_RX_ACTIVE;
+}
+
+enum uartError uartWriteStart(
     struct uartHandle * handle,
     void *              buffer,
-    size_t              nElements);
+    size_t              nElements) {
+
+    if ((handle->state & UART_TX_ACTIVE) != 0u) {
+
+        return (UART_ERROR_BUSY);
+    }
+    handle->state      |= UART_TX_ACTIVE;
+    handle->writeBuffer = buffer;
+    handle->writeSize   = nElements;
+    handle->id->writeStart(handle);
+
+    return (UART_ERROR_NONE);
+}
 
 void uartWriteStop(
-    struct uartHandle * handle);
+    struct uartHandle * handle) {
+
+    handle->id->writeStop(handle);
+    handle->state &= ~UART_TX_ACTIVE;
+}
 
 /*================================*//** @cond *//*==  CONFIGURATION ERRORS  ==*/
 /** @endcond *//** @} *//******************************************************

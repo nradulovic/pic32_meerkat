@@ -1,6 +1,7 @@
 /*
- * File:   lld_spi1.c
- * Author: nenad
+ * File:    lld_spi1.c
+ * Author:  nenad
+ * Details: Low Level Driver for SPI1
  *
  * Created on February 11, 2014, 10:32 PM
  */
@@ -10,8 +11,8 @@
 #include <stdbool.h>
 #include <xc.h>
 
+#include "driver/clock.h"
 #include "driver/spi.h"
-#include "bsp.h"
 
 /*=========================================================  LOCAL MACRO's  ==*/
 
@@ -37,26 +38,23 @@
 #define SPI1STAT_SPIROV                 (0x1u << 6)
 #define SPI1STAT_SPITUR                 (0x1u << 8)
 
-#define SPI1_PIN_ADDRESS(id, value, address)                                  \
+#define SPI1_PIN_ADDRESS(id, value, address)                                    \
     address,
 
-#define SPI1_PIN_VALUE(id, value, address)                                    \
+#define SPI1_PIN_VALUE(id, value, address)                                      \
     value,
 
 /*======================================================  LOCAL DATA TYPES  ==*/
 /*=============================================  LOCAL FUNCTION PROTOTYPES  ==*/
 
 static void lldSpiOpen(
-    const struct spiConfig *);
+    struct spiHandle *);
 static void lldSpiClose(
-    void);
-static bool lldSpiIsReadBuffEmpty(
-    void);
-static bool lldSpiIsWriteBuffFull(
-    void);
-static uint32_t lldSpiRead(
-    void);
-static uint32_t lldSpiWrite(
+    struct spiHandle *);
+static bool lldSpiIsBuffFull(
+    struct spiHandle *);
+static uint32_t lldSpiExchange(
+    struct spiHandle *,
     uint32_t);
 
 /*=======================================================  LOCAL VARIABLES  ==*/
@@ -74,20 +72,20 @@ static const unsigned int spiPinValue[SPI1_LAST_PIN_ID] = {
 const struct spiId GlobalSpi1 = {
     lldSpiOpen,
     lldSpiClose,
-    lldSpiIsReadBuffEmpty,
-    lldSpiIsWriteBuffFull,
-    lldSpiRead,
-    lldSpiWrite
+    lldSpiIsBuffFull,
+    lldSpiExchange
 };
 
 /*============================================  LOCAL FUNCTION DEFINITIONS  ==*/
 
 static void lldSpiOpen(
-    const struct spiConfig * config) {
+    struct spiHandle *  handle) {
 #if   (((__PIC32_FEATURE_SET__ >= 100) && (__PIC32_FEATURE_SET__ <= 299)) || defined(__32MXGENERIC__))
 
+    const struct spiConfig * config;
     unsigned int data;
-    
+
+    config = handle->config;
     SPI1CON             = 0;
     SPI1CON2            = 0;
     IEC1CLR             = IEC1_SPI1TX | IEC1_SPI1RX | IEC1_SPI1E;               /* Disable all interrupts                                   */
@@ -99,12 +97,12 @@ static void lldSpiOpen(
     SPI1CONCLR          = SPI1CON_FRMEN | SPI1CON_MCLKSEL;
     SPI1CONSET          = SPI1CON_ENHBUF;
     
-    if ((config->speed * 2u) >= bspGetPBfclock()) {
+    if ((config->speed * 2u) >= clockGetPeripheralClock()) {
         SPI1BRG         = 0;                                                    /* Maximum SPI speed                                        */
     } else {
         unsigned int    divisor;
         
-        divisor  = (bspGetPBfclock() / (config->speed * 2u)) - 1u;
+        divisor  = (clockGetPeripheralClock() / (config->speed * 2u)) - 1u;
         divisor &= 0x0fffu;
         SPI1BRG         = divisor;
     }
@@ -120,28 +118,19 @@ static void lldSpiOpen(
 }
 
 static void lldSpiClose(
-    void) {
+    struct spiHandle *  handle) {
 #if   (((__PIC32_FEATURE_SET__ >= 100) && (__PIC32_FEATURE_SET__ <= 299)) || defined(__32MXGENERIC__))
+    (void)handle;
     SPI1CON             = 0;
     IEC1CLR             = IEC1_SPI1TX | IEC1_SPI1RX | IEC1_SPI1E;               /* Disable all interrupts                                   */
     IFS1CLR             = IFS1_SPI1TX | IFS1_SPI1RX | IFS1_SPI1E;               /* Clear all interrupts                                     */
 #endif
 }
 
-static bool lldSpiIsReadBuffEmpty(
-    void) {
-
-    if ((SPI1STAT & SPI1STAT_SPIRBE) != 0) {
-
-        return (true);
-    } else {
-
-        return (false);
-    }
-}
-
-static bool lldSpiIsWriteBuffFull(
-    void) {
+static bool lldSpiIsBuffFull(
+    struct spiHandle *  handle) {
+#if   (((__PIC32_FEATURE_SET__ >= 100) && (__PIC32_FEATURE_SET__ <= 299)) || defined(__32MXGENERIC__))
+    (void)handle;
 
     if ((SPI1STAT & SPI1STAT_SPITBF) != 0) {
 
@@ -150,17 +139,14 @@ static bool lldSpiIsWriteBuffFull(
 
         return (false);
     }
+#endif
 }
 
-static uint32_t lldSpiRead(
-    void) {
-
-    return (SPI1BUF);
-}
-
-static uint32_t lldSpiWrite(
+static uint32_t lldSpiExchange(
+    struct spiHandle *  handle,
     uint32_t            data) {
 
+    (void)handle;
     SPI1BUF = data;
 
     return (SPI1BUF);

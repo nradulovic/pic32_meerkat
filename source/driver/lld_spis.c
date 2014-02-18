@@ -1,6 +1,7 @@
 /*
- * File:   lld_spis.c
- * Author: nenad
+ * File:    lld_spis.c
+ * Author:  nenad
+ * Details: Low Level Driver for Software SPI
  *
  * Created on February 14, 2014, 8:12 PM
  */
@@ -38,16 +39,13 @@ struct spisPolarized {
 /*=============================================  LOCAL FUNCTION PROTOTYPES  ==*/
 
 static void lldSpiOpen(
-    const struct spiConfig *);
+    struct spiHandle *);
 static void lldSpiClose(
-    void);
-static bool lldSpiIsReadBuffEmpty(
-    void);
-static bool lldSpiIsWriteBuffFull(
-    void);
-static uint32_t lldSpiRead(
-    void);
-static uint32_t lldSpiWrite(
+    struct spiHandle *);
+static bool lldSpiIsBuffFull(
+    struct spiHandle *);
+static uint32_t lldSpiExchange(
+    struct spiHandle *,
     uint32_t);
 
 /*=======================================================  LOCAL VARIABLES  ==*/
@@ -56,7 +54,6 @@ static const struct spisGpio Gpio[SPIS_LAST_PIN_ID] = {
     SPIS_PIN_TABLE(SPIS_GPIO)
 };
 
-static struct spiConfig     Config;
 static struct spisPolarized Polarized;
 
 /*======================================================  GLOBAL VARIABLES  ==*/
@@ -64,88 +61,81 @@ static struct spisPolarized Polarized;
 const struct spiId GlobalSpis = {
     lldSpiOpen,
     lldSpiClose,
-    lldSpiIsReadBuffEmpty,
-    lldSpiIsWriteBuffFull,
-    lldSpiRead,
-    lldSpiWrite
+    lldSpiIsBuffFull,
+    lldSpiExchange
 };
 
 /*============================================  LOCAL FUNCTION DEFINITIONS  ==*/
 
 static void lldSpiOpen(
-    const struct spiConfig * config) {
+    struct spiHandle *  handle) {
 
-    Config.flags     = config->flags;
-    Config.remap.sdi = config->remap.sdi;
-    Config.remap.sdo = config->remap.sdo;
-    Config.remap.sck = config->remap.sck;
-    Config.remap.ss  = config->remap.ss;
+    const struct spiConfig * config;
+
+    config = handle->config;
 
     if (config->flags & SPI_CLOCK_POLARITY_IDLE_HIGH) {
-        Polarized.sckActive   = Gpio[Config.remap.sck].clr;
-        Polarized.sckInactive = Gpio[Config.remap.sck].set;
-        
+        Polarized.sckActive   = Gpio[config->remap.sck].clr;
+        Polarized.sckInactive = Gpio[config->remap.sck].set;
+
     } else {
-        Polarized.sckActive   = Gpio[Config.remap.sck].set;
-        Polarized.sckInactive = Gpio[Config.remap.sck].clr;
+        Polarized.sckActive   = Gpio[config->remap.sck].set;
+        Polarized.sckInactive = Gpio[config->remap.sck].clr;
     }
 
     if (config->flags & SPI_MASTER_SS_ACTIVE_HIGH) {
-        Polarized.ssActive    = Gpio[Config.remap.ss].set;
-        Polarized.ssInactive  = Gpio[Config.remap.ss].clr;
+        Polarized.ssActive    = Gpio[config->remap.ss].set;
+        Polarized.ssInactive  = Gpio[config->remap.ss].clr;
     } else {
-        Polarized.ssActive    = Gpio[Config.remap.ss].clr;
-        Polarized.ssInactive  = Gpio[Config.remap.ss].set;
+        Polarized.ssActive    = Gpio[config->remap.ss].clr;
+        Polarized.ssInactive  = Gpio[config->remap.ss].set;
     }
     /*--  Setup SCK  ---------------------------------------------------------*/
-    *Gpio[Config.remap.sck].tris  &= ~Gpio[Config.remap.sck].bit;
-    *Polarized.sckInactive        |= Gpio[Config.remap.sck].bit;
+    *Gpio[config->remap.sck].tris &= ~Gpio[config->remap.sck].bit;
+    *Polarized.sckInactive        |= Gpio[config->remap.sck].bit;
 
     /*--  Setup SDI  ---------------------------------------------------------*/
-    *Gpio[Config.remap.sdi].tris  |= Gpio[Config.remap.sdi].bit;
-    
+    *Gpio[config->remap.sdi].tris |= Gpio[config->remap.sdi].bit;
+
     /*--  Setup SDO  ---------------------------------------------------------*/
-    *Gpio[Config.remap.sdo].tris  &= ~Gpio[Config.remap.sdo].bit;
-    *Gpio[Config.remap.sdo].clr   |= Gpio[Config.remap.sdo].bit;
+    *Gpio[config->remap.sdo].tris &= ~Gpio[config->remap.sdo].bit;
+    *Gpio[config->remap.sdo].clr  |= Gpio[config->remap.sdo].bit;
 
     /*--  Setup SS  ----------------------------------------------------------*/
-    *Gpio[Config.remap.ss].tris   &= ~Gpio[Config.remap.ss].bit;
-    *Polarized.ssInactive         |= Gpio[Config.remap.ss].bit;
+    *Gpio[config->remap.ss].tris  &= ~Gpio[config->remap.ss].bit;
+    *Polarized.ssInactive         |= Gpio[config->remap.ss].bit;
 }
 
 static void lldSpiClose(
-    void) {
+    struct spiHandle *  handle) {
 
-    *Polarized.sckInactive        |= Gpio[Config.remap.sck].bit;
-    *Polarized.ssInactive         |= Gpio[Config.remap.ss].bit;
-    *Gpio[Config.remap.sdo].clr   |= Gpio[Config.remap.sdo].bit;
+    const struct spiConfig * config;
+
+    config = handle->config;
+    *Polarized.sckInactive        |= Gpio[config->remap.sck].bit;
+    *Polarized.ssInactive         |= Gpio[config->remap.ss].bit;
+    *Gpio[config->remap.sdo].clr  |= Gpio[config->remap.sdo].bit;
 }
 
-static bool lldSpiIsReadBuffEmpty(
-    void) {
+static bool lldSpiIsBuffFull(
+    struct spiHandle *  handle) {
+
+    (void)handle;
 
     return (false);
 }
 
-static bool lldSpiIsWriteBuffFull(
-    void) {
-
-    return (false);
-}
-
-static uint32_t lldSpiRead(
-    void) {
-
-    return (lldSpiWrite(0u));
-}
-
-static uint32_t lldSpiWrite(
+static uint32_t lldSpiExchange(
+    struct spiHandle *  handle,
     uint32_t            data) {
 
+    const struct spiConfig * config;
     uint32_t            cnt;
     uint32_t            retval;
 
-    switch (Config.flags & (0x3u << 10)) {
+    config = handle->config;
+
+    switch (config->flags & (0x3u << 10)) {
         case SPI_DATA_8 : {
             cnt = 8;
             break;
@@ -159,16 +149,16 @@ static uint32_t lldSpiWrite(
             break;
         }
     }
-    *Polarized.sckInactive |= Gpio[Config.remap.sck].bit;
+    *Polarized.sckInactive |= Gpio[config->remap.sck].bit;
 
-    if ((Config.flags & SPI_MASTER_SS) != 0) {
-        *Polarized.ssActive |= Gpio[Config.remap.ss].bit;
+    if ((config->flags & SPI_MASTER_SS) != 0) {
+        *Polarized.ssActive |= Gpio[config->remap.ss].bit;
     }
-    
+
     /*
      * Wait SCK/2
      */
-    if ((Config.flags & SPI_CLOCK_PHASE_FIRST_EDGE) != 0) {
+    if ((config->flags & SPI_CLOCK_PHASE_FIRST_EDGE) != 0) {
         retval = 0;
 
         while (cnt != 0) {
@@ -178,57 +168,57 @@ static uint32_t lldSpiWrite(
              * Wait SCK/2
              */
             if ((data & (0x01 << cnt)) != 0) {
-                *Gpio[Config.remap.sdo].set = Gpio[Config.remap.sdo].bit;
+                *Gpio[config->remap.sdo].set = Gpio[config->remap.sdo].bit;
             } else {
-                *Gpio[Config.remap.sdo].clr = Gpio[Config.remap.sdo].bit;
+                *Gpio[config->remap.sdo].clr = Gpio[config->remap.sdo].bit;
             }
             /*
              * Wait SCK/2
              */
-            *Polarized.sckActive |= Gpio[Config.remap.sck].bit;
-            
-            if ((*Gpio[Config.remap.sdi].port & Gpio[Config.remap.sdi].bit) != 0) {
+            *Polarized.sckActive |= Gpio[config->remap.sck].bit;
+
+            if ((*Gpio[config->remap.sdi].port & Gpio[config->remap.sdi].bit) != 0) {
                 retval |= (0x01 << cnt);
             }
             /*
              * Wait SCK
              */
-            *Polarized.sckInactive |= Gpio[Config.remap.sck].bit;
+            *Polarized.sckInactive |= Gpio[config->remap.sck].bit;
         }
     } else {
         retval = 0;
-        
+
         while (cnt != 0) {
             cnt--;
 
             /*
              * Wait SCK
              */
-            *Polarized.sckActive |= Gpio[Config.remap.sck].bit;
+            *Polarized.sckActive |= Gpio[config->remap.sck].bit;
             /*
              * Wait SCK/2
              */
             if ((data & (0x01 << cnt)) != 0) {
-                *Gpio[Config.remap.sdo].set = Gpio[Config.remap.sdo].bit;
+                *Gpio[config->remap.sdo].set = Gpio[config->remap.sdo].bit;
             } else {
-                *Gpio[Config.remap.sdo].clr = Gpio[Config.remap.sdo].bit;
+                *Gpio[config->remap.sdo].clr = Gpio[config->remap.sdo].bit;
             }
             /*
              * Wait SCK/2
              */
-            *Polarized.sckInactive |= Gpio[Config.remap.sck].bit;
+            *Polarized.sckInactive |= Gpio[config->remap.sck].bit;
 
-            if ((*Gpio[Config.remap.sdi].port & Gpio[Config.remap.sdi].bit) != 0) {
+            if ((*Gpio[config->remap.sdi].port & Gpio[config->remap.sdi].bit) != 0) {
                 retval |= (0x01 << cnt);
             }
         }
     }
-    
+
     /*
      * Wait SCK/2
      */
-    if ((Config.flags & SPI_MASTER_SS) != 0) {
-        *Polarized.ssInactive |= Gpio[Config.remap.ss].bit;
+    if ((config->flags & SPI_MASTER_SS) != 0) {
+        *Polarized.ssInactive |= Gpio[config->remap.ss].bit;
     }
 
     return (retval);

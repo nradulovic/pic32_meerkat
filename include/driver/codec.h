@@ -1,6 +1,7 @@
 /* 
- * File:   codec.h
- * Author: nenad
+ * File:    codec.h
+ * Author:  nenad
+ * Details: Audio codec driver
  *
  * Created on February 15, 2014, 11:11 PM
  */
@@ -31,6 +32,9 @@ enum codecError {
 
 /*======================================================  GLOBAL VARIABLES  ==*/
 /*===================================================  FUNCTION PROTOTYPES  ==*/
+
+void initCodec(
+    void);
 
 enum codecError codecOpen(
     struct spiHandle *  spi);

@@ -1,6 +1,7 @@
 /* 
- * File:   bsp.h
- * Author: nenad
+ * File:    bsp.h
+ * Author:  nenad
+ * Details: Board Support Package
  *
  * Created on February 10, 2014, 7:11 PM
  */
@@ -9,9 +10,6 @@
 #define	BSP_H_
 
 /*=========================================================  INCLUDE FILES  ==*/
-
-#include <stdint.h>
-
 /*===============================================================  MACRO's  ==*/
 
 /*------------------------------------------------------  C++ extern begin  --*/
@@ -23,10 +21,10 @@ extern "C" {
 /*======================================================  GLOBAL VARIABLES  ==*/
 /*===================================================  FUNCTION PROTOTYPES  ==*/
 
-void bspInit(
-    void);
-
-uint32_t bspGetPBfclock (
+/**@brief       Initialize Board Support Package
+ * @details     This function will initialize basic system clocks
+ */
+void initBsp(
     void);
 
 /*--------------------------------------------------------  C++ extern end  --*/

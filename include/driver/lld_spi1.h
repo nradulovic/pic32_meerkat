@@ -1,6 +1,7 @@
 /* 
- * File:   lld_spi1.h
- * Author: nenad
+ * File:    lld_spi1.h
+ * Author:  nenad
+ * Details: Low Level Driver for SPI1
  *
  * Created on February 11, 2014, 10:28 PM
  */
@@ -14,13 +15,13 @@
 
 /*===============================================================  MACRO's  ==*/
 
-#if   (((__PIC32_FEATURE_SET__ >= 100) && (__PIC32_FEATURE_SET__ <= 299)) || defined(__32MXGENERIC__))
+#if   (((__PIC32_FEATURE_SET__ >= 100) && (__PIC32_FEATURE_SET__ <= 299)))
 #define SPI1_PIN_TABLE(entry)                                                   \
     entry(SPI1_SDI_RPA1,            0x00,           NULL)                       \
     entry(SPI1_SDI_RPB5,            0x01,           NULL)                       \
     entry(SPI1_SDO_RPA2,            0,              &RPA2R)                     \
     entry(SPI1_SS_EXAMPLE,          0,              &RPA2R)
-#elif (((__PIC32_FEATURE_SET__ >= 300) && (__PIC32_FEATURE_SET__ <= 499)) || defined(__32MXGENERIC__))
+#elif (((__PIC32_FEATURE_SET__ >= 300) && (__PIC32_FEATURE_SET__ <= 499)))
 #elif (((__PIC32_FEATURE_SET__ >= 500) && (__PIC32_FEATURE_SET__ <= 799)))
 #define SPI1_PIN_TABLE(entry)                                                   \
     entry(SPI1_SCK,                 0,              &PORTC)
@@ -43,6 +44,8 @@ enum spi1PinId {
 
 /*======================================================  GLOBAL VARIABLES  ==*/
 
+/**@brief       Hardware SPI1 identificator
+ */
 extern const struct spiId GlobalSpi1;
 
 /*===================================================  FUNCTION PROTOTYPES  ==*/
