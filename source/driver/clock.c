@@ -15,19 +15,19 @@
 
 /*=========================================================  LOCAL MACRO's  ==*/
 
-#define CONFIG_MAX_CPU_CLOCK            48000000ul
+#define CONFIG_SYSTEM_CLOCK             48000000ul
 
 /*======================================================  LOCAL DATA TYPES  ==*/
 
-struct systemClocks {
-    uint32_t            cpu;
+struct clocks {
+    uint32_t            system;
     uint32_t            peripheralBus;
 };
 
 /*=============================================  LOCAL FUNCTION PROTOTYPES  ==*/
 /*=======================================================  LOCAL VARIABLES  ==*/
 
-static struct systemClocks GlobalSystemClocks;
+static struct clocks GlobalClocks;
 
 /*======================================================  GLOBAL VARIABLES  ==*/
 /*============================================  LOCAL FUNCTION DEFINITIONS  ==*/
@@ -37,20 +37,20 @@ static struct systemClocks GlobalSystemClocks;
 void initClock(
     void) {
 
-    GlobalSystemClocks.cpu           = CONFIG_MAX_CPU_CLOCK;
-    GlobalSystemClocks.peripheralBus = SYSTEMConfigPerformance(CONFIG_MAX_CPU_CLOCK);
+    GlobalClocks.system        = CONFIG_SYSTEM_CLOCK;
+    GlobalClocks.peripheralBus = SYSTEMConfigPerformance(CONFIG_SYSTEM_CLOCK);
 }
 
 uint32_t clockGetSystemClock(
     void) {
 
-    return (GlobalSystemClocks.cpu);
+    return (GlobalClocks.system);
 }
 
 uint32_t clockGetPeripheralClock (
     void) {
 
-    return (GlobalSystemClocks.peripheralBus);
+    return (GlobalClocks.peripheralBus);
 }
 
 /*================================*//** @cond *//*==  CONFIGURATION ERRORS  ==*/
