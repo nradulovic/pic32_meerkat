@@ -1,0 +1,39 @@
+1. MCU hardware & peripheral drivers                Status              Tested
+  1.1 Clock & Power management                      DONE                YES
+  1.2 I2C                                           in progress         in progress
+  1.3 SPI                                           DONE                YES
+  1.3.1 Hardware SPI1                               DONE                YES
+  1.3.2 Software SPI                                DONE                YES
+  1.4 UART                                          DONE                YES
+
+2. 24LC64 driver
+  2.1 Initialization
+
+3. TLV320AIC26 driver
+  3.1 Clock generation and PLL configuration        in progress
+  3.2 Gain control/EQ configuration
+
+4. RN52 driver
+  4.1 Initialization                                in progress
+  4.2 A2DP Profile
+  4.2 SPP Profile
+  4.3 SSP(Passkey entry)/PIN authentication
+5. System layer
+  5.1 Debug module                                  DONE                YES
+  5.2 Heap memory                                   DONE                in progress
+  5.3 FSM/HSM execution                             DONE                in progress
+  5.4 Virtual timers                                DONE                YES
+6. Application layer
+  6.1 Bluetooth management
+  6.2 TETRA Radio management
+  6.3 System control
+
+Milestones:
+I    Basic system tests (MCU, EEPROM)
+II   Bluetooth driver
+III  Bluetooth A2DP Profile profile tests
+IV   Bluetooth SPP Profile tests
+V    Bluetooth SSP(Passkey entry)/PIN authentication
+VI   Bluetooth management
+VII  Tetra Radio management
+VIII System control
