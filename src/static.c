@@ -63,7 +63,7 @@ esError esStaticMemInit(
     ES_API_REQUIRE(ES_API_RANGE, 0u != storageSize);
 
     staticMem->base = storage;
-    staticMem->size = ES_ALIGN(storageSize, sizeof(esAtomic));
+    staticMem->size = ES_ALIGN_UP(storageSize, ES_CPU_DEF_DATA_ALIGNMENT);;
     staticMem->free = staticMem->size;
 
     ES_API_OBLIGATION(staticMem->signature = STATIC_MEM_SIGNATURE);
@@ -81,7 +81,7 @@ esError esStaticMemAllocI(
     ES_API_REQUIRE(ES_API_RANGE,   size != 0u);
     ES_API_REQUIRE(ES_API_POINTER, mem != NULL);
 
-    size = ES_DIVISION_ROUNDUP(size, sizeof(esAtomic));
+    size = ES_ALIGN_UP(size, ES_CPU_DEF_DATA_ALIGNMENT);
 
     if (size <= staticMem->free) {
         staticMem->free -= size;
