@@ -111,15 +111,28 @@ esError esStaticMemAlloc(
     return (error);
 }
 
-esError esStaticMemGetFree(
+esError esStaticMemGetFreeI(
     esStaticMem *       staticMem,
     size_t *            size) {
 
     ES_API_REQUIRE(ES_API_POINTER, staticMem != NULL);
-    ES_API_REQUIRE(ES_API_OBJECT,  staticMem->signature != STATIC_MEM_SIGNATURE);
+    ES_API_REQUIRE(ES_API_OBJECT,  staticMem->signature == STATIC_MEM_SIGNATURE);
     ES_API_REQUIRE(ES_API_RANGE,   size != 0u);
 
     *size = staticMem->free;
+
+    return (ES_ERROR_NONE);
+}
+
+esError esStaticMemGetSizeI(
+    esStaticMem *       staticMem,
+    size_t *            size) {
+
+    ES_API_REQUIRE(ES_API_POINTER, staticMem != NULL);
+    ES_API_REQUIRE(ES_API_OBJECT,  staticMem->signature == STATIC_MEM_SIGNATURE);
+    ES_API_REQUIRE(ES_API_RANGE,   size != 0u);
+
+    *size = staticMem->size;
 
     return (ES_ERROR_NONE);
 }

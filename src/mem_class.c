@@ -110,7 +110,7 @@ const PORT_C_ROM struct esMemClass esGlobalStaticMemClass = {
     NULL,
     (esError (*)(void *, size_t, void **))esStaticMemAllocI,
     NULL,
-    NULL,
+    (esError (*)(void *, size_t *))esStaticMemGetSizeI,
     NULL,
     NULL
 #if (CONFIG_API_VALIDATION) || defined(__DOXYGEN__)
