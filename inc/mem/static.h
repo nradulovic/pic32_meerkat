@@ -113,8 +113,12 @@ esError esStaticMemAlloc(
     size_t              size,
     void **             mem);
 
-esError esStaticMemGetFree(
+esError esStaticMemGetFreeI(
     struct esStaticMem * staticMem,
+    size_t *            size);
+
+esError esStaticMemGetSizeI(
+    esStaticMem *       staticMem,
     size_t *            size);
 
 /*--------------------------------------------------------  C++ extern end  --*/
