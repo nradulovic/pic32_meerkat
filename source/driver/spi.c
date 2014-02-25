@@ -77,11 +77,11 @@ enum spiError spiClose(
     while ((handle->state != SPI_INACTIVE) && (timerState == SPI_TIMER_COUNTING));
 
     if (handle->state != SPI_INACTIVE) {
-        esVTimerTerm(&timerTimeout);
+        esVTimerCancel(&timerTimeout);
 
         return (SPI_ERROR_BUSY);
     }
-    esVTimerTerm(&timerTimeout);
+    esVTimerCancel(&timerTimeout);
     handle->state = SPI_INACTIVE;
     handle->id->close(handle);
 
@@ -112,7 +112,7 @@ enum spiError spiExchange(
     while ((handle->state == SPI_INACTIVE) && (timerState == SPI_TIMER_COUNTING));
 
     if (handle->state != SPI_INACTIVE) {
-        esVTimerTerm(&timerTimeout);
+        esVTimerCancel(&timerTimeout);
 
         return (SPI_ERROR_BUSY);
     }
@@ -154,7 +154,7 @@ enum spiError spiExchange(
             break;
         }
     }
-    esVTimerTerm(&timerTimeout);
+    esVTimerCancel(&timerTimeout);
 
     if ((timerState == SPI_TIMER_COUNTING)) {
         error = SPI_ERROR_NONE;

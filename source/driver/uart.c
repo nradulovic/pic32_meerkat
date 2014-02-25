@@ -95,7 +95,7 @@ enum uartError uartRead(
     while (((handle->state & UART_RX_ACTIVE) != 0u) && (timerState == UART_TIMER_COUNTING));
 
     if ((handle->state & UART_RX_ACTIVE) != 0u) {
-        esVTimerTerm(&timerTimeout);
+        esVTimerCancel(&timerTimeout);
 
         return (UART_ERROR_BUSY);
     }
@@ -121,7 +121,7 @@ enum uartError uartRead(
             }
         }
     }
-    esVTimerTerm(&timerTimeout);
+    esVTimerCancel(&timerTimeout);
 
     if ((timerState == UART_TIMER_COUNTING)) {
         error = UART_ERROR_NONE;
@@ -157,7 +157,7 @@ enum uartError uartWrite(
     while (((handle->state & UART_TX_ACTIVE) != 0u) && (timerState == UART_TIMER_COUNTING));
 
     if ((handle->state & UART_TX_ACTIVE) != 0u) {
-        esVTimerTerm(&timerTimeout);
+        esVTimerCancel(&timerTimeout);
 
         return (UART_ERROR_BUSY);
     }
@@ -183,7 +183,7 @@ enum uartError uartWrite(
             }
         }
     }
-    esVTimerTerm(&timerTimeout);
+    esVTimerCancel(&timerTimeout);
 
     if ((timerState == UART_TIMER_COUNTING)) {
         error = UART_ERROR_NONE;

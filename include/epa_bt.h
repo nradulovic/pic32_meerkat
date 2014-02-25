@@ -20,6 +20,8 @@
 #define CONFIG_BT_DRV_PRIORITY          30
 #define CONFIG_BT_DRV_QUEUE_SIZE        10
 #define CONFIG_BT_DRV_EVENT_BASE        1000
+#define CONFIG_BT_UART_SPEED            115200
+#define CONFIG_BT_UART_TIMEOUT_MS       100u
 
 #define BT_DRV_CMD_TABLE(entry)                                                 \
     entry(BT_DRV_SET_AUDIO_ROUTING,     "S|,",      2)                          \
@@ -46,6 +48,9 @@
 
 #define BT_DRV_CMD_EXPAND_ID(id, cmd, args)                                     \
     id,
+
+#define BT_DRV_CMD_EXPAND_CMD(id, cmd, args)                                    \
+    {cmd "\r\n", sizeof(cmd "\r\n")},
 
 #define BT_DRV_AUDIO_ROUTE_ANALOG       "00"
 #define BT_DRV_AUDIO_ROUTE_I2S          "01"
@@ -97,11 +102,18 @@ struct BtDrvEvent {
     size_t              stringSize;
 };
 
+struct BtDrvCmd {
+    char *              cmd;
+    size_t              size;
+};
+
 /*======================================================  GLOBAL VARIABLES  ==*/
 
 extern const struct esEpaDefine BtDrvEpaDefine;
 extern const struct esSmDefine  BtDrvSmDefine;
 extern struct esEpa *   BtDrv;
+
+extern const struct BtDrvCmd BtDrvCmd[];
 
 /*===================================================  FUNCTION PROTOTYPES  ==*/
 

@@ -75,7 +75,7 @@ static void processEvents(
     esBaseInit();
 
     /*--  Initialize static memory allocator  --------------------------------*/
-    ES_API_ENSURE(esMemInit(
+    ES_ENSURE(esMemInit(
         &esGlobalStaticMemClass,
         &StaticMem,
         StaticMemBuff,
@@ -83,8 +83,8 @@ static void processEvents(
         0));
 
     /*--  Initialize heap memory allocator  ----------------------------------*/
-    ES_API_ENSURE(esMemAlloc(&StaticMem, 4096, &heapBuff));
-    ES_API_ENSURE(esMemInit(
+    ES_ENSURE(esMemAlloc(&StaticMem, 4096, &heapBuff));
+    ES_ENSURE(esMemInit(
         &esGlobalHeapMemClass,
         &HeapMem,
         heapBuff,
@@ -92,24 +92,20 @@ static void processEvents(
         0));
 
     /*--  Register a memory to use for events  -------------------------------*/
-    ES_API_ENSURE(esEventRegisterMem(&HeapMem));
+    ES_ENSURE(esEventRegisterMem(&HeapMem));
 
     /*--  Initialize EDS kernel  ---------------------------------------------*/
-    ES_API_ENSURE(esEpaKernelInit());
+    ES_ENSURE(esEpaKernelInit());
 
     /*--  Set application idle routine  --------------------------------------*/
-    ES_API_ENSURE(esEpaKernelSetIdle(idle));
+    ES_ENSURE(esEpaKernelSetIdle(idle));
 
     /*-- Create all required EPAs  -------------------------------------------*/
-    ES_API_ENSURE(esEpaCreate(
-        &BtDrvEpaDefine,
-        &BtDrvSmDefine,
-        &StaticMem,
-        &BtDrv));
+    ES_ENSURE(esEpaCreate(&BtDrvEpaDefine, &BtDrvSmDefine, &StaticMem, &BtDrv));
 
     /*--  Start EPA execution  -----------------------------------------------*/
-    ES_API_ENSURE(esEpaKernelStart());
-    ES_API_ENSURE(esMemTerm(&HeapMem));
+    ES_ENSURE(esEpaKernelStart());
+    ES_ENSURE(esMemTerm(&HeapMem));
 }
 
 static void idle(
