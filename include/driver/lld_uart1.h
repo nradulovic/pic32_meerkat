@@ -44,7 +44,7 @@ enum uart1PinId {
 
 /**@brief       UART1 identifier
  */
-extern const struct uartId GlobalUart1;
+extern const struct uartId Uart1;
 
 /*===================================================  FUNCTION PROTOTYPES  ==*/
 

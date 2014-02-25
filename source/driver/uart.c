@@ -52,6 +52,8 @@ void uartOpen(
 
     handle->id     = config->id;
     handle->config = config;
+    handle->reader = NULL;
+    handle->writer = NULL;
     handle->id->open(handle);
     handle->state  = UART_INACTIVE;
 }

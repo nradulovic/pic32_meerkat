@@ -92,7 +92,7 @@ static const unsigned int uartPinValue[UART1_LAST_PIN_ID] = {
 
 /*======================================================  GLOBAL VARIABLES  ==*/
 
-const struct uartId GlobalUart1 = {
+const struct uartId Uart1 = {
     lldUartOpen,
     lldUartClose,
     lldUartIsReadBuffEmpty,
@@ -258,7 +258,7 @@ static void lldUartWriteStop(
 /*
  * TODO: ISR supports only 8-bit data size
  */
-void __ISR(_UART1_VECTOR, IPL2SOFT) lldUart1Handler(void) {
+void __ISR(_UART1_VECTOR) lldUart1Handler(void) {
 
     /*--  RX interrupt  ------------------------------------------------------*/
     if ((IEC1 & IFS1 & INTR_U1RX) != 0u) {
@@ -282,15 +282,19 @@ void __ISR(_UART1_VECTOR, IPL2SOFT) lldUart1Handler(void) {
             } else {
                 error = UART_ERROR_PARITY;
             }
-            (void)GlobalHandle->reader(
-                error,
-                GlobalHandle->readBuffer,
-                GlobalHandle->readSize);
+            if (GlobalHandle->reader != NULL) {
+                (void)GlobalHandle->reader(
+                    error,
+                    GlobalHandle->readBuffer,
+                    GlobalHandle->readSize);
+            }
         } else if (GlobalRxCounter == GlobalHandle->readSize) {
-            (void)GlobalHandle->reader(
-                UART_ERROR_NONE,
-                GlobalHandle->readBuffer,
-                GlobalHandle->readSize);
+            if (GlobalHandle->reader != NULL) {
+                (void)GlobalHandle->reader(
+                    UART_ERROR_NONE,
+                    GlobalHandle->readBuffer,
+                    GlobalHandle->readSize);
+            }
         }
         IFS1CLR = IFS1_U1RX;
     }
@@ -305,10 +309,12 @@ void __ISR(_UART1_VECTOR, IPL2SOFT) lldUart1Handler(void) {
         }
         
         if (GlobalTxCounter == GlobalHandle->writeSize) {
-            (void)GlobalHandle->writer(
+            if (GlobalHandle->writer != NULL) {
+                (void)GlobalHandle->writer(
                 UART_ERROR_NONE,
                 GlobalHandle->writeBuffer,
                 GlobalHandle->writeSize);
+            }
             IEC1CLR = IEC1_U1TX;                                                /* Stop further transmission                                */
         }
         IFS1CLR = IFS1_U1TX;

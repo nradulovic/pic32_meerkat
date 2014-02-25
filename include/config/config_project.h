@@ -22,7 +22,7 @@ extern "C" {
  * @details     0 - disable
  *              1 - enable
  */
-#define CONFIG_PROJ_TEST_UART           1
+#define CONFIG_PROJ_TEST_UART           0
 
 #ifdef	__cplusplus
 }

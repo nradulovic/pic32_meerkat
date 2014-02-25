@@ -8,18 +8,18 @@
 
 /*=========================================================  INCLUDE FILES  ==*/
 
-#include "../config/config_mcu.h"
-#include "../config/config_project.h"
+#include "config/config_mcu.h"
+#include "config/config_project.h"
 
 #include <stdio.h>
 
-#include "base/base.h"
 #include "base/debug.h"
 #include "eds/epa.h"
 
 #include "test/test_spi.h"
 #include "test/test_uart.h"
 #include "bsp.h"
+#include "epa_bt.h"
 
 /*=========================================================  LOCAL MACRO's  ==*/
 /*======================================================  LOCAL DATA TYPES  ==*/
@@ -32,6 +32,9 @@
 static void execTests(
     void);
 
+static void processEvents(
+    void);
+
 /**@brief       Idle routine
  */
 static void idle(
@@ -41,11 +44,13 @@ static void idle(
 
 static const ES_MODULE_INFO_CREATE("main", "main loop", "Nenad Radulovic");
 
-static uint8_t          GlobalStaticBuff[10240];
-static esMem            GlobalStatic = ES_MEM_INITIALIZER();
-static esMem            GlobalHeap   = ES_MEM_INITIALIZER();
+static uint8_t          StaticMemBuff[10240];
 
 /*======================================================  GLOBAL VARIABLES  ==*/
+
+esMem                   StaticMem = ES_MEM_INITIALIZER();
+esMem                   HeapMem   = ES_MEM_INITIALIZER();
+
 /*============================================  LOCAL FUNCTION DEFINITIONS  ==*/
 
 static void execTests(
@@ -54,13 +59,57 @@ static void execTests(
 #if (CONFIG_PROJ_TEST_SPI == 1) ||                                              \
     (CONFIG_PROJ_TEST_UART == 1)
     for (;;) {
-        PORTCSET = (0x1 << 1);
-        LATCSET  = (0x1 << 1);
-        TRISCCLR = (0x1 << 1);
         execTestSpi();
         execTestUart();
     }
 #endif
+}
+
+static void processEvents(
+    void) {
+    void *              heapBuff;
+
+    /*--  Initialize PIC32 port  ---------------------------------------------*/
+    /* NOTE: This will setup interrupt policy, PIC32 core timer, etc
+     */
+    esBaseInit();
+
+    /*--  Initialize static memory allocator  --------------------------------*/
+    ES_API_ENSURE(esMemInit(
+        &esGlobalStaticMemClass,
+        &StaticMem,
+        StaticMemBuff,
+        sizeof(StaticMemBuff),
+        0));
+
+    /*--  Initialize heap memory allocator  ----------------------------------*/
+    ES_API_ENSURE(esMemAlloc(&StaticMem, 4096, &heapBuff));
+    ES_API_ENSURE(esMemInit(
+        &esGlobalHeapMemClass,
+        &HeapMem,
+        heapBuff,
+        4096,
+        0));
+
+    /*--  Register a memory to use for events  -------------------------------*/
+    ES_API_ENSURE(esEventRegisterMem(&HeapMem));
+
+    /*--  Initialize EDS kernel  ---------------------------------------------*/
+    ES_API_ENSURE(esEpaKernelInit());
+
+    /*--  Set application idle routine  --------------------------------------*/
+    ES_API_ENSURE(esEpaKernelSetIdle(idle));
+
+    /*-- Create all required EPAs  -------------------------------------------*/
+    ES_API_ENSURE(esEpaCreate(
+        &BtDrvEpaDefine,
+        &BtDrvSmDefine,
+        &StaticMem,
+        &BtDrv));
+
+    /*--  Start EPA execution  -----------------------------------------------*/
+    ES_API_ENSURE(esEpaKernelStart());
+    ES_API_ENSURE(esMemTerm(&HeapMem));
 }
 
 static void idle(
@@ -77,34 +126,12 @@ int main(
     int                 argc,
     char**              argv) {
 
-    void *              heapBuff;
-
     (void)argc;
     (void)argv;
-
+    
     initBsp();                                                                  /* Initialize Board Support Package module                  */
     execTests();                                                                /* Execute enabled tests                                    */
-
-    ES_API_ENSURE(
-        esMemInit(
-            &esGlobalStaticMemClass,
-            &GlobalStatic,
-            GlobalStaticBuff,
-            sizeof(GlobalStaticBuff),
-            0));
-    ES_API_ENSURE(esMemAlloc(&GlobalStatic, 4096, &heapBuff));
-    ES_API_ENSURE(
-        esMemInit(
-            &esGlobalHeapMemClass,
-            &GlobalHeap,
-            heapBuff,
-            4096,
-            0));
-    ES_API_ENSURE(esEventRegisterMem(&GlobalHeap));
-    ES_API_ENSURE(esEpaKernelInit());
-    ES_API_ENSURE(esEpaKernelSetIdle(idle));
-    ES_API_ENSURE(esEpaKernelStart());
-    ES_API_ENSURE(esMemTerm(&GlobalHeap));
+    processEvents();
 
     return (EXIT_SUCCESS);
 }

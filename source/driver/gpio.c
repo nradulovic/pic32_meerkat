@@ -19,15 +19,15 @@
 /*======================================================  GLOBAL VARIABLES  ==*/
 
 const struct gpio GlobalGpioA = {
-    &PORTA, &TRISA, &LATA,  &PORTASET,  &PORTACLR,  &PORTAINV
+    &PORTA, &TRISA, &LATA,  &LATASET,  &LATACLR,  &PORTAINV
 };
 
 const struct gpio GlobalGpioB = {
-    &PORTB, &TRISB, &LATB,  &PORTBSET,  &PORTBCLR,  &PORTBINV
+    &PORTB, &TRISB, &LATB,  &LATBSET,  &LATBCLR,  &PORTBINV
 };
 
 const struct gpio GlobalGpioC = {
-    &PORTC, &TRISC, &LATC,  &PORTCSET,  &PORTCCLR,  &PORTCINV
+    &PORTC, &TRISC, &LATC,  &LATCSET,  &LATCCLR,  &PORTCINV
 };
 
 /*============================================  LOCAL FUNCTION DEFINITIONS  ==*/
@@ -37,9 +37,15 @@ const struct gpio GlobalGpioC = {
 void initGpio(
     void) {
 #if (__PIC32_FEATURE_SET == 150)
+    /*
+     * Setup all pins as digital IO with push-pull mode
+     */
     ANSELA = 0u;
+    ODCA   = 0u;
     ANSELB = 0u;
+    ODCB   = 0u;
     ANSELC = 0u;
+    ODCC   = 0u;
 #endif
 }
 

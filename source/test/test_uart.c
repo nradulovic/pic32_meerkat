@@ -79,7 +79,7 @@ void execTestUart(
     {
         struct uartHandle testUart;
         struct uartConfig testUartConfig = {
-            &GlobalUart1,
+            &Uart1,
             UART_TX_ENABLE |
             UART_RX_ENABLE |
             UART_DATA_BITS_8 |
@@ -104,7 +104,7 @@ void execTestUart(
         {
         struct uartHandle testUart;
         struct uartConfig testUartConfig = {
-            &GlobalUart1,
+            &Uart1,
             UART_TX_ENABLE |
             UART_RX_ENABLE |
             UART_DATA_BITS_8 |
@@ -141,7 +141,7 @@ void execTestUart(
     {
         struct uartHandle testUart;
         struct uartConfig testUartConfig = {
-            &GlobalUart1,
+            &Uart1,
             UART_TX_ENABLE |
             UART_RX_ENABLE |
             UART_DATA_BITS_8 |
