@@ -58,7 +58,7 @@ extern "C" {
 /*============================================================  DATA TYPES  ==*/
 
 struct esMem {
-    const struct esMemClass * class;
+    const PORT_C_ROM struct esMemClass * memClass;
     union esMemHandle {
         struct esHeapMem heapMem;
         struct esPoolMem poolMem;
@@ -80,7 +80,7 @@ extern const PORT_C_ROM struct esMemClass esGlobalStaticMemClass;
 /*===================================================  FUNCTION PROTOTYPES  ==*/
 
 esError esMemInit(
-    const struct esMemClass * class,
+    const PORT_C_ROM struct esMemClass * memClass,
     struct esMem *      object,
     void *              buffer,
     size_t              size,

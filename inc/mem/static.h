@@ -35,6 +35,7 @@
 /*=========================================================  INCLUDE FILES  ==*/
 
 #include <stddef.h>
+#include <stdint.h>
 
 #include "plat/compiler.h"
 #include "family/profile.h"
@@ -56,8 +57,8 @@ extern "C" {
  */
 struct esStaticMem {
     uint8_t *           base;                                                   /**<@brief Pointer to the base of static memory        */
-    esRamSSize          free;                                                   /**<@brief Current index of managed memory                  */
-    esRamSSize          size;                                                   /**<@brief The size of static memory                        */
+    size_t              free;                                                   /**<@brief Current index of managed memory                  */
+    size_t              size;                                                   /**<@brief The size of static memory                        */
 #if (1U == CONFIG_API_VALIDATION) || defined(__DOXYGEN__)
     esAtomic            signature;                                              /**<@brief Structure signature, used during development only*/
 #endif

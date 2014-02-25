@@ -1,28 +1,26 @@
 /*
- * This file is part of esolid-mem
+ * This file is part of eSolid.
  *
- * Template version: 1.1.16 (24.12.2013)
+ * Copyright (C) 2010 - 2013 Nenad Radulovic
  *
- * Copyright (C) 2011, 2012 - Nenad Radulovic
- *
- * esolid-mem is free software; you can redistribute it and/or modify
+ * eSolid is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
+ * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * esolid-mem is distributed in the hope that it will be useful,
+ * eSolid is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * GNU Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public License
  * along with eSolid.  If not, see <http://www.gnu.org/licenses/>.
  *
- * web site:    http://blueskynet.dyndns-server.com
- * e-mail  :    blueskyniss@gmail.com
+ * web site:    http://github.com/nradulovic
+ * e-mail  :    nenad.b.radulovic@gmail.com
  *//***********************************************************************//**
  * @file
- * @author      nenad
+ * @author      Nenad Radulovic
  * @brief       Short desciption of file
  * @addtogroup  module_impl
  *********************************************************************//** @{ */
@@ -165,7 +163,7 @@ static esError wrapStaticInit(
 /*====================================  GLOBAL PUBLIC FUNCTION DEFINITIONS  ==*/
 
 esError esMemInit(
-    const struct esMemClass * class,
+    const PORT_C_ROM struct esMemClass * memClass,
     struct esMem *      object,
     void *              buffer,
     size_t              size,
@@ -175,14 +173,14 @@ esError esMemInit(
 
     ES_API_REQUIRE(ES_API_POINTER, object != NULL);
     ES_API_REQUIRE(ES_API_OBJECT,  object->signature != MEM_SIGNATURE);
-    ES_API_REQUIRE(ES_API_POINTER, class != NULL);
-    ES_API_REQUIRE(ES_API_OBJECT,  class->signature == MEM_CLASS_SIGNATURE);
+    ES_API_REQUIRE(ES_API_POINTER, memClass != NULL);
+    ES_API_REQUIRE(ES_API_OBJECT,  memClass->signature == MEM_CLASS_SIGNATURE);
     ES_API_REQUIRE(ES_API_POINTER, buffer != NULL);
 
-    error = (class->init)(&object->handle, buffer, size, block);
+    error = memClass->init(&object->handle, buffer, size, block);
 
     if (error == ES_ERROR_NONE) {
-        object->class = class;
+        object->memClass = memClass;
         ES_API_OBLIGATION(object->signature = MEM_SIGNATURE);
     }
 
@@ -190,7 +188,7 @@ esError esMemInit(
 }
 
 esError esMemTerm(
-    struct esMem * object) {
+    struct esMem *      object) {
 
     esError             error;
 
@@ -199,10 +197,10 @@ esError esMemTerm(
 
     error = ES_ERROR_NOT_IMPLEMENTED;
 
-    if (object->class->term != NULL) {
-        error = (object->class->term)(&object->handle);
+    if (object->memClass->term != NULL) {
+        error = object->memClass->term(&object->handle);
     }
-    object->class = NULL;
+    object->memClass = NULL;
     ES_API_OBLIGATION(object->signature = ~(esAtomic)MEM_SIGNATURE);
 
     return (error);
@@ -218,7 +216,7 @@ esError esMemAllocI(
     ES_API_REQUIRE(ES_API_POINTER, object != NULL);
     ES_API_REQUIRE(ES_API_OBJECT,  object->signature == MEM_SIGNATURE);
 
-    error = (object->class->alloc)(&object->handle, size, mem);
+    error = object->memClass->alloc(&object->handle, size, mem);
 
     return (error);
 }
@@ -249,8 +247,8 @@ esError esMemFreeI(
 
     error = ES_ERROR_NOT_IMPLEMENTED;
 
-    if (object->class->free != NULL) {
-        error = (object->class->free)(&object->handle, mem);
+    if (object->memClass->free != NULL) {
+        error = object->memClass->free(&object->handle, mem);
     }
 
     return (error);
@@ -281,8 +279,8 @@ esError esMemGetSizeI(
 
     error = ES_ERROR_NOT_IMPLEMENTED;
 
-    if (object->class->getSize != NULL) {
-        error = (object->class->getSize)(&object->handle, size);
+    if (object->memClass->getSize != NULL) {
+        error = object->memClass->getSize(&object->handle, size);
     }
 
     return (error);
@@ -303,7 +301,7 @@ esError esMemGetSize(
 }
 
 esError esMemGetFreeI(
-    struct esMem * object,
+    struct esMem *      object,
     size_t *            free) {
 
     esError             error;
@@ -313,8 +311,8 @@ esError esMemGetFreeI(
 
     error = ES_ERROR_NOT_IMPLEMENTED;
 
-    if (object->class->getFree != NULL) {
-        error = (object->class->getFree)(&object->handle, free);
+    if (object->memClass->getFree != NULL) {
+        error = object->memClass->getFree(&object->handle, free);
     }
 
     return (error);
@@ -347,8 +345,8 @@ esError esMemGetBlockSizeI(
 
     error = ES_ERROR_NOT_IMPLEMENTED;
 
-    if (object->class->getBlockSize != NULL) {
-        error = (object->class->getBlockSize)(&object->handle, blockSize);
+    if (object->memClass->getBlockSize != NULL) {
+        error = object->memClass->getBlockSize(&object->handle, blockSize);
     }
 
     return (error);
