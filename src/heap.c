@@ -139,7 +139,7 @@ esError esHeapMemAllocI(
                 (size + sizeof(struct heapMemBlock [1]))) {
                 struct heapMemBlock * tmp;
 
-                tmp = (struct heapMemBlock *)((uint8_t *)curr + size);
+                tmp = (struct heapMemBlock *)((uint8_t *)curr + size + sizeof(struct heapPhy [1]));
                 tmp->phy.size  = (esRamSSize)
                     ((size_t)curr->phy.size - size - sizeof(struct heapPhy [1]));
                 tmp->phy.prev  = curr;
@@ -147,8 +147,7 @@ esError esHeapMemAllocI(
                 tmp->free.prev = curr->free.prev;
                 tmp->free.next->free.prev = tmp;
                 tmp->free.prev->free.next = tmp;
-                curr->phy.size = (esRamSSize)size;
-                curr->phy.size = (esRamSSize)(curr->phy.size * (-1));           /* Mark block as allocated                                  */
+                curr->phy.size = (esRamSSize)(size * (-1));           /* Mark block as allocated                                  */
                 *mem = (void *)(&curr->free);
 
                 return (ES_ERROR_NONE);
@@ -199,7 +198,7 @@ esError esHeapMemFreeI(
     curr = (struct heapMemBlock *)
         ((uint8_t *)mem - offsetof(struct heapMemBlock, free));
     curr->phy.size = (esRamSSize)(curr->phy.size * (-1));                       /* UnMark block as allocated                                */
-    tmp  = (struct heapMemBlock *)((uint8_t *)curr + curr->phy.size);
+    tmp  = (struct heapMemBlock *)((uint8_t *)curr + curr->phy.size + sizeof(struct heapPhy [1]));
 
     if ((curr->phy.prev->phy.size >= 0) && (tmp->phy.size < 0)) {               /* Previous block is free                                   */
         curr->phy.prev->phy.size = (esRamSSize)
