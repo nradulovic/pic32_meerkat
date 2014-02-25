@@ -85,8 +85,8 @@ esError esHeapMemInit(
     heapMem->sentinel =
         (struct heapMemBlock *)((uint8_t *)storage + storageSize) - 1;          /* Sentinel is the last element of the storage              */
     begin = (struct heapMemBlock *)storage;
-    begin->phy.size  = (esRamSSize)(storageSize - sizeof(struct heapMemBlock [1])
-                                   - sizeof(struct heapPhy [1]));
+    begin->phy.size  = (esRamSSize)(storageSize
+        - sizeof(struct heapMemBlock [1]) - sizeof(struct heapPhy [1]));
     begin->phy.prev  = heapMem->sentinel;
     begin->free.next = heapMem->sentinel;
     begin->free.prev = heapMem->sentinel;
@@ -95,7 +95,7 @@ esError esHeapMemInit(
     heapMem->sentinel->phy.prev  = begin;
     heapMem->sentinel->free.next = begin;
     heapMem->sentinel->free.prev = begin;
-    heapMem->size = begin->phy.size;
+    heapMem->size = (size_t)begin->phy.size;
     heapMem->free = heapMem->size;
 
     ES_API_OBLIGATION(heapMem->signature = HEAP_MEM_SIGNATURE);
