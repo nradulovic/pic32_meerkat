@@ -171,17 +171,17 @@ esError esMemInit(
 
     esError             error;
 
-    ES_API_REQUIRE(ES_API_POINTER, object != NULL);
-    ES_API_REQUIRE(ES_API_OBJECT,  object->signature != MEM_SIGNATURE);
-    ES_API_REQUIRE(ES_API_POINTER, memClass != NULL);
-    ES_API_REQUIRE(ES_API_OBJECT,  memClass->signature == MEM_CLASS_SIGNATURE);
-    ES_API_REQUIRE(ES_API_POINTER, buffer != NULL);
+    ES_REQUIRE(ES_API_POINTER, object != NULL);
+    ES_REQUIRE(ES_API_OBJECT,  object->signature != MEM_SIGNATURE);
+    ES_REQUIRE(ES_API_POINTER, memClass != NULL);
+    ES_REQUIRE(ES_API_OBJECT,  memClass->signature == MEM_CLASS_SIGNATURE);
+    ES_REQUIRE(ES_API_POINTER, buffer != NULL);
 
     error = memClass->init(&object->handle, buffer, size, block);
 
     if (error == ES_ERROR_NONE) {
         object->memClass = memClass;
-        ES_API_OBLIGATION(object->signature = MEM_SIGNATURE);
+        ES_OBLIGATION(object->signature = MEM_SIGNATURE);
     }
 
     return (error);
@@ -192,8 +192,8 @@ esError esMemTerm(
 
     esError             error;
 
-    ES_API_REQUIRE(ES_API_POINTER, object != NULL);
-    ES_API_REQUIRE(ES_API_OBJECT,  object->signature == MEM_SIGNATURE);
+    ES_REQUIRE(ES_API_POINTER, object != NULL);
+    ES_REQUIRE(ES_API_OBJECT,  object->signature == MEM_SIGNATURE);
 
     error = ES_ERROR_NOT_IMPLEMENTED;
 
@@ -201,7 +201,7 @@ esError esMemTerm(
         error = object->memClass->term(&object->handle);
     }
     object->memClass = NULL;
-    ES_API_OBLIGATION(object->signature = ~(esAtomic)MEM_SIGNATURE);
+    ES_OBLIGATION(object->signature = ~(esAtomic)MEM_SIGNATURE);
 
     return (error);
 }
@@ -213,8 +213,8 @@ esError esMemAllocI(
 
     esError             error;
 
-    ES_API_REQUIRE(ES_API_POINTER, object != NULL);
-    ES_API_REQUIRE(ES_API_OBJECT,  object->signature == MEM_SIGNATURE);
+    ES_REQUIRE(ES_API_POINTER, object != NULL);
+    ES_REQUIRE(ES_API_OBJECT,  object->signature == MEM_SIGNATURE);
 
     error = object->memClass->alloc(&object->handle, size, mem);
 
@@ -242,8 +242,8 @@ esError esMemFreeI(
 
     esError             error;
 
-    ES_API_REQUIRE(ES_API_POINTER, object != NULL);
-    ES_API_REQUIRE(ES_API_OBJECT,  object->signature == MEM_SIGNATURE);
+    ES_REQUIRE(ES_API_POINTER, object != NULL);
+    ES_REQUIRE(ES_API_OBJECT,  object->signature == MEM_SIGNATURE);
 
     error = ES_ERROR_NOT_IMPLEMENTED;
 
@@ -274,8 +274,8 @@ esError esMemGetSizeI(
 
     esError             error;
 
-    ES_API_REQUIRE(ES_API_POINTER, object != NULL);
-    ES_API_REQUIRE(ES_API_OBJECT,  object->signature == MEM_SIGNATURE);
+    ES_REQUIRE(ES_API_POINTER, object != NULL);
+    ES_REQUIRE(ES_API_OBJECT,  object->signature == MEM_SIGNATURE);
 
     error = ES_ERROR_NOT_IMPLEMENTED;
 
@@ -306,8 +306,8 @@ esError esMemGetFreeI(
 
     esError             error;
 
-    ES_API_REQUIRE(ES_API_POINTER, object != NULL);
-    ES_API_REQUIRE(ES_API_OBJECT,  object->signature == MEM_SIGNATURE);
+    ES_REQUIRE(ES_API_POINTER, object != NULL);
+    ES_REQUIRE(ES_API_OBJECT,  object->signature == MEM_SIGNATURE);
 
     error = ES_ERROR_NOT_IMPLEMENTED;
 
@@ -340,8 +340,8 @@ esError esMemGetBlockSizeI(
 
     esError             error;
 
-    ES_API_REQUIRE(ES_API_POINTER, object != NULL);
-    ES_API_REQUIRE(ES_API_OBJECT,  object->signature == MEM_SIGNATURE);
+    ES_REQUIRE(ES_API_POINTER, object != NULL);
+    ES_REQUIRE(ES_API_OBJECT,  object->signature == MEM_SIGNATURE);
 
     error = ES_ERROR_NOT_IMPLEMENTED;
 

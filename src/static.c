@@ -58,15 +58,15 @@ esError esStaticMemInit(
     void *              storage,
     size_t              storageSize) {
 
-    ES_API_REQUIRE(ES_API_POINTER, NULL != staticMem);
-    ES_API_REQUIRE(ES_API_POINTER, NULL != storage);
-    ES_API_REQUIRE(ES_API_RANGE, 0u != storageSize);
+    ES_REQUIRE(ES_API_POINTER, NULL != staticMem);
+    ES_REQUIRE(ES_API_POINTER, NULL != storage);
+    ES_REQUIRE(ES_API_RANGE, 0u != storageSize);
 
     staticMem->base = storage;
     staticMem->size = (esRamSize)ES_ALIGN_UP(storageSize, ES_CPU_DEF_DATA_ALIGNMENT);
     staticMem->free = staticMem->size;
 
-    ES_API_OBLIGATION(staticMem->signature = STATIC_MEM_SIGNATURE);
+    ES_OBLIGATION(staticMem->signature = STATIC_MEM_SIGNATURE);
 
     return (ES_ERROR_NONE);
 }
@@ -76,10 +76,10 @@ esError esStaticMemAllocI(
     size_t              size,
     void **             mem) {
 
-    ES_API_REQUIRE(ES_API_POINTER, staticMem != NULL);
-    ES_API_REQUIRE(ES_API_OBJECT,  staticMem->signature == STATIC_MEM_SIGNATURE);
-    ES_API_REQUIRE(ES_API_RANGE,   size != 0u);
-    ES_API_REQUIRE(ES_API_POINTER, mem != NULL);
+    ES_REQUIRE(ES_API_POINTER, staticMem != NULL);
+    ES_REQUIRE(ES_API_OBJECT,  staticMem->signature == STATIC_MEM_SIGNATURE);
+    ES_REQUIRE(ES_API_RANGE,   size != 0u);
+    ES_REQUIRE(ES_API_POINTER, mem != NULL);
 
     size = ES_ALIGN_UP(size, ES_CPU_DEF_DATA_ALIGNMENT);
 
@@ -115,9 +115,9 @@ esError esStaticMemGetFreeI(
     esStaticMem *       staticMem,
     size_t *            size) {
 
-    ES_API_REQUIRE(ES_API_POINTER, staticMem != NULL);
-    ES_API_REQUIRE(ES_API_OBJECT,  staticMem->signature == STATIC_MEM_SIGNATURE);
-    ES_API_REQUIRE(ES_API_RANGE,   size != 0u);
+    ES_REQUIRE(ES_API_POINTER, staticMem != NULL);
+    ES_REQUIRE(ES_API_OBJECT,  staticMem->signature == STATIC_MEM_SIGNATURE);
+    ES_REQUIRE(ES_API_RANGE,   size != 0u);
 
     *size = staticMem->free;
 
@@ -128,9 +128,9 @@ esError esStaticMemGetSizeI(
     esStaticMem *       staticMem,
     size_t *            size) {
 
-    ES_API_REQUIRE(ES_API_POINTER, staticMem != NULL);
-    ES_API_REQUIRE(ES_API_OBJECT,  staticMem->signature == STATIC_MEM_SIGNATURE);
-    ES_API_REQUIRE(ES_API_RANGE,   size != 0u);
+    ES_REQUIRE(ES_API_POINTER, staticMem != NULL);
+    ES_REQUIRE(ES_API_OBJECT,  staticMem->signature == STATIC_MEM_SIGNATURE);
+    ES_REQUIRE(ES_API_RANGE,   size != 0u);
 
     *size = staticMem->size;
 

@@ -72,10 +72,10 @@ esError esPoolMemInit(
 
     blockSize = ES_ALIGN_UP(blockSize, sizeof(esAtomic));
 
-    ES_API_REQUIRE(ES_API_POINTER, poolMem != NULL);
-    ES_API_REQUIRE(ES_API_POINTER, array != NULL);
-    ES_API_REQUIRE(ES_API_RANGE,   blockSize != 0u);
-    ES_API_REQUIRE(ES_API_RANGE,   blockSize <= arraySize);
+    ES_REQUIRE(ES_API_POINTER, poolMem != NULL);
+    ES_REQUIRE(ES_API_POINTER, array != NULL);
+    ES_REQUIRE(ES_API_RANGE,   blockSize != 0u);
+    ES_REQUIRE(ES_API_RANGE,   blockSize <= arraySize);
 
     nBlocks = arraySize / blockSize;
     poolMem->size = arraySize;
@@ -91,7 +91,7 @@ esError esPoolMemInit(
     }
     block->next = NULL;
 
-    ES_API_OBLIGATION(
+    ES_OBLIGATION(
         poolMem->signature = POOL_MEM_SIGNATURE);
 
     return (ES_ERROR_NONE);
@@ -102,9 +102,9 @@ esError esPoolMemAllocI(
     size_t              size,
     void **             mem) {
 
-    ES_API_REQUIRE(ES_API_POINTER, poolMem != NULL);
-    ES_API_REQUIRE(ES_API_OBJECT,  poolMem->signature == POOL_MEM_SIGNATURE);
-    ES_API_REQUIRE(ES_API_POINTER, mem != NULL);
+    ES_REQUIRE(ES_API_POINTER, poolMem != NULL);
+    ES_REQUIRE(ES_API_OBJECT,  poolMem->signature == POOL_MEM_SIGNATURE);
+    ES_REQUIRE(ES_API_POINTER, mem != NULL);
 
     if (size > poolMem->blockSize) {
 
@@ -148,9 +148,9 @@ esError esPoolMemFreeI(
 
     struct poolMemBlock * block;
 
-    ES_API_REQUIRE(ES_API_POINTER, poolMem != NULL);
-    ES_API_REQUIRE(ES_API_OBJECT,  poolMem->signature == POOL_MEM_SIGNATURE);
-    ES_API_REQUIRE(ES_API_POINTER, mem != NULL);
+    ES_REQUIRE(ES_API_POINTER, poolMem != NULL);
+    ES_REQUIRE(ES_API_OBJECT,  poolMem->signature == POOL_MEM_SIGNATURE);
+    ES_REQUIRE(ES_API_POINTER, mem != NULL);
 
     block = (struct poolMemBlock *)mem;
     block->next = poolMem->sentinel;
@@ -180,9 +180,9 @@ esError esPoolMemGetFreeI(
     struct esPoolMem *  poolMem,
     size_t *            size) {
 
-    ES_API_REQUIRE(ES_API_POINTER, poolMem != NULL);
-    ES_API_REQUIRE(ES_API_OBJECT,  poolMem->signature == POOL_MEM_SIGNATURE);
-    ES_API_REQUIRE(ES_API_POINTER, size != NULL);
+    ES_REQUIRE(ES_API_POINTER, poolMem != NULL);
+    ES_REQUIRE(ES_API_OBJECT,  poolMem->signature == POOL_MEM_SIGNATURE);
+    ES_REQUIRE(ES_API_POINTER, size != NULL);
 
     *size = poolMem->free;
 
@@ -193,9 +193,9 @@ esError esPoolMemGetBlockSizeI(
     struct esPoolMem *  poolMem,
     size_t *            size) {
 
-    ES_API_REQUIRE(ES_API_POINTER, poolMem != NULL);
-    ES_API_REQUIRE(ES_API_OBJECT,  poolMem->signature == POOL_MEM_SIGNATURE);
-    ES_API_REQUIRE(ES_API_POINTER, size != NULL);
+    ES_REQUIRE(ES_API_POINTER, poolMem != NULL);
+    ES_REQUIRE(ES_API_OBJECT,  poolMem->signature == POOL_MEM_SIGNATURE);
+    ES_REQUIRE(ES_API_POINTER, size != NULL);
 
     *size = poolMem->blockSize;
 
