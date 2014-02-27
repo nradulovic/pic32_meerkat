@@ -75,11 +75,11 @@ esError esHeapMemInit(
 
     struct heapMemBlock * begin;
 
-    ES_API_REQUIRE(ES_API_POINTER, heapMem != NULL);
-    ES_API_REQUIRE(ES_API_OBJECT,  heapMem->signature != HEAP_MEM_SIGNATURE);
-    ES_API_REQUIRE(ES_API_POINTER, storage != NULL);
-    ES_API_REQUIRE(ES_API_RANGE,   storageSize > sizeof(struct heapMemBlock [2]));
-    ES_API_REQUIRE(ES_API_RANGE,   storageSize < ES_RAM_SSIZE_MAX);
+    ES_REQUIRE(ES_API_POINTER, heapMem != NULL);
+    ES_REQUIRE(ES_API_OBJECT,  heapMem->signature != HEAP_MEM_SIGNATURE);
+    ES_REQUIRE(ES_API_POINTER, storage != NULL);
+    ES_REQUIRE(ES_API_RANGE,   storageSize > sizeof(struct heapMemBlock [2]));
+    ES_REQUIRE(ES_API_RANGE,   storageSize < ES_RAM_SSIZE_MAX);
 
     storageSize = ES_ALIGN(storageSize, ES_CPU_DEF_DATA_ALIGNMENT);
     heapMem->sentinel =
@@ -98,7 +98,7 @@ esError esHeapMemInit(
     heapMem->size = (size_t)begin->phy.size;
     heapMem->free = heapMem->size;
 
-    ES_API_OBLIGATION(heapMem->signature = HEAP_MEM_SIGNATURE);
+    ES_OBLIGATION(heapMem->signature = HEAP_MEM_SIGNATURE);
 
     return (ES_ERROR_NONE);
 }
@@ -106,12 +106,12 @@ esError esHeapMemInit(
 esError esHeapMemTerm(
     struct esHeapMem *  heapMem) {
 
-    ES_API_REQUIRE(ES_API_POINTER, heapMem != NULL);
-    ES_API_REQUIRE(ES_API_OBJECT,  heapMem->signature == HEAP_MEM_SIGNATURE);
+    ES_REQUIRE(ES_API_POINTER, heapMem != NULL);
+    ES_REQUIRE(ES_API_OBJECT,  heapMem->signature == HEAP_MEM_SIGNATURE);
 
     heapMem->sentinel = NULL;
 
-    ES_API_OBLIGATION(heapMem->signature = ~HEAP_MEM_SIGNATURE);
+    ES_OBLIGATION(heapMem->signature = ~HEAP_MEM_SIGNATURE);
 
     return (ES_ERROR_NONE);
 }
@@ -123,12 +123,12 @@ esError esHeapMemAllocI(
 
     struct heapMemBlock * curr;
 
-    ES_API_REQUIRE(ES_API_POINTER, heapMem != NULL);
-    ES_API_REQUIRE(ES_API_OBJECT,  heapMem->signature == HEAP_MEM_SIGNATURE);
-    ES_API_REQUIRE(ES_API_RANGE,   (size != 0u) && (size < ES_RAM_SSIZE_MAX));
-    ES_API_REQUIRE(ES_API_POINTER, mem != NULL);
+    ES_REQUIRE(ES_API_POINTER, heapMem != NULL);
+    ES_REQUIRE(ES_API_OBJECT,  heapMem->signature == HEAP_MEM_SIGNATURE);
+    ES_REQUIRE(ES_API_RANGE,   (size != 0u) && (size < ES_RAM_SSIZE_MAX));
+    ES_REQUIRE(ES_API_POINTER, mem != NULL);
 
-    size = ES_ALIGN_UP(size, ES_CPU_DEF_DATA_ALIGNMENT);
+    size = ES_ALIGN_UP(size, sizeof(struct heapPhy [1]));
     curr = heapMem->sentinel->free.next;
 
     while (curr != heapMem->sentinel) {
@@ -140,13 +140,13 @@ esError esHeapMemAllocI(
                 struct heapMemBlock * tmp;
 
                 tmp = (struct heapMemBlock *)((uint8_t *)curr + size + sizeof(struct heapPhy [1]));
-                tmp->phy.size  = (esRamSSize)
-                    ((size_t)curr->phy.size - size - sizeof(struct heapPhy [1]));
-                tmp->phy.prev  = curr;
                 tmp->free.next = curr->free.next;
                 tmp->free.prev = curr->free.prev;
                 tmp->free.next->free.prev = tmp;
                 tmp->free.prev->free.next = tmp;
+                tmp->phy.size  = (esRamSSize)
+                    ((size_t)curr->phy.size - size - sizeof(struct heapPhy [1]));
+                tmp->phy.prev  = curr;
                 curr->phy.size = (esRamSSize)(size * (-1));           /* Mark block as allocated                                  */
                 *mem = (void *)(&curr->free);
 
@@ -191,9 +191,9 @@ esError esHeapMemFreeI(
     struct heapMemBlock * curr;
     struct heapMemBlock * tmp;
 
-    ES_API_REQUIRE(ES_API_POINTER, heapMem != NULL);
-    ES_API_REQUIRE(ES_API_OBJECT,  heapMem->signature == HEAP_MEM_SIGNATURE);
-    ES_API_REQUIRE(ES_API_POINTER, mem != NULL);
+    ES_REQUIRE(ES_API_POINTER, heapMem != NULL);
+    ES_REQUIRE(ES_API_OBJECT,  heapMem->signature == HEAP_MEM_SIGNATURE);
+    ES_REQUIRE(ES_API_POINTER, mem != NULL);
 
     curr = (struct heapMemBlock *)
         ((uint8_t *)mem - offsetof(struct heapMemBlock, free));
@@ -202,21 +202,21 @@ esError esHeapMemFreeI(
 
     if ((curr->phy.prev->phy.size >= 0) && (tmp->phy.size < 0)) {               /* Previous block is free                                   */
         curr->phy.prev->phy.size = (esRamSSize)
-            (curr->phy.prev->phy.size + curr->phy.size);
+            (curr->phy.prev->phy.size + curr->phy.size + sizeof(struct heapPhy [1]));
         tmp->phy.prev = curr->phy.prev;
     } else if ((curr->phy.prev->phy.size < 0) && (tmp->phy.size >= 0)) {        /* Next block is free                                     */
         curr->free.next = tmp->free.next;
         curr->free.prev = tmp->free.prev;
         curr->free.prev->free.next = curr;
         curr->free.next->free.prev = curr;
-        curr->phy.size  = (esRamSSize)(curr->phy.size + tmp->phy.size);
+        curr->phy.size  = (esRamSSize)(curr->phy.size + tmp->phy.size + sizeof(struct heapPhy [1]));
         tmp = (struct heapMemBlock *)((uint8_t *)curr + curr->phy.size);
         tmp->phy.prev = curr;
     } else if ((curr->phy.prev->phy.size >= 0) && (tmp->phy.size >= 0)) {       /* Previous and next blocks are free                      */
         tmp->free.prev->free.next = tmp->free.next;
         tmp->free.next->free.prev = tmp->free.prev;
         curr->phy.prev->phy.size  = (esRamSSize)
-            (curr->phy.prev->phy.size + curr->phy.size + tmp->phy.size);
+            (curr->phy.prev->phy.size + curr->phy.size + tmp->phy.size + sizeof(struct heapPhy [1]));
         tmp = (struct heapMemBlock *)
             ((uint8_t *)curr->phy.prev + curr->phy.prev->phy.size);
         tmp->phy.prev = curr->phy.prev;
@@ -250,9 +250,9 @@ esError esHeapGetSizeI(
     struct esHeapMem *  heapMem,
     size_t *            size) {
 
-    ES_API_REQUIRE(ES_API_POINTER, heapMem != NULL);
-    ES_API_REQUIRE(ES_API_OBJECT,  heapMem->signature == HEAP_MEM_SIGNATURE);
-    ES_API_REQUIRE(ES_API_POINTER, size != NULL);
+    ES_REQUIRE(ES_API_POINTER, heapMem != NULL);
+    ES_REQUIRE(ES_API_OBJECT,  heapMem->signature == HEAP_MEM_SIGNATURE);
+    ES_REQUIRE(ES_API_POINTER, size != NULL);
 
     *size = heapMem->size;
 
@@ -270,9 +270,9 @@ esError esHeapGetBlockSizeI(
     struct esHeapMem *  heapMem,
     size_t *            size) {
 
-    ES_API_REQUIRE(ES_API_POINTER, heapMem != NULL);
-    ES_API_REQUIRE(ES_API_OBJECT,  heapMem->signature == HEAP_MEM_SIGNATURE);
-    ES_API_REQUIRE(ES_API_POINTER, size != NULL);
+    ES_REQUIRE(ES_API_POINTER, heapMem != NULL);
+    ES_REQUIRE(ES_API_OBJECT,  heapMem->signature == HEAP_MEM_SIGNATURE);
+    ES_REQUIRE(ES_API_POINTER, size != NULL);
 
     *size = heapMem->size;
 
