@@ -104,6 +104,7 @@
       <itemPath>include/main.h</itemPath>
       <itemPath>include/events.h</itemPath>
       <itemPath>include/epa_bt.h</itemPath>
+      <itemPath>include/epa_sysguard.h</itemPath>
     </logicalFolder>
     <logicalFolder name="LinkerScript"
                    displayName="Linker Files"
@@ -184,6 +185,7 @@
       <itemPath>source/bsp.c</itemPath>
       <itemPath>source/support.c</itemPath>
       <itemPath>source/epa_bt.c</itemPath>
+      <itemPath>source/epa_sysguard.c</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"

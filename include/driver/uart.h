@@ -36,7 +36,7 @@ enum uartError {
     UART_ERROR_TIMEOUT,
     UART_ERROR_OVERFLOW,
     UART_ERROR_PARITY,
-    UART_ERROR_STOP,
+    UART_ERROR_CANCEL,
     UART_ERROR_FRAME
 };
 
@@ -91,6 +91,7 @@ struct uartId {
     uint32_t         (* read)(struct uartHandle *);
     void             (* write)(struct uartHandle *, uint32_t);
     void             (* readStart)(struct uartHandle *);
+    void             (* readCancel)(struct uartHandle *);
     void             (* readStop)(struct uartHandle *);
     void             (* writeStart)(struct uartHandle *);
     void             (* writeStop)(struct uartHandle *);
@@ -133,6 +134,9 @@ enum uartError uartReadStart(
     struct uartHandle * handle,
     void *              buffer,
     size_t              nElements);
+
+void uartReadCancel(
+    struct uartHandle * handle);
 
 void uartReadStop(
     struct uartHandle * handle);

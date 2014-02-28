@@ -40,11 +40,14 @@
 #define U1STA_FERR                      (0x1u << 2)
 #define U1STA_PERR                      (0x1u << 3)
 #define U1STA_RXISEL_3_4                (0x2u << 6)
+#define U1STA_RXISEL_1_2                (0x1u << 6)
 #define U1STA_TRMT                      (0x1u << 8)
 #define U1STA_UTXBF                     (0x1u << 9)
 #define U1STA_TXEN                      (0x1u << 10)
 #define U1STA_RXEN                      (0x1u << 12)
 #define U1STA_TXISEL_ALL                (0x1u << 14)
+
+#define U1STA_URXISEL_Msk               (0x3u << 6)
 
 #define UART1_PIN_ADDRESS(id, value, address)                                   \
     address,
@@ -55,6 +58,8 @@
 /*======================================================  LOCAL DATA TYPES  ==*/
 /*=============================================  LOCAL FUNCTION PROTOTYPES  ==*/
 
+static void uartUpdateRxTrigger(
+    size_t);
 static void lldUartOpen(
     struct uartHandle *);
 static void lldUartClose(
@@ -69,6 +74,8 @@ static void lldUartWrite(
     struct uartHandle *,
     uint32_t);
 static void lldUartReadStart(
+    struct uartHandle *);
+static void lldUartReadCancel(
     struct uartHandle *);
 static void lldUartReadStop(
     struct uartHandle *);
@@ -102,12 +109,25 @@ const struct uartId Uart1 = {
     lldUartRead,
     lldUartWrite,
     lldUartReadStart,
+    lldUartReadCancel,
     lldUartReadStop,
     lldUartWriteStart,
     lldUartWriteStop
 };
 
 /*============================================  LOCAL FUNCTION DEFINITIONS  ==*/
+
+static void uartUpdateRxTrigger(
+    size_t              size) {
+
+    U1STACLR = U1STA_URXISEL_Msk;
+
+    if (size >= 6) {
+        U1STASET = U1STA_RXISEL_3_4;
+    } else if (size >= 4) {
+        U1STASET = U1STA_RXISEL_1_2;
+    }
+}
 
 static void lldUartOpen(
     struct uartHandle * handle) {
@@ -133,7 +153,7 @@ static void lldUartOpen(
     if ((config->flags & UART_RX_ENABLE) != 0u) {
         sta            |= U1STA_RXEN;
     }
-    sta                |= U1STA_TXISEL_ALL | U1STA_RXISEL_3_4;
+    sta                |= U1STA_TXISEL_ALL; /* | U1STA_RXISEL_3_4;*/
     U1STA               = sta;
     brg = clockGetPeripheralClock() / config->speed;
     brg++;
@@ -217,16 +237,25 @@ static void lldUartWrite(
     U1TXREG = data;
 }
 
+
 static void lldUartReadStart(
     struct uartHandle * handle) {
 
-    (void)handle;
-    GlobalRxCounter = 0u;
-    GlobalRxCancelled  = false;
-
+    GlobalRxCounter   = 0u;
+    GlobalRxCancelled = false;
+    uartUpdateRxTrigger(handle->readSize);
     U1STACLR = U1STA_OERR;                                                      /* Flush old reveived data                                  */
     IFS1CLR  = IFS1_U1RX;
     IEC1SET  = IEC1_U1RX;
+}
+
+static void lldUartReadCancel(
+    struct uartHandle * handle) {
+
+    (void)handle;
+
+    GlobalRxCancelled = true;
+    IFS1SET           = IFS1_U1RX;
 }
 
 static void lldUartReadStop(
@@ -234,8 +263,7 @@ static void lldUartReadStop(
 
     (void)handle;
 
-    GlobalRxCancelled = true;
-    IFS1SET           = IFS1_U1RX;
+    IEC1CLR = IEC1_U1RX;
 }
 
 static void lldUartWriteStart(
@@ -267,53 +295,46 @@ void __ISR(_UART1_VECTOR) lldUart1Handler(void) {
     /*--  RX interrupt  ------------------------------------------------------*/
     if ((IEC1 & IFS1 & INTR_U1RX) != 0u) {
 
-        if (GlobalRxCancelled == true) {
-            GlobalRxCancelled = false;
-            IEC1CLR          = IEC1_U1RX;
-            U1STACLR         = U1STA_OERR;                                      /* Flush the rest in fifo buffer                            */
+        while (((U1STA & U1STA_URXDA) != 0u) &&
+            GlobalRxCounter < GlobalHandle->readSize) {
+
+            ((uint8_t *)GlobalHandle->readBuffer)[GlobalRxCounter] = U1RXREG;
+            GlobalRxCounter++;
+        }
+        
+        if ((U1STA & (U1STA_OERR | U1STA_FERR | U1STA_PERR)) != 0u) {
+            enum uartError error;
+
+            if ((U1STA & U1STA_OERR) != 0u) {
+                error = UART_ERROR_OVERFLOW;
+            } else if ((U1STA & U1STA_FERR) != 0u) {
+                error = UART_ERROR_FRAME;
+            } else {
+                error = UART_ERROR_PARITY;
+            }
+            U1STACLR = U1STA_OERR;                                              /* Flush the rest in fifo buffer                            */
 
             if (GlobalHandle->reader != NULL) {
                 (void)GlobalHandle->reader(
-                    UART_ERROR_STOP,
+                    error,
                     GlobalHandle->readBuffer,
-                    GlobalHandle->readSize);
+                    GlobalRxCounter);
             }
-        } else {
-            while (((U1STA & U1STA_URXDA) != 0u) &&
-                GlobalRxCounter < GlobalHandle->readSize) {
+            IEC1CLR = IEC1_U1RX;
+        } else if ((GlobalRxCounter == GlobalHandle->readSize) || (GlobalRxCancelled == true)) {
+            GlobalRxCancelled = false;
+            IEC1CLR           = IEC1_U1RX;
+            U1STACLR          = U1STA_OERR;                                     /* Flush the rest in fifo buffer                            */
+            uartUpdateRxTrigger(GlobalHandle->readSize - GlobalRxCounter);
 
-                ((uint8_t *)GlobalHandle->readBuffer)[GlobalRxCounter] = U1RXREG;
-                GlobalRxCounter++;
-            }
-
-            if ((U1STA & (U1STA_OERR | U1STA_FERR | U1STA_PERR)) != 0u) {
-                enum uartError error;
-
-                if ((U1STA & U1STA_OERR) != 0u) {
-                    error = UART_ERROR_OVERFLOW;
-                } else if ((U1STA & U1STA_FERR) != 0u) {
-                    error = UART_ERROR_FRAME;
-                } else {
-                    error = UART_ERROR_PARITY;
-                }
-                U1STACLR = U1STA_OERR;                                              /* Flush the rest in fifo buffer                            */
-
-                if (GlobalHandle->reader != NULL) {
-                    (void)GlobalHandle->reader(
-                        error,
-                        GlobalHandle->readBuffer,
-                        GlobalHandle->readSize);
-                }
-                IEC1CLR = IEC1_U1RX;
-            } else if (GlobalRxCounter == GlobalHandle->readSize) {
-                if (GlobalHandle->reader != NULL) {
-                    (void)GlobalHandle->reader(
-                        UART_ERROR_NONE,
-                        GlobalHandle->readBuffer,
-                        GlobalHandle->readSize);
-                }
+            if (GlobalHandle->reader != NULL) {
+                (void)GlobalHandle->reader(
+                    UART_ERROR_NONE,
+                    GlobalHandle->readBuffer,
+                    GlobalRxCounter);
             }
         }
+        
         IFS1CLR = IFS1_U1RX;
     }
     

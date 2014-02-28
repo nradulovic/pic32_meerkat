@@ -24,6 +24,7 @@
 #define CONFIG_BT_UART_TIMEOUT_MS       100u
 
 #define BT_DRV_CMD_TABLE(entry)                                                 \
+    entry(BT_DRV_SET_AUTH_NONE,         "SA,0",     0)                          \
     entry(BT_DRV_SET_AUDIO_ROUTING,     "S|,",      2)                          \
     entry(BT_DRV_SET_NAME,              "S-,",      8)                          \
     entry(BT_DRV_SET_AUTH,              "SA,",      1)                          \
@@ -49,8 +50,6 @@
 #define BT_DRV_CMD_EXPAND_ID(id, cmd, args)                                     \
     id,
 
-#define BT_DRV_CMD_EXPAND_CMD(id, cmd, args)                                    \
-    {cmd "\r\n", sizeof(cmd "\r\n")},
 
 #define BT_DRV_AUDIO_ROUTE_ANALOG       "00"
 #define BT_DRV_AUDIO_ROUTE_I2S          "01"
@@ -73,47 +72,48 @@ extern "C" {
 
 /*============================================================  DATA TYPES  ==*/
 
-enum BtDrvCommandId {
+enum BtCommandId {
     BT_DRV_CMD_TABLE(BT_DRV_CMD_EXPAND_ID)
     LAST_BT_CMD_ID
 };
 
-enum BtDrvEvents {
+enum BtEvents {
     EVT_BT_DRV_REQ      = CONFIG_BT_DRV_EVENT_BASE,
     EVT_BT_DRV_REPLY,
     EVT_BT_DRV_STATUS
 };
 
-enum BtDrvStatus {
+enum BtStatus {
     BT_DRV_ERR_NONE,
     BT_DRV_ERR_TIMEOUT,
     BT_DRV_ERR_FAILURE,
     BT_DRV_ERR_COMM
 };
 
-struct BtDrvStatusEvent {
+struct BtStatusEvent {
     struct esEvent      header;
-    enum BtDrvStatus    status;
+    enum BtStatus       status;
 };
 
-struct BtDrvEvent {
+struct BtEvent {
     struct esEvent      header;
-    char *              string;
-    size_t              stringSize;
+    enum BtCommandId    cmd;
+    char *              arg;
+    size_t              argSize;
 };
 
-struct BtDrvCmd {
+struct BtCmd {
     char *              cmd;
     size_t              size;
 };
 
 /*======================================================  GLOBAL VARIABLES  ==*/
 
-extern const struct esEpaDefine BtDrvEpaDefine;
-extern const struct esSmDefine  BtDrvSmDefine;
+extern const struct esEpaDefine BtDrvEpa;
+extern const struct esSmDefine  BtDrvSm;
 extern struct esEpa *   BtDrv;
 
-extern const struct BtDrvCmd BtDrvCmd[];
+extern const struct BtCmd BtCmd[];
 
 /*===================================================  FUNCTION PROTOTYPES  ==*/
 

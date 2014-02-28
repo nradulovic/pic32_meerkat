@@ -19,7 +19,7 @@
 #include "test/test_spi.h"
 #include "test/test_uart.h"
 #include "bsp.h"
-#include "epa_bt.h"
+#include "events.h"
 
 /*=========================================================  LOCAL MACRO's  ==*/
 /*======================================================  LOCAL DATA TYPES  ==*/
@@ -101,7 +101,8 @@ static void processEvents(
     ES_ENSURE(esEpaKernelSetIdle(idle));
 
     /*-- Create all required EPAs  -------------------------------------------*/
-    ES_ENSURE(esEpaCreate(&BtDrvEpaDefine, &BtDrvSmDefine, &StaticMem, &BtDrv));
+    ES_ENSURE(esEpaCreate(&BtDrvEpa, &BtDrvSm, &StaticMem, &BtDrv));
+    ES_ENSURE(esEpaCreate(&SysGuardEpa, &SysGuardSm, &StaticMem, &SysGuard));
 
     /*--  Start EPA execution  -----------------------------------------------*/
     ES_ENSURE(esEpaKernelStart());

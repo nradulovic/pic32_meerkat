@@ -226,6 +226,13 @@ enum uartError uartReadStart(
     return (UART_ERROR_NONE);
 }
 
+void uartReadCancel(
+    struct uartHandle * handle) {
+
+    handle->id->readCancel(handle);
+    handle->state &= ~UART_RX_ACTIVE;
+}
+
 void uartReadStop(
     struct uartHandle * handle) {
 

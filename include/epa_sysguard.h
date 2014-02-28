@@ -1,21 +1,23 @@
-/*
- * File:   events.h
- * Author: nenad
+/* 
+ * File:    epa_sysguard.h
+ * Author:  nenad
+ * Details: Event Processing Agent for SysGuard
  *
- * Created on February 21, 2014, 10:08 PM
+ * Created on February 27, 2014, 10:05 PM
  */
 
-#ifndef EVENTS_H
-#define	EVENTS_H
+#ifndef EPA_SYSGUARD_H
+#define EPA_SYSGUARD_H
 
 /*=========================================================  INCLUDE FILES  ==*/
 
-#include <stddef.h>
-
-#include "epa_bt.h"
-#include "epa_sysguard.h"
+#include "config/config_pins.h"
+#include "eds/epa.h"
 
 /*===============================================================  MACRO's  ==*/
+
+#define CONFIG_SYSGUARD_QUEUE_SIZE      10
+#define CONFIG_SYSGUARD_EVENT_BASE      10000
 
 /*------------------------------------------------------  C++ extern begin  --*/
 #ifdef	__cplusplus
@@ -24,12 +26,18 @@ extern "C" {
 
 /*============================================================  DATA TYPES  ==*/
 
-
-
-
+enum SysGuardEvents {
+    EVT_SYSGUARD_NOTIFY_READY = CONFIG_SYSGUARD_EVENT_BASE
+};
 
 /*======================================================  GLOBAL VARIABLES  ==*/
+
+extern const struct esEpaDefine SysGuardEpa;
+extern const struct esSmDefine  SysGuardSm;
+extern struct esEpa *   SysGuard;
+
 /*===================================================  FUNCTION PROTOTYPES  ==*/
+
 /*--------------------------------------------------------  C++ extern end  --*/
 #ifdef __cplusplus
 }
@@ -37,6 +45,9 @@ extern "C" {
 
 /*================================*//** @cond *//*==  CONFIGURATION ERRORS  ==*/
 /** @endcond *//** @} *//** @} *//*********************************************
- * END of events.h
+ * END of epa_sysguard.h
  ******************************************************************************/
-#endif /* EVENTS_H */
+#endif /* EPA_SYSGUARD_H */
+
+
+
