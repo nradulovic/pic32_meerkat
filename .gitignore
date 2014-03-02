@@ -1,2 +1,11 @@
 build/
 dist/
+Debug/
+Release/
+.project
+.cproject
+.settings/
+
+*~
+.*~
+/arm
