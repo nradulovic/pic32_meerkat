@@ -10,80 +10,85 @@
 
 #include <string.h>
 
+#include "events.h"
 #include "epa_bt.h"
+#include "arch/intr.h"
 #include "driver/gpio.h"
 #include "driver/uart.h"
 #include "vtimer/vtimer.h"
-#include "arch/intr.h"
-#include "epa_sysguard.h"
 
 /*=========================================================  LOCAL MACRO's  ==*/
 
-#define BT_DRV_CMD_SIZE(id, cmd, args)  char cmdSize ## id[sizeof(cmd) + args + sizeof("\r\n") - 1u];
+#define BT_DRV_CMD_EXPAND_SIZE(id, cmd, args)                                   \
+    char cmdSize ## id[sizeof(cmd) + args + sizeof("\r\n") - 1u];
 
 #define BT_DRV_CMD_EXPAND_CMD(id, cmd, args)                                    \
     {cmd, sizeof(cmd) - 1u},
 
 #define BT_CMD_REPLY_BUFF_SIZE          100
 
-#define BT_R_CMD                        "CMD\r\n"
+#define BT_CMD_BEGIN                    "CMD\r\n"
+#define BT_CMD_END                      "END\r\n"
+#define BT_CMD_VALID                    "AOK\r\n"
+#define BT_CMD_REBOOT                   "Reboot!\r\n"
 
-#define BT_CMD_GPIO_INIT()                                                      \
+#define BT_CMD_INIT_OUT()                                                       \
     do {                                                                        \
-        *(CONFIG_BT_CMD_GPIO_PORT)->tris &= ~(0x1u << CONFIG_BT_CMD_GPIO_PIN);  \
+        *(CONFIG_BT_GPIO_CMD_PORT)->tris &= ~(0x1u << CONFIG_BT_GPIO_CMD_PIN);  \
     } while (0)
 
-#define BT_CMD_GPIO_LOW()                                                       \
+#define BT_CMD_LOW()                                                            \
     do {                                                                        \
-        *(CONFIG_BT_CMD_GPIO_PORT)->clr = 0x1u << CONFIG_BT_CMD_GPIO_PIN;       \
+        *(CONFIG_BT_GPIO_CMD_PORT)->clr = 0x1u << CONFIG_BT_GPIO_CMD_PIN;       \
     } while (0)
 
-#define BT_CMD_GPIO_HIGH()                                                      \
+#define BT_CMD_HIGH()                                                           \
     do {                                                                        \
-        *(CONFIG_BT_CMD_GPIO_PORT)->set = 0x1u << CONFIG_BT_CMD_GPIO_PIN;       \
+        *(CONFIG_BT_GPIO_CMD_PORT)->set = 0x1u << CONFIG_BT_GPIO_CMD_PIN;       \
     } while (0)
 
-#define BT_DEF_GPIO_INIT_OUT()                                                  \
+#define BT_DEF_INIT_OUT()                                                       \
     do {                                                                        \
-        *(CONFIG_BT_DEF_GPIO_PORT)->tris &= ~(0x1u << CONFIG_BT_DEF_GPIO_PIN);  \
+        *(CONFIG_BT_GPIO_DEF_PORT)->tris &= ~(0x1u << CONFIG_BT_GPIO_DEF_PIN);  \
     } while (0)
 
-#define BT_DEF_GPIO_INIT_IN()                                                   \
+#define BT_DEF_INIT_IN()                                                        \
     do {                                                                        \
-        *(CONFIG_BT_DEF_GPIO_PORT)->tris |= (0x1u << CONFIG_BT_DEF_GPIO_PIN);   \
+        *(CONFIG_BT_GPIO_DEF_PORT)->tris |= (0x1u << CONFIG_BT_GPIO_DEF_PIN);   \
     } while (0)
 
-#define BT_DEF_GPIO_LOW()                                                       \
+#define BT_DEF_LOW()                                                            \
     do {                                                                        \
-        *(CONFIG_BT_DEF_GPIO_PORT)->clr = 0x1u << CONFIG_BT_DEF_GPIO_PIN;       \
+        *(CONFIG_BT_GPIO_DEF_PORT)->clr = 0x1u << CONFIG_BT_GPIO_DEF_PIN;       \
     } while (0)
 
-#define BT_DEF_GPIO_HIGH()                                                      \
+#define BT_DEF_HIGH()                                                           \
     do {                                                                        \
-        *(CONFIG_BT_DEF_GPIO_PORT)->set = 0x1u << CONFIG_BT_DEF_GPIO_PIN;       \
+        *(CONFIG_BT_GPIO_DEF_PORT)->set = 0x1u << CONFIG_BT_GPIO_DEF_PIN;       \
     } while (0)
 
-#define BT_PWR_GPIO_INIT()                                                      \
+#define BT_PWR_INIT_OUT()                                                       \
     do {                                                                        \
-        *(CONFIG_BT_PWR_GPIO_PORT)->tris &= ~(0x1u << CONFIG_BT_PWR_GPIO_PIN);  \
+        *(CONFIG_BT_GPIO_PWR_PORT)->tris &= ~(0x1u << CONFIG_BT_GPIO_PWR_PIN);  \
     } while (0)
 
-#define BT_PWR_GPIO_LOW()                                                       \
+#define BT_PWR_LOW()                                                            \
     do {                                                                        \
-        *(CONFIG_BT_PWR_GPIO_PORT)->clr = 0x1u << CONFIG_BT_PWR_GPIO_PIN;       \
+        *(CONFIG_BT_GPIO_PWR_PORT)->clr = 0x1u << CONFIG_BT_GPIO_PWR_PIN;       \
     } while (0)
 
-#define BT_PWR_GPIO_HIGH()                                                      \
+#define BT_PWR_HIGH()                                                           \
     do {                                                                        \
-        *(CONFIG_BT_PWR_GPIO_PORT)->set = 0x1u << CONFIG_BT_PWR_GPIO_PIN;       \
+        *(CONFIG_BT_GPIO_PWR_PORT)->set = 0x1u << CONFIG_BT_GPIO_PWR_PIN;       \
     } while (0)
 
 #define BT_DRV_TABLE(entry)                                                     \
     entry(stateInit,            TOP)                                            \
     entry(stateIdle,            TOP)                                            \
-    entry(stateCmdWaitBegin,    TOP)                                            \
+    entry(stateCmdBegin,    TOP)                                            \
+    entry(stateCmdIdle,         TOP)                                            \
     entry(stateCmdSend,         TOP)                                            \
-    entry(stateCmdWaitEnd,      TOP)                                            \
+    entry(stateCmdEnd,      TOP)                                            \
     entry(stateDefToggle0,      TOP)                                            \
     entry(stateDefToggle1,      TOP)                                            \
     entry(stateDefToggle2,      TOP)                                            \
@@ -91,42 +96,47 @@
 
 /*======================================================  LOCAL DATA TYPES  ==*/
 
+struct BtCmd {
+    char *              cmd;
+    size_t              size;
+};
+
 union BtDrvCmdSize {
-    BT_DRV_CMD_TABLE(BT_DRV_CMD_SIZE)
+    BT_DRV_CMD_TABLE(BT_DRV_CMD_EXPAND_SIZE)
 };
 
 enum btDrvStateId {
     ES_STATE_ID_INIT(BT_DRV_TABLE)
 };
 
-enum localEvent {
-    EVT_BT_UART_RESPONSE = ES_EVENT_LOCAL_ID,
-    EVT_BT_UART_ERROR,
-    EVT_BT_TIMEOUT
+enum localEvents {
+    EVT_UART_RESPONSE_ = ES_EVENT_LOCAL_ID,
+    EVT_UART_ERROR_,
+    EVT_TIMEOUT_
 };
 
-struct btDrvEvent_ {
+struct uartEvent_ {
     struct esEvent      header;
     size_t              size;
 };
 
 struct wspace {
     struct esEpa *      client;
-    enum BtCommandId reqCmd;
-    char                reqBuffer[sizeof(union BtDrvCmdSize)];
-    size_t              reqSize;
-    char                replyBuffer[BT_CMD_REPLY_BUFF_SIZE];
     struct uartHandle   uart;
     struct esVTimer     timer;
+    size_t              reqSize;
+    char                reqBuffer[sizeof(union BtDrvCmdSize)];
+    char                replyBuffer[BT_CMD_REPLY_BUFF_SIZE];
 };
 
 /*=============================================  LOCAL FUNCTION PROTOTYPES  ==*/
 
 static esAction stateInit      (struct wspace *, esEvent *);
 static esAction stateIdle      (struct wspace *, esEvent *);
-static esAction stateCmdWaitBegin(struct wspace *, esEvent *);
+static esAction stateCmdBegin(struct wspace *, esEvent *);
+static esAction stateCmdIdle   (struct wspace *, esEvent *);
 static esAction stateCmdSend   (struct wspace *, esEvent *);
-static esAction stateCmdWaitEnd(struct wspace *, esEvent *);
+static esAction stateCmdEnd(struct wspace *, esEvent *);
 static esAction stateDefToggle0(struct wspace *, esEvent *);
 static esAction stateDefToggle1(struct wspace *, esEvent *);
 static esAction stateDefToggle2(struct wspace *, esEvent *);
@@ -134,7 +144,7 @@ static esAction stateDefToggle3(struct wspace *, esEvent *);
 
 /*--  Support functions  -----------------------------------------------------*/
 
-static size_t btReplyHandler(
+static size_t btUartReadHandler(
     enum uartError, void *, size_t);
 
 static void btTimeoutHandler(void *);
@@ -146,6 +156,10 @@ static void initBtDrv(struct wspace *);
 static const ES_MODULE_INFO_CREATE("epa_bt", CONFIG_BT_DRV_NAME, "Nenad Radulovic");
 
 static const esSmTable BtDrvTable[] = ES_STATE_TABLE_INIT(BT_DRV_TABLE);
+
+static const struct BtCmd BtCmdTable[] = {
+    BT_DRV_CMD_TABLE(BT_DRV_CMD_EXPAND_CMD)
+};
 
 /*======================================================  GLOBAL VARIABLES  ==*/
 
@@ -161,10 +175,6 @@ const struct esSmDefine BtDrvSm = ES_SM_DEFINE(
 
 struct esEpa *   BtDrv;
 
-const struct BtCmd BtCmd[] = {
-    BT_DRV_CMD_TABLE(BT_DRV_CMD_EXPAND_CMD)
-};
-
 /*============================================  LOCAL FUNCTION DEFINITIONS  ==*/
 
 static esAction stateInit (struct wspace * space, esEvent * event) {
@@ -172,6 +182,17 @@ static esAction stateInit (struct wspace * space, esEvent * event) {
     switch (event->id) {
         case ES_INIT : {
             initBtDrv(space);
+            BT_PWR_LOW();
+            esVTimerStart(
+                &space->timer,
+                ES_VTMR_TIME_TO_TICK_MS(1000u),
+                btTimeoutHandler,
+                BtDrv);
+
+            return (ES_STATE_HANDLED());
+        }
+        case EVT_TIMEOUT_ : {
+            BT_PWR_HIGH();
 
             return (ES_STATE_TRANSITION(stateDefToggle0));
         }
@@ -193,9 +214,9 @@ static esAction stateDefToggle0 (struct wspace * space, esEvent * event) {
 
             return (ES_STATE_HANDLED());
         }
-        case EVT_BT_TIMEOUT : {
-            BT_DEF_GPIO_INIT_OUT();
-            BT_DEF_GPIO_LOW();
+        case EVT_TIMEOUT_ : {
+            BT_DEF_INIT_OUT();
+            BT_DEF_LOW();
 
             return (ES_STATE_TRANSITION(stateDefToggle1));
         }
@@ -217,8 +238,8 @@ static esAction stateDefToggle1 (struct wspace * space, esEvent * event) {
 
             return (ES_STATE_HANDLED());
         }
-        case EVT_BT_TIMEOUT : {
-            BT_DEF_GPIO_HIGH();
+        case EVT_TIMEOUT_ : {
+            BT_DEF_HIGH();
 
             return (ES_STATE_TRANSITION(stateDefToggle2));
         }
@@ -240,8 +261,8 @@ static esAction stateDefToggle2 (struct wspace * space, esEvent * event) {
 
             return (ES_STATE_HANDLED());
         }
-        case EVT_BT_TIMEOUT : {
-            BT_DEF_GPIO_LOW();
+        case EVT_TIMEOUT_ : {
+            BT_DEF_LOW();
 
             return (ES_STATE_TRANSITION(stateDefToggle3));
         }
@@ -263,16 +284,17 @@ static esAction stateDefToggle3 (struct wspace * space, esEvent * event) {
 
             return (ES_STATE_HANDLED());
         }
-        case EVT_BT_TIMEOUT : {
-            esEvent *   notify;
-
+        case EVT_TIMEOUT_ : {
+            /*
+             * TODO: Should broadcast here it is ready
+             */
             ES_ENSURE(esEventCreate(
                 sizeof(esEvent),
-                EVT_SYSGUARD_NOTIFY_READY,
-                &notify));
-            esEpaSendEvent(SysGuard, notify);
-            BT_DEF_GPIO_HIGH();
-            BT_DEF_GPIO_INIT_IN();
+                EVT_BT_NOTIFY_READY,
+                &event));
+            esEpaSendEvent(BtMan, event);
+            BT_DEF_HIGH();
+            BT_DEF_INIT_IN();
 
             return (ES_STATE_TRANSITION(stateIdle));
         }
@@ -285,35 +307,37 @@ static esAction stateDefToggle3 (struct wspace * space, esEvent * event) {
 
 static esAction stateIdle (struct wspace * space, esEvent * event) {
 
+    (void)space;
+
     switch (event->id) {
-        case ES_ENTRY : {
-            BT_CMD_GPIO_HIGH();
+        case EVT_BT_CMD_MODE_ENTER : {
+            space->client  = event->producer;
+
+            return (ES_STATE_TRANSITION(stateCmdBegin));
+        }
+        case EVT_BT_RESTART : {
+            esVTimerStart(
+                &space->timer,
+                ES_VTMR_TIME_TO_TICK_MS(1000u),
+                btTimeoutHandler,
+                BtDrv);
+            BT_PWR_LOW();
 
             return (ES_STATE_HANDLED());
         }
-        case EVT_BT_DRV_REQ : {
-            space->client  = event->producer;
-            space->reqSize = 0u;
-            memcpy(
-                &space->reqBuffer[space->reqSize],
-                BtCmd[((struct BtEvent *)event)->cmd].cmd,
-                BtCmd[((struct BtEvent *)event)->cmd].size);
-            space->reqSize += BtCmd[((struct BtEvent *)event)->cmd].size;
+        case EVT_TIMEOUT_: {
+            BT_PWR_HIGH();
 
-            if (((struct BtEvent *)event)->arg != NULL) {
-                memcpy(
-                    &space->reqBuffer[space->reqSize],
-                    ((struct BtEvent *)event)->arg,
-                    ((struct BtEvent *)event)->argSize);
-                space->reqSize += ((struct BtEvent *)event)->argSize;
-            }
-            memcpy(
-                &space->reqBuffer[space->reqSize],
-                "\r\n",
-                2u);
-            space->reqSize += 2u;
+            return (ES_STATE_HANDLED());
+        }
+        case EVT_BT_SEND_DATA : {
+            struct BtSendEvent * data;
 
-            return (ES_STATE_TRANSITION(stateCmdWaitBegin));
+            data = (struct BtSendEvent *)event;
+            uartWriteStop(&space->uart);
+            uartWriteStart(&space->uart, data->arg, data->argSize);
+
+            return (ES_STATE_HANDLED());
         }
         default : {
 
@@ -322,7 +346,7 @@ static esAction stateIdle (struct wspace * space, esEvent * event) {
     }
 }
 
-static esAction stateCmdWaitBegin (struct wspace * space, esEvent * event) {
+static esAction stateCmdBegin (struct wspace * space, esEvent * event) {
     switch (event->id) {
         case ES_ENTRY : {
             esVTimerStart(
@@ -333,55 +357,106 @@ static esAction stateCmdWaitBegin (struct wspace * space, esEvent * event) {
             uartReadStart(
                 &space->uart,
                 space->replyBuffer,
-                sizeof(BT_R_CMD) - 1u);
-            BT_CMD_GPIO_LOW();
+                sizeof(BT_CMD_BEGIN) - 1u);
+            BT_CMD_LOW();
 
             return (ES_STATE_HANDLED());
         }
-        case EVT_BT_TIMEOUT: {
+        case EVT_TIMEOUT_: {
             uartReadCancel(&space->uart);
             
             return (ES_STATE_HANDLED());
         }
-        case EVT_BT_UART_RESPONSE : {
+        case EVT_UART_RESPONSE_ : {
             esVTimerCancel(&space->timer);
             uartReadStop(&space->uart);
             
-            if (strcmp(space->replyBuffer, BT_R_CMD) == 0) {
+            if (strcmp(space->replyBuffer, BT_CMD_BEGIN) == 0) {
+                ES_ENSURE(esEventCreate(
+                    sizeof(esEvent),
+                    EVT_BT_NOTIFY_READY,
+                    &event));
+                esEpaSendEvent(space->client, event);
 
-                return (ES_STATE_TRANSITION(stateCmdSend));
+                return (ES_STATE_TRANSITION(stateCmdIdle));
             } else {
                 esError error;
+                struct BtReplyEvent * reply;
 
                 ES_ENSURE(error = esEventCreate(
-                    sizeof(struct BtStatusEvent),
-                    EVT_BT_DRV_STATUS,
-                    &event));
+                    sizeof(struct BtReplyEvent),
+                    EVT_BT_REPLY,
+                    (esEvent **)&reply));
 
                 if (error == ES_ERROR_NONE) {
-                    ((struct BtStatusEvent *)event)->status = BT_DRV_ERR_FAILURE;
-                    esEpaSendEvent(space->client, event);
+                    reply->status  = BT_ERR_FAILURE;
+                    reply->arg     = NULL;
+                    reply->argSize = 0;
+                    esEpaSendEvent(space->client, (esEvent *)reply);
                 }
 
-                return (ES_STATE_TRANSITION(stateIdle));
+                return (ES_STATE_TRANSITION(stateCmdEnd));
             }
         }
-        case EVT_BT_UART_ERROR : {
+        case EVT_UART_ERROR_ : {
             esError     error;
-
-            uartReadStop(&space->uart);
+            struct BtReplyEvent * reply;
+            
             esVTimerCancel(&space->timer);
+            uartReadStop(&space->uart);
             ES_ENSURE(error = esEventCreate(
-                sizeof(struct BtStatusEvent),
-                EVT_BT_DRV_STATUS,
-                &event));
+                sizeof(struct BtReplyEvent),
+                EVT_BT_REPLY,
+                (esEvent **)&reply));
 
             if (error == ES_ERROR_NONE) {
-                ((struct BtStatusEvent *)event)->status = BT_DRV_ERR_COMM;
-                esEpaSendEvent(space->client, event);
+                reply->status  = BT_ERR_COMM;
+                reply->arg     = NULL;
+                reply->argSize = 0;
+                esEpaSendEvent(space->client, (esEvent *)reply);
             }
 
-            return (ES_STATE_TRANSITION(stateIdle));
+            return (ES_STATE_TRANSITION(stateCmdEnd));
+        }
+        default : {
+
+            return (ES_STATE_IGNORED());
+        }
+    }
+}
+
+static esAction stateCmdIdle (struct wspace * space, esEvent * event) {
+    switch (event->id) {
+        case EVT_BT_CMD_MODE_EXIT : {
+
+            return (ES_STATE_TRANSITION(stateCmdEnd));
+        }
+        case EVT_BT_REQ : {
+            struct BtReqEvent * request;
+
+            
+            space->reqSize = 0u;
+            request = (struct BtReqEvent *)event;
+            memcpy(
+                &space->reqBuffer[space->reqSize],
+                BtCmdTable[request->cmd].cmd,
+                BtCmdTable[request->cmd].size);
+            space->reqSize += BtCmdTable[request->cmd].size;
+
+            if (request->arg != NULL) {
+                memcpy(
+                    &space->reqBuffer[space->reqSize],
+                    request->arg,
+                    request->argSize);
+                space->reqSize += request->argSize;
+            }
+            memcpy(
+                &space->reqBuffer[space->reqSize],
+                "\r\n",
+                2u);
+            space->reqSize += 2u;
+
+            return (ES_STATE_TRANSITION(stateCmdSend));
         }
         default : {
 
@@ -406,7 +481,7 @@ static esAction stateCmdSend (struct wspace * space, esEvent * event) {
             
             return (ES_STATE_HANDLED());
         }
-        case EVT_BT_TIMEOUT: {
+        case EVT_TIMEOUT_: {
             /* Cancel UART RX which will generate EVT_BT_UART_RESPONSE or
              * EVT_BT_UART_ERROR
              */
@@ -415,48 +490,54 @@ static esAction stateCmdSend (struct wspace * space, esEvent * event) {
 
             return (ES_STATE_HANDLED());
         }
-        case EVT_BT_UART_RESPONSE : {
+        case EVT_UART_RESPONSE_ : {
             esError     error;
-
+            struct BtReplyEvent * reply;
+            
             esVTimerCancel(&space->timer);
             uartReadStop(&space->uart);
             uartWriteStop(&space->uart);
             ES_ENSURE(error = esEventCreate(
-                sizeof(struct BtEvent [1]) + ((struct btDrvEvent_ *)event)->size,
-                EVT_BT_DRV_REPLY,
-                &event));
+                sizeof(struct BtReplyEvent [1]) + ((struct uartEvent_ *)event)->size,
+                EVT_BT_REPLY,
+                (esEvent **)&reply));
 
             if (error == ES_ERROR_NONE) {
-                ((struct BtEvent *)event)->cmd = 0;
-                ((struct BtEvent *)event)->arg = (char *)(event + 1u);
-                ((struct BtEvent *)event)->argSize = ((struct btDrvEvent_ *)event)->size;
-                memcpy(
-                    ((struct BtEvent *)event)->arg,
-                    space->replyBuffer,
-                    ((struct btDrvEvent_ *)event)->size);
-                esEpaSendEvent(space->client, event);
+
+                if ((strcmp(space->replyBuffer, BT_CMD_VALID) == 0) ||
+                    (strcmp(space->replyBuffer, BT_CMD_REBOOT) == 0)) {
+                    reply->status = BT_ERR_NONE;
+                } else {
+                    reply->status = BT_ERR_FAILURE;
+                }
+                reply->arg     = (char *)(reply + 1u);
+                reply->argSize = ((struct uartEvent_ *)event)->size;
+                memcpy(reply->arg, space->replyBuffer, reply->argSize);
+                esEpaSendEvent(space->client, (esEvent *)reply);
             }
 
-            return (ES_STATE_TRANSITION(stateIdle));
-
+            return (ES_STATE_TRANSITION(stateCmdIdle));
         }
-        case EVT_BT_UART_ERROR : {
+        case EVT_UART_ERROR_ : {
             esError     error;
+            struct BtReplyEvent * reply;
 
             esVTimerCancel(&space->timer);
             uartReadStop(&space->uart);
             uartWriteStop(&space->uart);
             ES_ENSURE(error = esEventCreate(
-                sizeof(struct BtStatusEvent),
-                EVT_BT_DRV_STATUS,
-                &event));
+                sizeof(struct BtReplyEvent),
+                EVT_BT_REPLY,
+                (esEvent **)&reply));
 
             if (error == ES_ERROR_NONE) {
-                ((struct BtStatusEvent *)event)->status = BT_DRV_ERR_COMM;
-                esEpaSendEvent(space->client, event);
+                reply->status  = BT_ERR_COMM;
+                reply->arg     = NULL;
+                reply->argSize = 0;
+                esEpaSendEvent(space->client, (esEvent *)reply);
             }
 
-            return (ES_STATE_TRANSITION(stateIdle));
+            return (ES_STATE_TRANSITION(stateCmdIdle));
         }
         default : {
             return (ES_STATE_IGNORED());
@@ -464,8 +545,16 @@ static esAction stateCmdSend (struct wspace * space, esEvent * event) {
     }
 }
 
-static esAction stateCmdWaitEnd(struct wspace * space , esEvent * event) {
+static esAction stateCmdEnd(struct wspace * space , esEvent * event) {
+
+    (void)space;
+    
     switch (event->id) {
+        case ES_INIT : {
+            BT_CMD_HIGH();
+
+            return (ES_STATE_TRANSITION(stateIdle));
+        }
         default : {
             return (ES_STATE_IGNORED());
         }
@@ -474,28 +563,30 @@ static esAction stateCmdWaitEnd(struct wspace * space , esEvent * event) {
 
 /*--  Support functions  -----------------------------------------------------*/
 
-static size_t btReplyHandler(
+static size_t btUartReadHandler(
     enum uartError      uartError,
     void *              buffer,
     size_t              size) {
 
     uint16_t            id;
-    esEvent *           event;
+    struct uartEvent_ * reply;
     esError             error;
 
+    (void)buffer;
+
     if ((uartError == UART_ERROR_NONE) || (uartError == UART_ERROR_CANCEL)) {
-        id = EVT_BT_UART_RESPONSE;
+        id = EVT_UART_RESPONSE_;
     } else {
-        id = EVT_BT_UART_ERROR;
+        id = EVT_UART_ERROR_;
     }
     ES_ENSURE(error = esEventCreate(
-        sizeof(struct btDrvEvent_),
+        sizeof(struct uartEvent_),
         id,
-        &event));
+        (esEvent **)&reply));
 
     if (error == ES_ERROR_NONE) {
-        ((struct btDrvEvent_ *)event)->size = size;
-        esEpaSendEvent(BtDrv, event);
+        reply->size = size;
+        esEpaSendAheadEvent(BtDrv, (esEvent *)reply);
     }
 
     return (0u);
@@ -503,17 +594,17 @@ static size_t btReplyHandler(
 
 static void btTimeoutHandler(void *   arg) {
     struct esEpa *      epa;
-    struct esEvent *    event;
+    struct esEvent *    timeout;
     esError             error;
 
     epa = (struct esEpa *)arg;
     ES_ENSURE(error = esEventCreate(
         sizeof(struct esEvent),
-        EVT_BT_TIMEOUT,
-        &event));
+        EVT_TIMEOUT_,
+        &timeout));
 
     if (error == ES_ERROR_NONE) {
-        esEpaSendEvent(epa, event);
+        esEpaSendAheadEvent(epa, timeout);
     }
 }
 
@@ -521,13 +612,13 @@ static void initBtDrv(struct wspace * space) {
 
     struct uartConfig btUartConfig;
 
-    /*--  Initialize CMD & DEF pins  -----------------------------------------*/
-    BT_CMD_GPIO_INIT();
-    BT_DEF_GPIO_INIT_IN();
-    BT_PWR_GPIO_INIT();
-    BT_CMD_GPIO_HIGH();
-    BT_DEF_GPIO_HIGH();
-    BT_PWR_GPIO_HIGH();
+    /*--  Initialize CMD & DEF & PWR pins  -----------------------------------*/
+    BT_CMD_INIT_OUT();
+    BT_DEF_INIT_IN();
+    BT_PWR_INIT_OUT();
+    BT_CMD_HIGH();
+    BT_DEF_HIGH();
+    BT_PWR_HIGH();
 
     /*--  Initialize UART  ---------------------------------------------------*/
     btUartConfig.id          = &Uart1;
@@ -541,7 +632,7 @@ static void initBtDrv(struct wspace * space) {
     btUartConfig.remap.cts   = CONFIG_BT_UART_CTS_PIN;
     btUartConfig.remap.rts   = CONFIG_BT_UART_RTS_PIN;
     uartOpen(&space->uart, &btUartConfig);
-    uartSetReader(&space->uart, btReplyHandler);
+    uartSetReader(&space->uart, btUartReadHandler);
 
     /*--  Initialize timeout timer  ------------------------------------------*/
     esVTimerInit(&space->timer);

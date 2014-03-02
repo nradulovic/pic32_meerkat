@@ -24,7 +24,9 @@
 #define CONFIG_BT_UART_TIMEOUT_MS       100u
 
 #define BT_DRV_CMD_TABLE(entry)                                                 \
-    entry(BT_DRV_SET_AUTH_NONE,         "SA,0",     0)                          \
+    entry(BT_SET_AUTH_NONE,             "SA,0",     0)                          \
+    entry(BT_SET_MODULE_NAME,           "S-,",      8)                          \
+    entry(BT_SET_DISCOVERY_MASK,        "SD,",      2)                          \
     entry(BT_DRV_SET_AUDIO_ROUTING,     "S|,",      2)                          \
     entry(BT_DRV_SET_NAME,              "S-,",      8)                          \
     entry(BT_DRV_SET_AUTH,              "SA,",      1)                          \
@@ -32,9 +34,9 @@
     entry(BT_DRV_SET_DISCOVERY_MASK,    "SD,",      2)                          \
     entry(BT_DRV_SET_FACTORY,           "SF,1",     0)                          \
     entry(BT_DRV_SET_CONNECTION_MASK,   "SK,",      2)                          \
-    entry(BT_DRV_SET_DEVICE_NAME,       "SN,",      8)                          \
+    entry(BT_SET_DEVICE_NAME,           "SN,",      8)                          \
     entry(BT_DRV_SET_SECURITY_PIN,      "SP,",      8)                          \
-    entry(BT_DRV_SET_DISCOVERABLE,      "@,1",      0)                          \
+    entry(BT_SET_DISCOVERABLE,          "@,1",      0)                          \
     entry(BT_DRV_SET_NOT_DISCOVERABLE,  "@,0",      0)                          \
     entry(BT_DRV_GET_DETAILS,           "D",        0)                          \
     entry(BT_DRV_GET_AUTH,              "GA",       0)                          \
@@ -45,11 +47,10 @@
     entry(BT_DRV_RECONNECT,             "B",        0)                          \
     entry(BT_DRV_DISCONNECT,            "K,",       2)                          \
     entry(BT_DRV_QUERY,                 "Q",        0)                          \
-    entry(BT_DRV_REBOOT,                "R,1",      0)
+    entry(BT_REBOOT,                    "R,1",      0)
 
 #define BT_DRV_CMD_EXPAND_ID(id, cmd, args)                                     \
     id,
-
 
 #define BT_DRV_AUDIO_ROUTE_ANALOG       "00"
 #define BT_DRV_AUDIO_ROUTE_I2S          "01"
@@ -78,33 +79,41 @@ enum BtCommandId {
 };
 
 enum BtEvents {
-    EVT_BT_DRV_REQ      = CONFIG_BT_DRV_EVENT_BASE,
-    EVT_BT_DRV_REPLY,
-    EVT_BT_DRV_STATUS
+    EVT_BT_CMD_MODE_ENTER = CONFIG_BT_DRV_EVENT_BASE,
+    EVT_BT_REQ,
+    EVT_BT_REPLY,
+    EVT_BT_STATUS,
+    EVT_BT_CMD_MODE_EXIT,
+    EVT_BT_RESTART,
+    EVT_BT_NOTIFY_READY,
+    EVT_BT_SEND_DATA
 };
 
 enum BtStatus {
-    BT_DRV_ERR_NONE,
-    BT_DRV_ERR_TIMEOUT,
-    BT_DRV_ERR_FAILURE,
-    BT_DRV_ERR_COMM
+    BT_ERR_NONE,
+    BT_ERR_TIMEOUT,
+    BT_ERR_FAILURE,
+    BT_ERR_COMM
 };
 
-struct BtStatusEvent {
+struct BtSendEvent {
     struct esEvent      header;
-    enum BtStatus       status;
+    char *              arg;
+    size_t              argSize;
 };
 
-struct BtEvent {
+struct BtReqEvent {
     struct esEvent      header;
     enum BtCommandId    cmd;
     char *              arg;
     size_t              argSize;
 };
 
-struct BtCmd {
-    char *              cmd;
-    size_t              size;
+struct BtReplyEvent {
+    struct esEvent      header;
+    enum BtStatus       status;
+    char *              arg;
+    size_t              argSize;
 };
 
 /*======================================================  GLOBAL VARIABLES  ==*/
@@ -112,8 +121,6 @@ struct BtCmd {
 extern const struct esEpaDefine BtDrvEpa;
 extern const struct esSmDefine  BtDrvSm;
 extern struct esEpa *   BtDrv;
-
-extern const struct BtCmd BtCmd[];
 
 /*===================================================  FUNCTION PROTOTYPES  ==*/
 

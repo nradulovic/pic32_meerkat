@@ -30,7 +30,8 @@ void initCodec(
 enum codecError codecOpen(
     struct spiHandle *  spi) {
 
-
+    (void)spi;
+    
     return (CODEC_ERROR_NONE);
 }
 

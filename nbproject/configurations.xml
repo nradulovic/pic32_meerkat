@@ -104,7 +104,7 @@
       <itemPath>include/main.h</itemPath>
       <itemPath>include/events.h</itemPath>
       <itemPath>include/epa_bt.h</itemPath>
-      <itemPath>include/epa_sysguard.h</itemPath>
+      <itemPath>include/epa_bt_man.h</itemPath>
     </logicalFolder>
     <logicalFolder name="LinkerScript"
                    displayName="Linker Files"
@@ -258,6 +258,7 @@
         <property key="use-cci" value="false"/>
         <property key="use-iar" value="false"/>
         <property key="use-indirect-calls" value="false"/>
+        <appendMe value="-Wextra"/>
       </C32>
       <C32-AS>
         <property key="assembler-symbols" value=""/>
