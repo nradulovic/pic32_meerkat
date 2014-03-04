@@ -39,6 +39,9 @@ void initCodec(
 enum codecError codecOpen(
     struct spiHandle *  spi);
 
+void codecClose(
+    void);
+
 /*--------------------------------------------------------  C++ extern end  --*/
 #ifdef __cplusplus
 }

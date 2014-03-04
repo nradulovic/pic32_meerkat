@@ -57,7 +57,6 @@ void spiOpen(
     handle->state  = SPI_INACTIVE;
 }
 
-
 enum spiError spiClose(
     struct spiHandle * handle) {
 

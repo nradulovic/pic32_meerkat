@@ -21,12 +21,13 @@
 #define CONFIG_BT_DRV_QUEUE_SIZE        10
 #define CONFIG_BT_DRV_EVENT_BASE        1000
 #define CONFIG_BT_UART_SPEED            115200
-#define CONFIG_BT_UART_TIMEOUT_MS       100u
+#define CONFIG_BT_UART_TIMEOUT_MS       200u
 
 #define BT_DRV_CMD_TABLE(entry)                                                 \
     entry(BT_SET_AUTH_NONE,             "SA,0",     0)                          \
     entry(BT_SET_MODULE_NAME,           "S-,",      8)                          \
     entry(BT_SET_DISCOVERY_MASK,        "SD,",      2)                          \
+    entry(BT_SET_AUDIO_I2S,             "S|,01",    0)                          \
     entry(BT_DRV_SET_AUDIO_ROUTING,     "S|,",      2)                          \
     entry(BT_DRV_SET_NAME,              "S-,",      8)                          \
     entry(BT_DRV_SET_AUTH,              "SA,",      1)                          \

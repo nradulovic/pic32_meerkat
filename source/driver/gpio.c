@@ -18,16 +18,16 @@
 /*=======================================================  LOCAL VARIABLES  ==*/
 /*======================================================  GLOBAL VARIABLES  ==*/
 
-const struct gpio GlobalGpioA = {
-    &PORTA, &TRISA, &LATA,  &LATASET,  &LATACLR,  &PORTAINV
+const struct gpio GpioA = {
+    &PORTA, &TRISA, &LATA, &LATASET, &LATACLR, &PORTAINV, &CNPUA, &CNPDA
 };
 
-const struct gpio GlobalGpioB = {
-    &PORTB, &TRISB, &LATB,  &LATBSET,  &LATBCLR,  &PORTBINV
+const struct gpio GpioB = {
+    &PORTB, &TRISB, &LATB, &LATBSET, &LATBCLR, &PORTBINV, &CNPUB, &CNPDB
 };
 
-const struct gpio GlobalGpioC = {
-    &PORTC, &TRISC, &LATC,  &LATCSET,  &LATCCLR,  &PORTCINV
+const struct gpio GpioC = {
+    &PORTC, &TRISC, &LATC, &LATCSET, &LATCCLR, &PORTCINV, &CNPUC, &CNPDC
 };
 
 /*============================================  LOCAL FUNCTION DEFINITIONS  ==*/
@@ -42,10 +42,16 @@ void initGpio(
      */
     ANSELA = 0u;
     ODCA   = 0u;
+    CNPUA  = 0u;
+    CNPDA  = 0u;
     ANSELB = 0u;
+    CNPUB  = 0u;
+    CNPDB  = 0u;
     ODCB   = 0u;
     ANSELC = 0u;
     ODCC   = 0u;
+    CNPUC  = 0u;
+    CNPDC  = 0u;
 #endif
 }
 

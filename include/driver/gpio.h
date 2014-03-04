@@ -26,13 +26,15 @@ struct gpio {
     volatile unsigned int * set;
     volatile unsigned int * clr;
     volatile unsigned int * invert;
+    volatile unsigned int * pullup;
+    volatile unsigned int * pulldown;
 };
 
 /*======================================================  GLOBAL VARIABLES  ==*/
 
-extern const struct gpio GlobalGpioA;
-extern const struct gpio GlobalGpioB;
-extern const struct gpio GlobalGpioC;
+extern const struct gpio GpioA;
+extern const struct gpio GpioB;
+extern const struct gpio GpioC;
 
 /*===================================================  FUNCTION PROTOTYPES  ==*/
 

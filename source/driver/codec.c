@@ -10,11 +10,15 @@
 
 #include "vtimer/vtimer.h"
 #include "driver/codec.h"
+#include "bsp.h"
 
 /*=========================================================  LOCAL MACRO's  ==*/
 /*======================================================  LOCAL DATA TYPES  ==*/
 /*=============================================  LOCAL FUNCTION PROTOTYPES  ==*/
 /*=======================================================  LOCAL VARIABLES  ==*/
+
+struct spiHandle *  GlobalSpi;
+
 /*======================================================  GLOBAL VARIABLES  ==*/
 /*============================================  LOCAL FUNCTION DEFINITIONS  ==*/
 /*===================================  GLOBAL PRIVATE FUNCTION DEFINITIONS  ==*/
@@ -30,9 +34,17 @@ void initCodec(
 enum codecError codecOpen(
     struct spiHandle *  spi) {
 
-    (void)spi;
+    GlobalSpi = spi;
+    cpumpEnable();                                                              /* We need 5V for output analog switch                      */
+    
     
     return (CODEC_ERROR_NONE);
+}
+
+void codecClose(
+    void) {
+
+    cpumpDisable();                                                             /* Disable 5V generation as we don't need it anymore        */
 }
 
 /*================================*//** @cond *//*==  CONFIGURATION ERRORS  ==*/

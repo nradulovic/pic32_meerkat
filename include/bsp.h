@@ -10,6 +10,9 @@
 #define	BSP_H_
 
 /*=========================================================  INCLUDE FILES  ==*/
+
+#include <stdbool.h>
+
 /*===============================================================  MACRO's  ==*/
 
 /*------------------------------------------------------  C++ extern begin  --*/
@@ -25,6 +28,28 @@ extern "C" {
  * @details     This function will initialize basic system clocks
  */
 void initBsp(
+    void);
+
+void initCPump(
+    void);
+void cpumpEnable(
+    void);
+void cpumpDisable(
+    void);
+
+void initRadioCharger(
+    void);
+void radioChargerEnable(
+    void);
+void radioChargerDisable(
+    void);
+
+void initBattCharger(
+    void);
+bool isBatteryCharging(
+    void);
+
+void initAudioSwitch(
     void);
 
 /*--------------------------------------------------------  C++ extern end  --*/
