@@ -1,0 +1,5 @@
+1. BT Man: Fortify Bluetooth initialization
+    Bluetooth FSM needs to be more persistent and elaborate in trying to initialize
+    the module. In case a command fails, it needs to retry several times with different
+    waiting intervals in between.
+
