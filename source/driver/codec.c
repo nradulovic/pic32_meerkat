@@ -10,6 +10,7 @@
 
 #include "vtimer/vtimer.h"
 #include "driver/codec.h"
+#include "driver/clock.h"
 #include "bsp.h"
 
 /*=========================================================  LOCAL MACRO's  ==*/
@@ -36,7 +37,7 @@ enum codecError codecOpen(
 
     GlobalSpi = spi;
     cpumpEnable();                                                              /* We need 5V for output analog switch                      */
-    
+    clockSetOutput(CLOCK_OUT_1, CLOCK_OUT_SOURCE_SYSCLK, CLOCK_OUT_DIV_6);
     
     return (CODEC_ERROR_NONE);
 }

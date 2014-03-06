@@ -29,7 +29,7 @@ extern "C" {
 #pragma config FWDTEN = OFF                                                     /* Watchdog Timer Enable (WDT Disabled (SWDTEN Bit Controls)) */
 #pragma config FWDTWINSZ = WISZ_25                                              /* Watchdog Timer Window Size (Window Size is 25%)          */
 
-#pragma config JTAGEN = ON                                                      /* JTAG Enable (JTAG Port Enabled)                          */
+#pragma config JTAGEN = OFF                                                     /* JTAG Enable (JTAG Port Enabled)                          */
 #pragma config ICESEL = ICS_PGx1                                                /* ICE/ICD Comm Channel Select (Communicate on PGEC1/PGED1) */
 #pragma config PWP = OFF                                                        /* Program Flash Write Protect (Disable)                    */
 #pragma config BWP = OFF                                                        /* Boot Flash Write Protect bit (Protection Disabled)       */

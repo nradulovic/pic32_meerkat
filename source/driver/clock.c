@@ -12,6 +12,7 @@
 #include <xc.h>
 
 #include "driver/clock.h"
+#include "driver/gpio.h"
 
 /*=========================================================  LOCAL MACRO's  ==*/
 
@@ -51,6 +52,86 @@ uint32_t clockGetPeripheralClock (
     void) {
 
     return (GlobalClocks.peripheralBus);
+}
+
+#define REFOCON_ROSEL_SYSCLK            (0x0u << 0)
+#define REFOCON_ROSEL_PBCLK             (0x1u << 0)
+#define REFOCON_ROSEL_FRC               (0x3u << 0)
+#define REFOCON_ACTIVE                  (0x1u << 8)
+#define REFOCON_OE                      (0x1u << 12)
+#define REFOCON_ON                      (0x1u << 15)
+
+#define REFOCON_RODIV_Pos               16
+#define REFOCON_RODIV_Msk               (0x7fu << REFOCON_RODIV_Pos)
+
+void clockSetOutput(
+    enum clockOutNum    outputNum,
+    enum clockOutSource source,
+    enum clockOutDivider divider) {
+
+    REFOCON = 0u;
+
+    switch (outputNum) {
+        case CLOCK_OUT_1: {
+            RPA2R = 0x7u;
+            break;
+        }
+        case CLOCK_OUT_2 : {
+            RPA3R = 0x0u;
+            break;
+        }
+        default : {
+            return;
+        }
+    }
+    while ((REFOCON & REFOCON_ACTIVE) != 0u);
+
+    switch (source) {
+        case CLOCK_OUT_SOURCE_SYSCLK : {
+            REFOCONSET = REFOCON_ROSEL_SYSCLK;
+            break;
+        }
+        case CLOCK_OUT_SOURCE_PBCLK : {
+            REFOCONSET = REFOCON_ROSEL_PBCLK;
+            break;
+        }
+        case CLOCK_OUT_SOURCE_FRC : {
+            REFOCONSET = REFOCON_ROSEL_FRC;
+            break;
+        }
+    }
+
+    switch (divider) {
+        case CLOCK_OUT_DIV_1 : {
+            REFOTRIM   = 0x0u;
+            REFOCONCLR = REFOCON_RODIV_Msk;
+            break;
+        }
+        case CLOCK_OUT_DIV_2 : {
+            REFOTRIM   = 0x0u;
+            REFOCONCLR = REFOCON_RODIV_Msk;
+            REFOCONSET = (0x1u << REFOCON_RODIV_Pos);
+            break;
+        }
+        case CLOCK_OUT_DIV_4 : {
+            REFOTRIM   = 0x0u;
+            REFOCONCLR = REFOCON_RODIV_Msk;
+            REFOCONSET = (0x2u << REFOCON_RODIV_Pos);
+            break;
+        }
+        case CLOCK_OUT_DIV_6 : {
+            REFOTRIM   = 0x0u;
+            REFOCONCLR = REFOCON_RODIV_Msk;
+            REFOCONSET = (0x3u << REFOCON_RODIV_Pos);
+            break;
+        }
+        default : {
+            REFOTRIM = 0x0u;
+            REFOCONCLR = REFOCON_RODIV_Msk;
+            break;
+        }
+    }
+    REFOCONSET = REFOCON_ON | REFOCON_OE;
 }
 
 /*================================*//** @cond *//*==  CONFIGURATION ERRORS  ==*/
