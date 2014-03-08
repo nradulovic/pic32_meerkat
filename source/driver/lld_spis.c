@@ -47,6 +47,10 @@ static bool lldSpiIsBuffFull(
 static uint32_t lldSpiExchange(
     struct spiHandle *,
     uint32_t);
+static void lldSpiSSActivate(
+    struct spiHandle *);
+static void lldSpiSSDeactivate(
+    struct spiHandle *);
 
 /*=======================================================  LOCAL VARIABLES  ==*/
 
@@ -62,7 +66,9 @@ const struct spiId GlobalSpis = {
     lldSpiOpen,
     lldSpiClose,
     lldSpiIsBuffFull,
-    lldSpiExchange
+    lldSpiExchange,
+    lldSpiSSActivate,
+    lldSpiSSDeactivate
 };
 
 /*============================================  LOCAL FUNCTION DEFINITIONS  ==*/
@@ -222,6 +228,24 @@ static uint32_t lldSpiExchange(
     }
 
     return (retval);
+}
+
+static void lldSpiSSActivate(
+    struct spiHandle * handle) {
+
+    const struct spiConfig * config;
+    
+    config               = handle->config;
+    *Polarized.ssActive |= Gpio[config->remap.ss].bit;
+}
+
+static void lldSpiSSDeactivate(
+    struct spiHandle * handle) {
+
+    const struct spiConfig * config;
+    
+    config                 = handle->config;
+    *Polarized.ssInactive |= Gpio[config->remap.ss].bit;
 }
 
 /*===================================  GLOBAL PRIVATE FUNCTION DEFINITIONS  ==*/

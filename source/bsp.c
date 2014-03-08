@@ -44,8 +44,6 @@ void initBsp(
     initCPump();
     initRadioCharger();
     initBattCharger();
-
-    codecOpen(NULL);
 }
 
 /*--  Charge pump control  ---------------------------------------------------*/

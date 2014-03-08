@@ -56,6 +56,10 @@ static bool lldSpiIsBuffFull(
 static uint32_t lldSpiExchange(
     struct spiHandle *,
     uint32_t);
+static void lldSpiSSActivate(
+    struct spiHandle *);
+static void lldSpiSSDeactivate(
+    struct spiHandle *);
 
 /*=======================================================  LOCAL VARIABLES  ==*/
 
@@ -73,7 +77,9 @@ const struct spiId GlobalSpi1 = {
     lldSpiOpen,
     lldSpiClose,
     lldSpiIsBuffFull,
-    lldSpiExchange
+    lldSpiExchange,
+    lldSpiSSActivate,
+    lldSpiSSDeactivate
 };
 
 /*============================================  LOCAL FUNCTION DEFINITIONS  ==*/
@@ -150,6 +156,24 @@ static uint32_t lldSpiExchange(
     SPI1BUF = data;
 
     return (SPI1BUF);
+}
+
+static void lldSpiSSActivate(
+    struct spiHandle * handle) {
+
+    (void)handle;
+    /*
+     * TODO: Implement this
+     */
+}
+
+static void lldSpiSSDeactivate(
+    struct spiHandle * handle) {
+
+    (void)handle;
+    /*
+     * TODO: Implement this
+     */
 }
 
 /*===================================  GLOBAL PRIVATE FUNCTION DEFINITIONS  ==*/

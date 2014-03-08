@@ -15,12 +15,12 @@
         <itemPath>include/driver/lld_spi1.h</itemPath>
         <itemPath>include/driver/uart.h</itemPath>
         <itemPath>include/driver/lld_spis.h</itemPath>
-        <itemPath>include/driver/codec.h</itemPath>
         <itemPath>include/driver/i2c.h</itemPath>
         <itemPath>include/driver/lld_uart1.h</itemPath>
         <itemPath>include/driver/gpio.h</itemPath>
         <itemPath>include/driver/clock.h</itemPath>
         <itemPath>include/driver/intr.h</itemPath>
+        <itemPath>include/driver/codec.h</itemPath>
       </logicalFolder>
       <logicalFolder name="esolid-base" displayName="esolid-base" projectFiles="true">
         <logicalFolder name="inc" displayName="inc" projectFiles="true">
@@ -118,11 +118,11 @@
         <itemPath>source/driver/spi.c</itemPath>
         <itemPath>source/driver/uart.c</itemPath>
         <itemPath>source/driver/lld_spis.c</itemPath>
-        <itemPath>source/driver/codec.c</itemPath>
         <itemPath>source/driver/lld_uart1.c</itemPath>
         <itemPath>source/driver/gpio.c</itemPath>
         <itemPath>source/driver/clock.c</itemPath>
         <itemPath>source/driver/intr.c</itemPath>
+        <itemPath>source/driver/codec.c</itemPath>
       </logicalFolder>
       <logicalFolder name="esolid-base" displayName="esolid-base" projectFiles="true">
         <logicalFolder name="port" displayName="port" projectFiles="true">
@@ -295,7 +295,7 @@
         <property key="oXC32ld-extra-opts" value=""/>
         <property key="optimization-level" value=""/>
         <property key="preprocessor-macros" value=""/>
-        <property key="remove-unused-sections" value="true"/>
+        <property key="remove-unused-sections" value="false"/>
         <property key="report-memory-usage" value="true"/>
         <property key="stack-size" value=""/>
         <property key="symbol-stripping" value=""/>

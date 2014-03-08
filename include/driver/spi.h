@@ -22,10 +22,8 @@
 
 /*===============================================================  MACRO's  ==*/
 
-#define SPI_CONFIG_INITIALIZER(channel, flags, speed, priority, timeout, sdi, sdo, sck, ss) \
-    {channel, flags, speed, priority, timeout, {sdi, sdo, sck, ss}}
-
-#define CONFIG_SPI_CLOSE_WAIT_TICKS     100
+#define SPI_CONFIG_INITIALIZER(channel, flags, speed, priority, sdi, sdo, sck, ss) \
+    {channel, flags, speed, priority, {sdi, sdo, sck, ss}}
 
 /*------------------------------------------------------  C++ extern begin  --*/
 #ifdef	__cplusplus
@@ -33,12 +31,6 @@ extern "C" {
 #endif
 
 /*============================================================  DATA TYPES  ==*/
-
-enum spiError {
-    SPI_ERROR_NONE,
-    SPI_ERROR_BUSY,
-    SPI_ERROR_TIMEOUT
-};
 
 enum spiConfigFlags {
     SPI_MASTER_MODE              = (0x1u << 5),
@@ -77,7 +69,6 @@ struct spiConfig {
 struct spiHandle {
     const struct spiId * id;
     const struct spiConfig * config;
-    esAtomic            state;
 };
 
 struct spiId {
@@ -85,6 +76,8 @@ struct spiId {
     void             (* close)(struct spiHandle *);
     bool             (* isBuffFull)(struct spiHandle *);
     uint32_t         (* exchange)(struct spiHandle *, uint32_t);
+    void             (* ssActivate)(struct spiHandle *);
+    void             (* ssDeactivate)(struct spiHandle *);
 };
 
 /*======================================================  GLOBAL VARIABLES  ==*/
@@ -97,14 +90,19 @@ void spiOpen(
     struct spiHandle *        handle,
     const struct spiConfig *  config);
 
-enum spiError spiClose(
+void spiClose(
     struct spiHandle *  handle);
 
-enum spiError spiExchange(
+void spiExchange(
     struct spiHandle *  handle,
     void *              buffer,
-    size_t              nElements,
-    esSysTimerTick      timeout);
+    size_t              nElements);
+
+void spiSSActivate(
+    struct spiHandle *  handle);
+
+void spiSSDeactivate(
+    struct spiHandle *  handle);
 
 /*--------------------------------------------------------  C++ extern end  --*/
 #ifdef __cplusplus
