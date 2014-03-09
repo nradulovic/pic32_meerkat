@@ -30,21 +30,21 @@ extern "C" {
 void initBsp(
     void);
 
-void initCPump(
+void initCPumpDriver(
     void);
 void cpumpEnable(
     void);
 void cpumpDisable(
     void);
 
-void initRadioCharger(
+void initRadioChargerDriver(
     void);
 void radioChargerEnable(
     void);
 void radioChargerDisable(
     void);
 
-void initBattCharger(
+void initBattChargerDriver(
     void);
 bool isBatteryCharging(
     void);

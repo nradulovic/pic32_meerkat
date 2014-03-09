@@ -23,7 +23,7 @@
 /*===================================  GLOBAL PRIVATE FUNCTION DEFINITIONS  ==*/
 /*====================================  GLOBAL PUBLIC FUNCTION DEFINITIONS  ==*/
 
-void initSpi(
+void initSpiDriver(
     void) {
     /*
      * NOTE: This is the place to do general and system wide initializaion

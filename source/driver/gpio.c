@@ -34,7 +34,7 @@ const struct gpio GpioC = {
 /*===================================  GLOBAL PRIVATE FUNCTION DEFINITIONS  ==*/
 /*====================================  GLOBAL PUBLIC FUNCTION DEFINITIONS  ==*/
 
-void initGpio(
+void initGpioDriver(
     void) {
 #if (__PIC32_FEATURE_SET == 150)
     /*

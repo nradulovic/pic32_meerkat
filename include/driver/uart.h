@@ -100,7 +100,7 @@ struct uartId {
 /*======================================================  GLOBAL VARIABLES  ==*/
 /*===================================================  FUNCTION PROTOTYPES  ==*/
 
-void initUart(
+void initUartDriver(
     void);
 
 void uartOpen(

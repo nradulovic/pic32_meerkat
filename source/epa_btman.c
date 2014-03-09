@@ -1,7 +1,7 @@
 /*
- * File:    epa_sysguard.h
+ * File:    epa_btman.c
  * Author:  nenad
- * Details: Event Processing Agent for SysGuard
+ * Details: Bluetooth Manager
  *
  * Created on February 27, 2014, 10:07 PM
  */

@@ -26,7 +26,7 @@ void execTestSpi(
     {
         struct spiHandle testSpi;
         struct spiConfig testSpiConfig = SPI_CONFIG_INITIALIZER(
-            &GlobalSpis,
+            &SpiSoft,
             0,
             1000000,
             1,
@@ -70,7 +70,7 @@ void execTestSpi(
     {
         struct spiHandle testSpi;
         struct spiConfig testSpiConfig = SPI_CONFIG_INITIALIZER(
-            &GlobalSpis,
+            &SpiSoft,
             0,
             1000000,
             1,

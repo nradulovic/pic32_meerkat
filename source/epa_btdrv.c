@@ -1,5 +1,5 @@
 /*
- * File:    epa_bt.c
+ * File:    epa_btdrv.c
  * Author:  nenad
  * Details: Event Processing Agent for Bluetooth driver
  *
@@ -11,7 +11,6 @@
 #include <string.h>
 
 #include "events.h"
-#include "epa_bt.h"
 #include "arch/intr.h"
 #include "driver/gpio.h"
 #include "driver/uart.h"

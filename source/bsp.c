@@ -33,22 +33,22 @@ void initBsp(
     void) {
 
     /*--  Initialize CPU peripherals  ----------------------------------------*/
-    initClock();
-    initIntr();
-    initGpio();                                                                 /* Initialize GPIO module                                   */
-    initSpi();
-    initUart();
+    initClockDriver();
+    initIntrDriver();
+    initGpioDriver();                                                           /* Initialize GPIO module                                   */
+    initSpiDriver();
+    initUartDriver();
 
     /*--  Initialize board peripherals  --------------------------------------*/
-    initCodec();
-    initCPump();
-    initRadioCharger();
-    initBattCharger();
+    initCodecDriver();
+    initCPumpDriver();
+    initRadioChargerDriver();
+    initBattChargerDriver();
 }
 
 /*--  Charge pump control  ---------------------------------------------------*/
 
-void initCPump(
+void initCPumpDriver(
     void) {
 
     *(CONFIG_CPUMP_EN_PORT)->tris &= ~(0x1u << CONFIG_CPUMP_EN_PIN);
@@ -71,7 +71,7 @@ void cpumpDisable(
 
 /* NOTE: Radio charger enable pin is active low
  */
-void initRadioCharger(
+void initRadioChargerDriver(
     void) {
 
     *(CONFIG_RADIO_CHARGER_EN_PORT)->tris &=                           
@@ -94,7 +94,7 @@ void radioChargerDisable(
 
 /*--  Battery charger control  -----------------------------------------------*/
 
-void initBattCharger(
+void initBattChargerDriver(
     void) {
 
     *(CONFIG_BATT_CHARGER_EN_PORT)->tris     |=

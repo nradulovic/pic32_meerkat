@@ -61,7 +61,7 @@ enum spisPinId {
 
 /**@brief       Software SPI identifier
  */
-extern const struct spiId GlobalSpis;
+extern const struct spiId SpiSoft;
 
 /*===================================================  FUNCTION PROTOTYPES  ==*/
 

@@ -38,7 +38,7 @@ extern const struct gpio GpioC;
 
 /*===================================================  FUNCTION PROTOTYPES  ==*/
 
-void initGpio(
+void initGpioDriver(
     void);
 
 /*--------------------------------------------------------  C++ extern end  --*/

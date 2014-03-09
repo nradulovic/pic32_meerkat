@@ -33,7 +33,7 @@ static const ES_MODULE_INFO_CREATE("Codec", "Codec driver", "Nenad Radulovic");
 /*===================================  GLOBAL PRIVATE FUNCTION DEFINITIONS  ==*/
 /*====================================  GLOBAL PUBLIC FUNCTION DEFINITIONS  ==*/
 
-void initCodec(
+void initCodecDriver(
     void) {
     /*
      * NOTE: This is the place to do general and system wide initializaion
@@ -46,7 +46,7 @@ void codecOpen(
 
     struct spiConfig codecSpiConfig;
 
-    codecSpiConfig.flags     = config->spi->flags & ~(SPI_MASTER_SS);
+    codecSpiConfig.flags     = config->spi->flags & ~(SPI_MASTER_SS);           /* Hardware is not controlling SS pin                       */
     codecSpiConfig.id        = config->spi->id;
     codecSpiConfig.isrPrio   = config->spi->isrPrio;
     codecSpiConfig.remap.sck = config->spi->remap.sck;

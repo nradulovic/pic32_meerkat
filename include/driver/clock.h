@@ -43,7 +43,7 @@ enum clockOutDivider {
 /*======================================================  GLOBAL VARIABLES  ==*/
 /*===================================================  FUNCTION PROTOTYPES  ==*/
 
-void initClock(
+void initClockDriver(
     void);
 
 uint32_t clockGetSystemClock(

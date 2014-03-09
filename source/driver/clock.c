@@ -35,7 +35,7 @@ static struct clocks GlobalClocks;
 /*===================================  GLOBAL PRIVATE FUNCTION DEFINITIONS  ==*/
 /*====================================  GLOBAL PUBLIC FUNCTION DEFINITIONS  ==*/
 
-void initClock(
+void initClockDriver(
     void) {
 
     GlobalClocks.system        = CONFIG_SYSTEM_CLOCK;

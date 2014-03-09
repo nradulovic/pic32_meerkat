@@ -39,7 +39,7 @@ static void uartTimeout(
 /*===================================  GLOBAL PRIVATE FUNCTION DEFINITIONS  ==*/
 /*====================================  GLOBAL PUBLIC FUNCTION DEFINITIONS  ==*/
 
-void initUart(
+void initUartDriver(
     void) {
     /*
      * NOTE: This is the place to do general and system wide initializaion

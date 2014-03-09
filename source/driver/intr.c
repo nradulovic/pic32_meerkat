@@ -22,7 +22,7 @@
 /*===================================  GLOBAL PRIVATE FUNCTION DEFINITIONS  ==*/
 /*====================================  GLOBAL PUBLIC FUNCTION DEFINITIONS  ==*/
 
-void initIntr(
+void initIntrDriver(
     void) {
 
     INTConfigureSystem(INT_SYSTEM_CONFIG_MULT_VECTOR);

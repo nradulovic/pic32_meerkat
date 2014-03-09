@@ -83,7 +83,7 @@ struct spiId {
 /*======================================================  GLOBAL VARIABLES  ==*/
 /*===================================================  FUNCTION PROTOTYPES  ==*/
 
-void initSpi(
+void initSpiDriver(
     void);
 
 void spiOpen(

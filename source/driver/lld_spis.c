@@ -62,7 +62,7 @@ static struct spisPolarized Polarized;
 
 /*======================================================  GLOBAL VARIABLES  ==*/
 
-const struct spiId GlobalSpis = {
+const struct spiId SpiSoft = {
     lldSpiOpen,
     lldSpiClose,
     lldSpiIsBuffFull,
