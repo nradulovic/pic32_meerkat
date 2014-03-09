@@ -103,6 +103,7 @@ static void processEvents(
     /*-- Create all required EPAs  -------------------------------------------*/
     ES_ENSURE(esEpaCreate(&BtDrvEpa, &BtDrvSm, &StaticMem, &BtDrv));
     ES_ENSURE(esEpaCreate(&BtManEpa, &BtManSm, &StaticMem, &BtMan));
+    ES_ENSURE(esEpaCreate(&CodecEpa, &CodecSm, &StaticMem, &Codec));
 
     /*--  Start EPA execution  -----------------------------------------------*/
     ES_ENSURE(esEpaKernelStart());
