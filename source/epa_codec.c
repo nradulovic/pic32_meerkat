@@ -98,7 +98,6 @@ static void initCodec(
 
     struct spiConfig    spiConfig;
     struct codecConfig  codecConfig;
-    uint32_t            value;
     
     spiConfig.id        = &SpiSoft;
     spiConfig.flags     = SPI_MASTER_MODE | SPI_MASTER_SS_ACTIVE_LOW |
@@ -156,7 +155,7 @@ static void initCodec(
         &wspace->codec,
         CODEC_REG_POWER_CTRL,
         CODEC_POWER_CTRL_PWDNC_ON         | CODEC_POWER_CTRL_ASTPWD_OFF |
-        CODEC_POWER_CTRL_DAODRC_LOW_POWER | CODEC_POWER_CTRL_DAPWDN_ON  )
+        CODEC_POWER_CTRL_DAODRC_LOW_POWER | CODEC_POWER_CTRL_DAPWDN_ON  );
 }
 
 /*===================================  GLOBAL PRIVATE FUNCTION DEFINITIONS  ==*/
