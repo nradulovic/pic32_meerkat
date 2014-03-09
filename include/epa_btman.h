@@ -5,6 +5,9 @@
  *
  * Created on February 27, 2014, 10:05 PM
  */
+/*----------------------------------------------------------------------------*
+ * NOTE: This file must be included only through events.h file
+ *----------------------------------------------------------------------------*/
 
 #ifndef EPA_BT_MAN_H
 #define EPA_BT_MAN_H
@@ -20,8 +23,17 @@
 #define CONFIG_BT_MAN_QUEUE_SIZE        10
 #define CONFIG_BT_MAN_EVENT_BASE        1100
 
+/**@brief       BT module name
+ */
 #define CONFIG_BT_MODULE_NAME           "Meerkat"
+
+/**@brief       BT module device name
+ */
 #define CONFIG_BT_DEVICE_NAME           "meerkat"
+
+/**@brief       BT profiles
+ * @details     See documentation about available options for BT profile
+ */
 #define CONFIG_BT_PROFILE               "06"
 
 /*------------------------------------------------------  C++ extern begin  --*/
