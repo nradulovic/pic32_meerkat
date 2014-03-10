@@ -34,6 +34,10 @@ extern "C" {
 #define CONFIG_BATT_CHARGER_EN_PIN      8
 
 #define CONFIG_CODEC_CLOCK_OUT_PIN      CLOCK_OUT_1
+#define CONFIG_CODEC_RESET_PORT         &GpioB
+#define CONFIG_CODEC_RESET_PIN          11
+#define CONFIG_CODEC_POWER_PORT         &GpioB
+#define CONFIG_CODEC_POWER_PIN          12
 
 #define CONFIG_AUDIO_SW_CB1_PORT
 #endif

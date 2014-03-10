@@ -17,6 +17,7 @@
 #include "bsp.h"
 #include "base/bitop.h"
 #include "config/config_pins.h"
+#include "driver/gpio.h"
 
 /*=========================================================  LOCAL MACRO's  ==*/
 
@@ -33,11 +34,41 @@ static const ES_MODULE_INFO_CREATE("Codec", "Codec driver", "Nenad Radulovic");
 /*===================================  GLOBAL PRIVATE FUNCTION DEFINITIONS  ==*/
 /*====================================  GLOBAL PUBLIC FUNCTION DEFINITIONS  ==*/
 
+/*
+ *  NOTE: The device requires a low-to-high pulse on RESET after power up for
+ *        correct operation.
+ */
 void initCodecDriver(
     void) {
-    /*
-     * NOTE: This is the place to do general and system wide initializaion
-     */
+
+    *(CONFIG_CODEC_POWER_PORT)->tris &= CONFIG_CODEC_POWER_PIN;
+    *(CONFIG_CODEC_POWER_PORT)->clr   = CONFIG_CODEC_POWER_PIN;
+    *(CONFIG_CODEC_RESET_PORT)->tris &= CONFIG_CODEC_RESET_PIN;
+    *(CONFIG_CODEC_RESET_PORT)->clr   = CONFIG_CODEC_RESET_PIN;
+}
+
+void codecResetEnable(
+    void) {
+
+    *(CONFIG_CODEC_RESET_PORT)->clr   = CONFIG_CODEC_RESET_PIN;
+}
+
+void codecResetDisable(
+    void) {
+
+    *(CONFIG_CODEC_RESET_PORT)->set   = CONFIG_CODEC_RESET_PIN;
+}
+
+void codecPowerUp(
+    void) {
+
+    *(CONFIG_CODEC_POWER_PORT)->set = CONFIG_CODEC_POWER_PIN;
+}
+
+void codecPowerDown(
+    void) {
+
+    *(CONFIG_CODEC_POWER_PORT)->clr = CONFIG_CODEC_POWER_PIN;
 }
 
 void codecOpen(
@@ -92,7 +123,7 @@ void codecAudioEnable(
     uint32_t            masterClockDiv;
     uint32_t            divider;
 
-    cpumpEnable();                                                              /* We need 5V for output analog switch                      */
+    //cpumpEnable();                                                              /* We need 5V for output analog switch                      */
     masterClockDiv = clockGetSystemClock() / CONFIG_MASTER_CLOCK;
 
     switch (masterClockDiv) {

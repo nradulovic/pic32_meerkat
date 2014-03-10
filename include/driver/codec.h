@@ -105,6 +105,18 @@ struct codecHandle {
 void initCodecDriver(
     void);
 
+void codecResetEnable(
+    void);
+
+void codecResetDisable(
+    void);
+
+void codecPowerUp(
+    void);
+
+void codecPowerDown(
+    void);
+
 void codecOpen(
     struct codecHandle * handle,
     const struct codecConfig * config);

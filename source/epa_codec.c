@@ -11,11 +11,13 @@
 #include "events.h"
 #include "driver/codec.h"
 #include "arch/intr.h"
+#include "vtimer/vtimer.h"
 
 /*=========================================================  LOCAL MACRO's  ==*/
 
 #define CODEC_TABLE(entry)                                                      \
     entry(stateInit,                TOP)                                        \
+    entry(stateReset,               TOP)                                        \
     entry(stateIdle,                TOP)
 
 /*======================================================  LOCAL DATA TYPES  ==*/
@@ -24,18 +26,25 @@ enum codecStateId {
     ES_STATE_ID_INIT(CODEC_TABLE)
 };
 
+enum codecLocalId {
+    EVT_TIMEOUT_ = ES_EVENT_LOCAL_ID
+};
+
 struct wspace {
     struct codecHandle codec;
+    struct esVTimer    timeout;
 };
 
 /*=============================================  LOCAL FUNCTION PROTOTYPES  ==*/
 
 static esAction stateInit           (struct wspace *, esEvent *);
+static esAction stateReset          (struct wspace *, esEvent *);
 static esAction stateIdle           (struct wspace *, esEvent *);
 
 /*--  Support functions  -----------------------------------------------------*/
 
 static void initCodec(struct wspace *);
+static void codecTimeout(void *);
 
 /*=======================================================  LOCAL VARIABLES  ==*/
 
@@ -65,6 +74,35 @@ static esAction stateInit(struct wspace * wspace, esEvent * event) {
 
     switch (event->id) {
         case ES_INIT : {
+            esVTimerInit(&wspace->timeout);
+
+            return (ES_STATE_TRANSITION(stateReset));
+        }
+        default : {
+
+            return (ES_STATE_IGNORED());
+        }
+    }
+}
+
+static esAction stateReset(struct wspace * wspace, esEvent * event) {
+
+    (void)wspace;
+
+    switch (event->id) {
+        case ES_ENTRY : {
+            codecResetEnable();
+            esVTimerStart(
+                &wspace->timeout,
+                ES_VTMR_TIME_TO_TICK_MS(100),
+                codecTimeout,
+                NULL);
+
+            return (ES_STATE_HANDLED());
+        }
+        case EVT_TIMEOUT_ : {
+            codecResetDisable();
+            codecPowerUp();
             initCodec(wspace);
 
             return (ES_STATE_TRANSITION(stateIdle));
@@ -93,7 +131,7 @@ static esAction stateIdle(struct wspace * wspace, esEvent * event) {
             return (ES_STATE_HANDLED());
         }
         case EVT_CODEC_ENABLE_AUDIO : {
-            codecAudioEnable();
+            //codecAudioEnable();
 
             return (ES_STATE_HANDLED());
         }
@@ -186,6 +224,16 @@ static void initCodec(
         CODEC_POWER_CTRL_ADPWDN_ON        | CODEC_POWER_CTRL_VGPWDN_ON  |
         CODEC_POWER_CTRL_ADWSF_POWERDOWN  | CODEC_POWER_CTRL_VBIAS_25   |
         CODEC_POWER_CTRL_EFFCTL_OFF       | CODEC_POWER_CTRL_DEEMPF_OFF);
+}
+
+void codecTimeout(
+    void* arg) {
+
+    esEvent *           timeout;
+
+    (void)arg;
+    esEventCreate(sizeof(esEvent), EVT_TIMEOUT_, &timeout);
+    esEpaSendEvent(Codec, timeout);
 }
 
 /*===================================  GLOBAL PRIVATE FUNCTION DEFINITIONS  ==*/
