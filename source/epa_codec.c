@@ -52,7 +52,7 @@ const struct esEpaDefine CodecEpa = ES_EPA_DEFINE(
 
 const struct esSmDefine CodecSm = ES_SM_DEFINE(
     CodecTable,
-    0,
+    sizeof(struct wspace),
     stateInit);
 
 struct esEpa *          Codec;
@@ -80,7 +80,20 @@ static esAction stateIdle(struct wspace * wspace, esEvent * event) {
     (void)wspace;
 
     switch (event->id) {
-        case EVT_BT_NOTIFY_READY : {
+        case ES_ENTRY : {
+#if 0
+            esEvent *   notify;
+
+            ES_ENSURE(esEventCreate(
+                sizeof(esEvent),
+                EVT_CODEC_NOTIFY_READY,
+                &notify));
+            ES_ENSURE(esEpaSendEvent(notify))
+#endif
+            return (ES_STATE_HANDLED());
+        }
+        case EVT_CODEC_ENABLE_AUDIO : {
+            codecAudioEnable();
 
             return (ES_STATE_HANDLED());
         }
@@ -98,7 +111,7 @@ static void initCodec(
 
     struct spiConfig    spiConfig;
     struct codecConfig  codecConfig;
-    
+
     spiConfig.id        = &SpiSoft;
     spiConfig.flags     = SPI_MASTER_MODE | SPI_MASTER_SS_ACTIVE_LOW |
                           SPI_SLAVE_MODE  | SPI_CLOCK_POLARITY_IDLE_LOW |
@@ -150,12 +163,29 @@ static void initCodec(
         CODEC_AUDIO_CTRL_2_APGASS_SINGLE | CODEC_AUDIO_CTRL_2_KCLFRQ_625 |
         CODEC_AUDIO_CTRL_2_KCLLN_2       | CODEC_AUDIO_CTRL_2_DASTC_SINGLE);
 
+    /*--  Clock settings  ----------------------------------------------------*/
+    /*
+     * MCLK = 12MHz, Fsref = 48kHz, Q = N/A, P = 1, K = 8192, J = 8, D = 1920
+     */
+    codecWriteReg(
+        &wspace->codec,
+        CODEC_REG_PLL_1,
+        CODEC_PLL_1_PLLSEL_ON   | CODEC_PLL_1_QVAL_PAR(0x0) |
+        CODEC_PLL_1_PVAL_PAR(0x1) | CODEC_PLL_1_JVAL_PAR(0x8));
+    codecWriteReg(
+        &wspace->codec,
+        CODEC_REG_PLL_2,
+        CODEC_PLL_2_DVAL_PAR(1920));
+
     /*--  Power control  -----------------------------------------------------*/
     codecWriteReg(
         &wspace->codec,
         CODEC_REG_POWER_CTRL,
         CODEC_POWER_CTRL_PWDNC_ON         | CODEC_POWER_CTRL_ASTPWD_OFF |
-        CODEC_POWER_CTRL_DAODRC_LOW_POWER | CODEC_POWER_CTRL_DAPWDN_ON  );
+        CODEC_POWER_CTRL_DAODRC_LOW_POWER | CODEC_POWER_CTRL_DAPWDN_ON  |
+        CODEC_POWER_CTRL_ADPWDN_ON        | CODEC_POWER_CTRL_VGPWDN_ON  |
+        CODEC_POWER_CTRL_ADWSF_POWERDOWN  | CODEC_POWER_CTRL_VBIAS_25   |
+        CODEC_POWER_CTRL_EFFCTL_OFF       | CODEC_POWER_CTRL_DEEMPF_OFF);
 }
 
 /*===================================  GLOBAL PRIVATE FUNCTION DEFINITIONS  ==*/

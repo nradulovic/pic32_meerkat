@@ -44,17 +44,17 @@ void codecOpen(
     struct codecHandle * handle,
     const struct codecConfig * config) {
 
-    struct spiConfig codecSpiConfig;
+    struct spiConfig spiConfig;
 
-    codecSpiConfig.flags     = config->spi->flags & ~(SPI_MASTER_SS);           /* Hardware is not controlling SS pin                       */
-    codecSpiConfig.id        = config->spi->id;
-    codecSpiConfig.isrPrio   = config->spi->isrPrio;
-    codecSpiConfig.remap.sck = config->spi->remap.sck;
-    codecSpiConfig.remap.sdi = config->spi->remap.sdi;
-    codecSpiConfig.remap.sdo = config->spi->remap.sdo;
-    codecSpiConfig.remap.ss  = config->spi->remap.ss;
-    codecSpiConfig.speed     = config->spi->speed;
-    spiOpen(&handle->spi, &codecSpiConfig);
+    spiConfig.flags     = config->spi->flags & ~(SPI_MASTER_SS);        /* Hardware is not controlling SS pin                       */
+    spiConfig.id        = config->spi->id;
+    spiConfig.isrPrio   = config->spi->isrPrio;
+    spiConfig.remap.sck = config->spi->remap.sck;
+    spiConfig.remap.sdi = config->spi->remap.sdi;
+    spiConfig.remap.sdo = config->spi->remap.sdo;
+    spiConfig.remap.ss  = config->spi->remap.ss;
+    spiConfig.speed     = config->spi->speed;
+    spiOpen(&handle->spi, &spiConfig);
 }
 
 void codecWriteReg(

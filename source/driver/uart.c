@@ -51,10 +51,10 @@ void uartOpen(
     const struct uartConfig *  config) {
 
     handle->id     = config->id;
-    handle->config = config;
+    handle->flags  = config->flags;
     handle->reader = NULL;
     handle->writer = NULL;
-    handle->id->open(handle);
+    handle->id->open(config, handle);
     handle->state  = UART_INACTIVE;
 }
 
@@ -102,7 +102,7 @@ enum uartError uartRead(
     handle->state |= UART_RX_ACTIVE;
     received = 0u;
 
-    if (handle->config->flags & UART_DATA_BITS_9) {
+    if (handle->flags & UART_DATA_BITS_9) {
         uint16_t *  buffer_ = (uint16_t *)buffer;
 
         while ((timerState == UART_TIMER_COUNTING) && (received < nElements)) {
@@ -164,7 +164,7 @@ enum uartError uartWrite(
     handle->state |= UART_TX_ACTIVE;
     transmitted = 0u;
 
-    if (handle->config->flags & UART_DATA_BITS_9) {
+    if (handle->flags & UART_DATA_BITS_9) {
         uint16_t *  buffer_ = (uint16_t *)buffer;
 
         while ((timerState == UART_TIMER_COUNTING) && (transmitted < nElements)) {

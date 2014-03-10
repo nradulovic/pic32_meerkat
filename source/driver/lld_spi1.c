@@ -48,6 +48,7 @@
 /*=============================================  LOCAL FUNCTION PROTOTYPES  ==*/
 
 static void lldSpiOpen(
+    const struct spiConfig *,
     struct spiHandle *);
 static void lldSpiClose(
     struct spiHandle *);
@@ -85,13 +86,13 @@ const struct spiId GlobalSpi1 = {
 /*============================================  LOCAL FUNCTION DEFINITIONS  ==*/
 
 static void lldSpiOpen(
+    const struct spiConfig * config,
     struct spiHandle *  handle) {
 #if   (((__PIC32_FEATURE_SET__ >= 100) && (__PIC32_FEATURE_SET__ <= 299)) || defined(__32MXGENERIC__))
 
-    const struct spiConfig * config;
     unsigned int data;
 
-    config = handle->config;
+    (void)handle;
     SPI1CON             = 0;
     SPI1CON2            = 0;
     IEC1CLR             = IEC1_SPI1TX | IEC1_SPI1RX | IEC1_SPI1E;               /* Disable all interrupts                                   */

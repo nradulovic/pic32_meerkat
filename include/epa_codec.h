@@ -30,7 +30,8 @@ extern "C" {
 /*============================================================  DATA TYPES  ==*/
 
 enum codecEvents {
-    EVT_CODEC_NOTIFY_READY = CONFIG_CODEC_EVENT_BASE
+    EVT_CODEC_NOTIFY_READY = CONFIG_CODEC_EVENT_BASE,
+    EVT_CODEC_ENABLE_AUDIO
 };
 
 /*======================================================  GLOBAL VARIABLES  ==*/
