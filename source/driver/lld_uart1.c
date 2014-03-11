@@ -61,6 +61,7 @@
 static void uartUpdateRxTrigger(
     size_t);
 static void lldUartOpen(
+    const struct uartConfig *,
     struct uartHandle *);
 static void lldUartClose(
     struct uartHandle *);
@@ -130,15 +131,14 @@ static void uartUpdateRxTrigger(
 }
 
 static void lldUartOpen(
+    const struct uartConfig * config,
     struct uartHandle * handle) {
 
-    const struct uartConfig * config;
     uint32_t            brg;
     uint32_t            mode;
     uint32_t            sta;
 
     GlobalHandle        = handle;
-    config              = handle->config;
     U1MODE              = 0;
     U1STAT              = 0;
     IEC1CLR             = IEC1_U1TX | IEC1_U1RX | IEC1_U1E;

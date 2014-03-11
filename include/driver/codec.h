@@ -65,6 +65,13 @@
 #define CODEC_POWER_CTRL_ASTPWD_OFF         (0x1 << 13)
 #define CODEC_POWER_CTRL_PWDNC_ON           (0x0 << 15)
 
+#define CODEC_PLL_1_JVAL_PAR(val)           (((val) & 0x3fu) << 2)
+#define CODEC_PLL_1_PVAL_PAR(val)           (((val) & 0x7u) << 8)
+#define CODEC_PLL_1_QVAL_PAR(val)           (((val) & 0xfu) << 11)
+#define CODEC_PLL_1_PLLSEL_ON               (0x1 << 15)
+
+#define CODEC_PLL_2_DVAL_PAR(val)           (((val) & 0x3fffu) << 2)
+
 /*------------------------------------------------------  C++ extern begin  --*/
 #ifdef	__cplusplus
 extern "C" {
@@ -79,7 +86,9 @@ enum codecReg {
     CODEC_REG_DAC_GAIN          = CODEC_REG_ADDR(0x2, 0x02),
     CODEC_REG_SIDETONE          = CODEC_REG_ADDR(0x2, 0x03),
     CODEC_REG_AUDIO_CTRL_2      = CODEC_REG_ADDR(0x2, 0x04),
-    CODEC_REG_POWER_CTRL        = CODEC_REG_ADDR(0x2, 0x05)
+    CODEC_REG_POWER_CTRL        = CODEC_REG_ADDR(0x2, 0x05),
+    CODEC_REG_PLL_1             = CODEC_REG_ADDR(0x2, 0x1b),
+    CODEC_REG_PLL_2             = CODEC_REG_ADDR(0x2, 0x1c)
 };
 
 struct codecConfig {
@@ -87,7 +96,6 @@ struct codecConfig {
 };
 
 struct codecHandle {
-    const struct codecConfig * config;
     struct spiHandle    spi;
 };
 
@@ -95,6 +103,18 @@ struct codecHandle {
 /*===================================================  FUNCTION PROTOTYPES  ==*/
 
 void initCodecDriver(
+    void);
+
+void codecResetEnable(
+    void);
+
+void codecResetDisable(
+    void);
+
+void codecPowerUp(
+    void);
+
+void codecPowerDown(
     void);
 
 void codecOpen(
@@ -109,6 +129,12 @@ void codecWriteReg(
 uint16_t codecReadReg(
     struct codecHandle * handle,
     enum codecReg       reg);
+
+void codecAudioEnable(
+    void);
+
+void codecAudioDisable(
+    void);
 
 void codecClose(
     struct codecHandle * handle);

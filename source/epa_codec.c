@@ -11,11 +11,13 @@
 #include "events.h"
 #include "driver/codec.h"
 #include "arch/intr.h"
+#include "vtimer/vtimer.h"
 
 /*=========================================================  LOCAL MACRO's  ==*/
 
 #define CODEC_TABLE(entry)                                                      \
     entry(stateInit,                TOP)                                        \
+    entry(stateReset,               TOP)                                        \
     entry(stateIdle,                TOP)
 
 /*======================================================  LOCAL DATA TYPES  ==*/
@@ -24,18 +26,25 @@ enum codecStateId {
     ES_STATE_ID_INIT(CODEC_TABLE)
 };
 
+enum codecLocalId {
+    EVT_TIMEOUT_ = ES_EVENT_LOCAL_ID
+};
+
 struct wspace {
     struct codecHandle codec;
+    struct esVTimer    timeout;
 };
 
 /*=============================================  LOCAL FUNCTION PROTOTYPES  ==*/
 
 static esAction stateInit           (struct wspace *, esEvent *);
+static esAction stateReset          (struct wspace *, esEvent *);
 static esAction stateIdle           (struct wspace *, esEvent *);
 
 /*--  Support functions  -----------------------------------------------------*/
 
 static void initCodec(struct wspace *);
+static void codecTimeout(void *);
 
 /*=======================================================  LOCAL VARIABLES  ==*/
 
@@ -52,7 +61,7 @@ const struct esEpaDefine CodecEpa = ES_EPA_DEFINE(
 
 const struct esSmDefine CodecSm = ES_SM_DEFINE(
     CodecTable,
-    0,
+    sizeof(struct wspace),
     stateInit);
 
 struct esEpa *          Codec;
@@ -65,6 +74,35 @@ static esAction stateInit(struct wspace * wspace, esEvent * event) {
 
     switch (event->id) {
         case ES_INIT : {
+            esVTimerInit(&wspace->timeout);
+
+            return (ES_STATE_TRANSITION(stateReset));
+        }
+        default : {
+
+            return (ES_STATE_IGNORED());
+        }
+    }
+}
+
+static esAction stateReset(struct wspace * wspace, esEvent * event) {
+
+    (void)wspace;
+
+    switch (event->id) {
+        case ES_ENTRY : {
+            codecResetEnable();
+            esVTimerStart(
+                &wspace->timeout,
+                ES_VTMR_TIME_TO_TICK_MS(100),
+                codecTimeout,
+                NULL);
+
+            return (ES_STATE_HANDLED());
+        }
+        case EVT_TIMEOUT_ : {
+            codecResetDisable();
+            codecPowerUp();
             initCodec(wspace);
 
             return (ES_STATE_TRANSITION(stateIdle));
@@ -80,7 +118,20 @@ static esAction stateIdle(struct wspace * wspace, esEvent * event) {
     (void)wspace;
 
     switch (event->id) {
-        case EVT_BT_NOTIFY_READY : {
+        case ES_ENTRY : {
+#if 0
+            esEvent *   notify;
+
+            ES_ENSURE(esEventCreate(
+                sizeof(esEvent),
+                EVT_CODEC_NOTIFY_READY,
+                &notify));
+            ES_ENSURE(esEpaSendEvent(notify))
+#endif
+            return (ES_STATE_HANDLED());
+        }
+        case EVT_CODEC_ENABLE_AUDIO : {
+            codecAudioEnable();
 
             return (ES_STATE_HANDLED());
         }
@@ -98,16 +149,16 @@ static void initCodec(
 
     struct spiConfig    spiConfig;
     struct codecConfig  codecConfig;
-    
+
     spiConfig.id        = &SpiSoft;
     spiConfig.flags     = SPI_MASTER_MODE | SPI_MASTER_SS_ACTIVE_LOW |
                           SPI_SLAVE_MODE  | SPI_CLOCK_POLARITY_IDLE_LOW |
                           SPI_CLOCK_PHASE_FIRST_EDGE | SPI_DATA_16;
     spiConfig.isrPrio   = ES_INTR_DEFAULT_ISR_PRIO;
-    spiConfig.remap.sdi = SPIS_SDI_C6;
-    spiConfig.remap.sdo = SPIS_SDO_B8;
-    spiConfig.remap.sck = SPIS_SCK_B9;
-    spiConfig.remap.ss  = SPIS_SS_B10;
+    spiConfig.remap.sdi = CONFIG_CODEC_SDI_PIN;
+    spiConfig.remap.sdo = CONFIG_CODEC_SDO_PIN;
+    spiConfig.remap.sck = CONFIG_CODEC_SCK_PIN;
+    spiConfig.remap.ss  = CONFIG_CODEC_SS_PIN;
     spiConfig.speed     = 1000000ul;
     codecConfig.spi     = &spiConfig;
     codecOpen(&wspace->codec, &codecConfig);
@@ -150,12 +201,39 @@ static void initCodec(
         CODEC_AUDIO_CTRL_2_APGASS_SINGLE | CODEC_AUDIO_CTRL_2_KCLFRQ_625 |
         CODEC_AUDIO_CTRL_2_KCLLN_2       | CODEC_AUDIO_CTRL_2_DASTC_SINGLE);
 
+    /*--  Clock settings  ----------------------------------------------------*/
+    /*
+     * MCLK = 12MHz, Fsref = 48kHz, Q = N/A, P = 1, K = 8192, J = 8, D = 1920
+     */
+    codecWriteReg(
+        &wspace->codec,
+        CODEC_REG_PLL_1,
+        CODEC_PLL_1_PLLSEL_ON   | CODEC_PLL_1_QVAL_PAR(0x0) |
+        CODEC_PLL_1_PVAL_PAR(0x1) | CODEC_PLL_1_JVAL_PAR(0x8));
+    codecWriteReg(
+        &wspace->codec,
+        CODEC_REG_PLL_2,
+        CODEC_PLL_2_DVAL_PAR(1920));
+
     /*--  Power control  -----------------------------------------------------*/
     codecWriteReg(
         &wspace->codec,
         CODEC_REG_POWER_CTRL,
         CODEC_POWER_CTRL_PWDNC_ON         | CODEC_POWER_CTRL_ASTPWD_OFF |
-        CODEC_POWER_CTRL_DAODRC_LOW_POWER | CODEC_POWER_CTRL_DAPWDN_ON  );
+        CODEC_POWER_CTRL_DAODRC_LOW_POWER | CODEC_POWER_CTRL_DAPWDN_ON  |
+        CODEC_POWER_CTRL_ADPWDN_ON        | CODEC_POWER_CTRL_VGPWDN_ON  |
+        CODEC_POWER_CTRL_ADWSF_POWERDOWN  | CODEC_POWER_CTRL_VBIAS_25   |
+        CODEC_POWER_CTRL_EFFCTL_OFF       | CODEC_POWER_CTRL_DEEMPF_OFF);
+}
+
+void codecTimeout(
+    void* arg) {
+
+    esEvent *           timeout;
+
+    (void)arg;
+    esEventCreate(sizeof(esEvent), EVT_TIMEOUT_, &timeout);
+    esEpaSendEvent(Codec, timeout);
 }
 
 /*===================================  GLOBAL PRIVATE FUNCTION DEFINITIONS  ==*/

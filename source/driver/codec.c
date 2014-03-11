@@ -17,6 +17,7 @@
 #include "bsp.h"
 #include "base/bitop.h"
 #include "config/config_pins.h"
+#include "driver/gpio.h"
 
 /*=========================================================  LOCAL MACRO's  ==*/
 
@@ -33,28 +34,58 @@ static const ES_MODULE_INFO_CREATE("Codec", "Codec driver", "Nenad Radulovic");
 /*===================================  GLOBAL PRIVATE FUNCTION DEFINITIONS  ==*/
 /*====================================  GLOBAL PUBLIC FUNCTION DEFINITIONS  ==*/
 
+/*
+ *  NOTE: The device requires a low-to-high pulse on RESET after power up for
+ *        correct operation.
+ */
 void initCodecDriver(
     void) {
-    /*
-     * NOTE: This is the place to do general and system wide initializaion
-     */
+
+    *(CONFIG_CODEC_POWER_PORT)->tris &= CONFIG_CODEC_POWER_PIN;
+    *(CONFIG_CODEC_POWER_PORT)->clr   = CONFIG_CODEC_POWER_PIN;
+    *(CONFIG_CODEC_RESET_PORT)->tris &= CONFIG_CODEC_RESET_PIN;
+    *(CONFIG_CODEC_RESET_PORT)->clr   = CONFIG_CODEC_RESET_PIN;
+}
+
+void codecResetEnable(
+    void) {
+
+    *(CONFIG_CODEC_RESET_PORT)->clr   = CONFIG_CODEC_RESET_PIN;
+}
+
+void codecResetDisable(
+    void) {
+
+    *(CONFIG_CODEC_RESET_PORT)->set   = CONFIG_CODEC_RESET_PIN;
+}
+
+void codecPowerUp(
+    void) {
+
+    *(CONFIG_CODEC_POWER_PORT)->set = CONFIG_CODEC_POWER_PIN;
+}
+
+void codecPowerDown(
+    void) {
+
+    *(CONFIG_CODEC_POWER_PORT)->clr = CONFIG_CODEC_POWER_PIN;
 }
 
 void codecOpen(
     struct codecHandle * handle,
     const struct codecConfig * config) {
 
-    struct spiConfig codecSpiConfig;
+    struct spiConfig spiConfig;
 
-    codecSpiConfig.flags     = config->spi->flags & ~(SPI_MASTER_SS);           /* Hardware is not controlling SS pin                       */
-    codecSpiConfig.id        = config->spi->id;
-    codecSpiConfig.isrPrio   = config->spi->isrPrio;
-    codecSpiConfig.remap.sck = config->spi->remap.sck;
-    codecSpiConfig.remap.sdi = config->spi->remap.sdi;
-    codecSpiConfig.remap.sdo = config->spi->remap.sdo;
-    codecSpiConfig.remap.ss  = config->spi->remap.ss;
-    codecSpiConfig.speed     = config->spi->speed;
-    spiOpen(&handle->spi, &codecSpiConfig);
+    spiConfig.flags     = config->spi->flags & ~(SPI_MASTER_SS);        /* Hardware is not controlling SS pin                       */
+    spiConfig.id        = config->spi->id;
+    spiConfig.isrPrio   = config->spi->isrPrio;
+    spiConfig.remap.sck = config->spi->remap.sck;
+    spiConfig.remap.sdi = config->spi->remap.sdi;
+    spiConfig.remap.sdo = config->spi->remap.sdo;
+    spiConfig.remap.ss  = config->spi->remap.ss;
+    spiConfig.speed     = config->spi->speed;
+    spiOpen(&handle->spi, &spiConfig);
 }
 
 void codecWriteReg(
@@ -92,7 +123,6 @@ void codecAudioEnable(
     uint32_t            masterClockDiv;
     uint32_t            divider;
 
-    cpumpEnable();                                                              /* We need 5V for output analog switch                      */
     masterClockDiv = clockGetSystemClock() / CONFIG_MASTER_CLOCK;
 
     switch (masterClockDiv) {
@@ -125,7 +155,6 @@ void codecAudioDisable(
     void) {
 
     clockSetOutput(CLOCK_OUT_DISABLE, CLOCK_OUT_SOURCE_SYSCLK, CLOCK_OUT_DIV_1);
-    cpumpDisable();                                                             /* Disable 5V generation as we don't need it anymore        */
 }
 
 void codecClose(

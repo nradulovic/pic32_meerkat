@@ -55,7 +55,7 @@ struct spiId;
 
 struct spiConfig {
     const struct spiId * id;
-    enum spiConfigFlags flags;
+    uint32_t            flags;
     uint32_t            speed;
     uint32_t            isrPrio;
     struct spiRemap {
@@ -68,11 +68,11 @@ struct spiConfig {
 
 struct spiHandle {
     const struct spiId * id;
-    const struct spiConfig * config;
+    uint32_t            flags;
 };
 
 struct spiId {
-    void             (* open)(struct spiHandle *);
+    void             (* open)(const struct spiConfig *, struct spiHandle *);
     void             (* close)(struct spiHandle *);
     bool             (* isBuffFull)(struct spiHandle *);
     uint32_t         (* exchange)(struct spiHandle *, uint32_t);

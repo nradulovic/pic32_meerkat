@@ -34,9 +34,9 @@ void spiOpen(
     struct spiHandle *        handle,
     const struct spiConfig *  config) {
 
-    handle->id     = config->id;
-    handle->config = config;
-    handle->id->open(handle);
+    handle->id    = config->id;
+    handle->flags = config->flags;
+    handle->id->open(config, handle);
 }
 
 void spiClose(
@@ -54,7 +54,7 @@ void spiExchange(
 
     transmitted = 0u;
 
-    switch (handle->config->flags & SPI_DATA_Msk) {
+    switch (handle->flags & SPI_DATA_Msk) {
         case SPI_DATA_8: {
             uint8_t *  buffer_ = (uint8_t *)buffer;
 
@@ -94,13 +94,13 @@ void spiExchange(
 void spiSSActivate(
     struct spiHandle *  handle) {
 
-    handle->config->id->ssActivate(handle);
+    handle->id->ssActivate(handle);
 }
 
 void spiSSDeactivate(
     struct spiHandle *  handle) {
     
-    handle->config->id->ssDeactivate(handle);
+    handle->id->ssDeactivate(handle);
 }
 
 /*================================*//** @cond *//*==  CONFIGURATION ERRORS  ==*/

@@ -73,7 +73,7 @@ struct uartConfig {
 
 struct uartHandle {
     const struct uartId * id;
-    const struct uartConfig * config;
+    uint32_t            flags;
     size_t           (* reader)(enum uartError, void *, size_t);
     void *              readBuffer;
     size_t              readSize;
@@ -84,7 +84,7 @@ struct uartHandle {
 };
 
 struct uartId {
-    void             (* open)(struct uartHandle *);
+    void             (* open)(const struct uartConfig *, struct uartHandle *);
     void             (* close)(struct uartHandle *);
     bool             (* isReadBuffEmpty)(struct uartHandle *);
     bool             (* isWriteBuffFull)(struct uartHandle *);

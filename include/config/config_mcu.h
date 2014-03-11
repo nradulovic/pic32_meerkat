@@ -13,6 +13,11 @@ extern "C" {
 #endif
 
 #if (__PIC32_FEATURE_SET__ == 150)
+#pragma config PMDL1WAY = OFF                                                   /* Peripheral Module Disable Configuration (Allow multiple reconfigurations) */
+#pragma config IOL1WAY = OFF                                                    /* Peripheral Pin Select Configuration (Allow multiple reconfigurations)     */
+#pragma config FUSBIDIO = OFF                                                   /* USB USID Selection (Controlled by Port Function)                          */
+#pragma config FVBUSONIO = OFF                                                  /* USB VBUS ON Selection (Controlled by Port Function)                       */
+
 #pragma config FPLLIDIV = DIV_2                                                 /* PLL Input Divider (2x Divider)                           */
 #pragma config FPLLMUL = MUL_24                                                 /* PLL Multiplier (24x Multiplier)                          */
 #pragma config FPLLODIV = DIV_2                                                 /* System PLL Output Clock Divider (PLL Divide by 2)        */
@@ -29,7 +34,7 @@ extern "C" {
 #pragma config FWDTEN = OFF                                                     /* Watchdog Timer Enable (WDT Disabled (SWDTEN Bit Controls)) */
 #pragma config FWDTWINSZ = WISZ_25                                              /* Watchdog Timer Window Size (Window Size is 25%)          */
 
-#pragma config JTAGEN = OFF                                                     /* JTAG Enable (JTAG Port Enabled)                          */
+#pragma config JTAGEN = OFF                                                     /* JTAG Enable (JTAG Port disabled)                         */
 #pragma config ICESEL = ICS_PGx1                                                /* ICE/ICD Comm Channel Select (Communicate on PGEC1/PGED1) */
 #pragma config PWP = OFF                                                        /* Program Flash Write Protect (Disable)                    */
 #pragma config BWP = OFF                                                        /* Boot Flash Write Protect bit (Protection Disabled)       */

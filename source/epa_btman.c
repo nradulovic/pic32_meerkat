@@ -365,12 +365,16 @@ static esAction stateHartBeat(void * space, esEvent * event) {
 
     switch (event->id) {
         case ES_ENTRY : {
+            esEvent *   enableAudio;
+            
             esVTimerStart(
                 &GlobalHartBeatTimer,
                 ES_VTMR_TIME_TO_TICK_MS(10000u),
                 btTimeoutHandler,
                 NULL);
-            
+            esEventCreate(sizeof(esEvent), EVT_CODEC_ENABLE_AUDIO, &enableAudio);
+            esEpaSendEvent(Codec, enableAudio);
+
             return (ES_STATE_HANDLED());
         }
         case EVT_TIMEOUT_ : {
