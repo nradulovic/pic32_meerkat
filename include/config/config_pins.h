@@ -33,6 +33,10 @@ extern "C" {
 #define CONFIG_BATT_CHARGER_EN_PORT     &GpioA
 #define CONFIG_BATT_CHARGER_EN_PIN      8
 
+#define CONFIG_CODEC_SS_PIN             SPIS_SS_B10
+#define CONFIG_CODEC_SCK_PIN            SPIS_SCK_B9
+#define CONFIG_CODEC_SDO_PIN            SPIS_SDO_B8
+#define CONFIG_CODEC_SDI_PIN            SPIS_SDI_C6
 #define CONFIG_CODEC_CLOCK_OUT_PIN      CLOCK_OUT_1
 #define CONFIG_CODEC_RESET_PORT         &GpioB
 #define CONFIG_CODEC_RESET_PIN          11

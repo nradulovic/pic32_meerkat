@@ -155,10 +155,10 @@ static void initCodec(
                           SPI_SLAVE_MODE  | SPI_CLOCK_POLARITY_IDLE_LOW |
                           SPI_CLOCK_PHASE_FIRST_EDGE | SPI_DATA_16;
     spiConfig.isrPrio   = ES_INTR_DEFAULT_ISR_PRIO;
-    spiConfig.remap.sdi = SPIS_SDI_C6;
-    spiConfig.remap.sdo = SPIS_SDO_B8;
-    spiConfig.remap.sck = SPIS_SCK_B9;
-    spiConfig.remap.ss  = SPIS_SS_B10;
+    spiConfig.remap.sdi = CONFIG_CODEC_SDI_PIN;
+    spiConfig.remap.sdo = CONFIG_CODEC_SDO_PIN;
+    spiConfig.remap.sck = CONFIG_CODEC_SCK_PIN;
+    spiConfig.remap.ss  = CONFIG_CODEC_SS_PIN;
     spiConfig.speed     = 1000000ul;
     codecConfig.spi     = &spiConfig;
     codecOpen(&wspace->codec, &codecConfig);
