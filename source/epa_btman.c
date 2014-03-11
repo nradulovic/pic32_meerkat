@@ -372,10 +372,9 @@ static esAction stateHartBeat(void * space, esEvent * event) {
                 ES_VTMR_TIME_TO_TICK_MS(10000u),
                 btTimeoutHandler,
                 NULL);
-#if 0
             esEventCreate(sizeof(esEvent), EVT_CODEC_ENABLE_AUDIO, &enableAudio);
             esEpaSendEvent(Codec, enableAudio);
-#endif
+
             return (ES_STATE_HANDLED());
         }
         case EVT_TIMEOUT_ : {

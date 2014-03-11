@@ -123,7 +123,6 @@ void codecAudioEnable(
     uint32_t            masterClockDiv;
     uint32_t            divider;
 
-    //cpumpEnable();                                                              /* We need 5V for output analog switch                      */
     masterClockDiv = clockGetSystemClock() / CONFIG_MASTER_CLOCK;
 
     switch (masterClockDiv) {
@@ -156,7 +155,6 @@ void codecAudioDisable(
     void) {
 
     clockSetOutput(CLOCK_OUT_DISABLE, CLOCK_OUT_SOURCE_SYSCLK, CLOCK_OUT_DIV_1);
-    cpumpDisable();                                                             /* Disable 5V generation as we don't need it anymore        */
 }
 
 void codecClose(

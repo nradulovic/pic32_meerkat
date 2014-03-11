@@ -131,7 +131,7 @@ static esAction stateIdle(struct wspace * wspace, esEvent * event) {
             return (ES_STATE_HANDLED());
         }
         case EVT_CODEC_ENABLE_AUDIO : {
-            //codecAudioEnable();
+            codecAudioEnable();
 
             return (ES_STATE_HANDLED());
         }
