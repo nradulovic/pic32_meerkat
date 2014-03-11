@@ -13,6 +13,11 @@ extern "C" {
 #endif
 
 #if (__PIC32_FEATURE_SET__ == 150)
+#pragma config PMDL1WAY = OFF                                                   /* Peripheral Module Disable Configuration (Allow multiple reconfigurations) */
+#pragma config IOL1WAY = OFF                                                    /* Peripheral Pin Select Configuration (Allow multiple reconfigurations)     */
+#pragma config FUSBIDIO = OFF                                                   /* USB USID Selection (Controlled by Port Function)                          */
+#pragma config FVBUSONIO = OFF                                                  /* USB VBUS ON Selection (Controlled by Port Function)                       */
+
 #pragma config FPLLIDIV = DIV_2                                                 /* PLL Input Divider (2x Divider)                           */
 #pragma config FPLLMUL = MUL_24                                                 /* PLL Multiplier (24x Multiplier)                          */
 #pragma config FPLLODIV = DIV_2                                                 /* System PLL Output Clock Divider (PLL Divide by 2)        */
