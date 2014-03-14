@@ -10,13 +10,15 @@
   2.1 Initialization
 
 3. TLV320AIC26 driver
-  3.1 Clock generation and PLL configuration        in progress
-  3.2 Gain control/EQ configuration
+  3.1 Clock generation and PLL configuration        DONE                in
+  progress
+  3.2 Gain control/EQ configuration                 in progress
 
 4. RN52 driver
   4.1 Initialization                                in progress
-  4.2 A2DP Profile
-  4.2 SPP Profile
+  4.2 A2DP Profile                                  in progress
+  4.2 SPP Profile                                   DONE                in
+  progress
   4.3 SSP(Passkey entry)/PIN authentication
 5. System layer
   5.1 Debug module                                  DONE                YES
@@ -24,7 +26,7 @@
   5.3 FSM/HSM execution                             DONE                in progress
   5.4 Virtual timers                                DONE                YES
 6. Application layer
-  6.1 Bluetooth management
+  6.1 Bluetooth management                          in progress
   6.2 TETRA Radio management
   6.3 System control
 
