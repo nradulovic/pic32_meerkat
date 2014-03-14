@@ -21,7 +21,7 @@
 
 /*=========================================================  LOCAL MACRO's  ==*/
 
-#define COMMAND_RW                      (0x1 << 15)
+#define COMMAND_RW                      ((uint16_t)0x1u << 15)
 
 /*======================================================  LOCAL DATA TYPES  ==*/
 /*=============================================  LOCAL FUNCTION PROTOTYPES  ==*/
@@ -41,34 +41,34 @@ static const ES_MODULE_INFO_CREATE("Codec", "Codec driver", "Nenad Radulovic");
 void initCodecDriver(
     void) {
 
-    *(CONFIG_CODEC_POWER_PORT)->tris &= CONFIG_CODEC_POWER_PIN;
-    *(CONFIG_CODEC_POWER_PORT)->clr   = CONFIG_CODEC_POWER_PIN;
-    *(CONFIG_CODEC_RESET_PORT)->tris &= CONFIG_CODEC_RESET_PIN;
-    *(CONFIG_CODEC_RESET_PORT)->clr   = CONFIG_CODEC_RESET_PIN;
+    *(CONFIG_CODEC_POWER_PORT)->tris &= ~(0x1u << CONFIG_CODEC_POWER_PIN);
+    *(CONFIG_CODEC_POWER_PORT)->clr   = (0x1u << CONFIG_CODEC_POWER_PIN);
+    *(CONFIG_CODEC_RESET_PORT)->tris &= ~(0x1u << CONFIG_CODEC_RESET_PIN);
+    *(CONFIG_CODEC_RESET_PORT)->clr   = (0x1u << CONFIG_CODEC_RESET_PIN);
 }
 
 void codecResetEnable(
     void) {
 
-    *(CONFIG_CODEC_RESET_PORT)->clr   = CONFIG_CODEC_RESET_PIN;
+    *(CONFIG_CODEC_RESET_PORT)->clr = (0x1u << CONFIG_CODEC_RESET_PIN);
 }
 
 void codecResetDisable(
     void) {
 
-    *(CONFIG_CODEC_RESET_PORT)->set   = CONFIG_CODEC_RESET_PIN;
+    *(CONFIG_CODEC_RESET_PORT)->set = (0x1u << CONFIG_CODEC_RESET_PIN);
 }
 
 void codecPowerUp(
     void) {
 
-    *(CONFIG_CODEC_POWER_PORT)->set = CONFIG_CODEC_POWER_PIN;
+    *(CONFIG_CODEC_POWER_PORT)->set = (0x1u << CONFIG_CODEC_POWER_PIN);
 }
 
 void codecPowerDown(
     void) {
 
-    *(CONFIG_CODEC_POWER_PORT)->clr = CONFIG_CODEC_POWER_PIN;
+    *(CONFIG_CODEC_POWER_PORT)->clr = (0x1u << CONFIG_CODEC_POWER_PIN);
 }
 
 void codecOpen(
@@ -95,7 +95,7 @@ void codecWriteReg(
 
     uint16_t            buff[2];
 
-    buff[0] = reg & ~COMMAND_RW;
+    buff[0] = (uint16_t)reg & ~COMMAND_RW;
     buff[1] = value;
     spiSSActivate(&handle->spi);
     spiExchange(&handle->spi, buff, ES_ARRAY_DIMENSION(buff));
@@ -108,7 +108,7 @@ uint16_t codecReadReg(
 
     uint16_t            buff[2];
 
-    buff[0] = reg | COMMAND_RW;
+    buff[0] = (uint16_t)reg | COMMAND_RW;
     buff[1] = 0;
     spiSSActivate(&handle->spi);
     spiExchange(&handle->spi, buff, ES_ARRAY_DIMENSION(buff));
@@ -117,7 +117,7 @@ uint16_t codecReadReg(
     return (buff[1]);
 }
 
-void codecAudioEnable(
+void codecClockEnable(
     void) {
 
     uint32_t            masterClockDiv;

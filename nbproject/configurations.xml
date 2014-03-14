@@ -243,7 +243,7 @@
         <property key="enable-omit-frame-pointer" value="false"/>
         <property key="enable-symbols" value="true"/>
         <property key="enable-unroll-loops" value="false"/>
-        <property key="exclude-floating-point" value="false"/>
+        <property key="exclude-floating-point" value="true"/>
         <property key="extra-include-directories"
                   value="esolid-base/inc;esolid-base/port/pic32-none-gcc/common;esolid-base/port/pic32-none-gcc/mips-m4k;esolid-base/port/pic32-none-gcc/pic32mx150f128d;esolid-mem/inc;esolid-vtimer/inc;esolid-eds/inc;include;include/test"/>
         <property key="generate-16-bit-code" value="false"/>
@@ -283,7 +283,7 @@
       <C32-LD>
         <property key="additional-options-use-response-files" value="false"/>
         <property key="enable-check-sections" value="false"/>
-        <property key="exclude-floating-point-library" value="false"/>
+        <property key="exclude-floating-point-library" value="true"/>
         <property key="exclude-standard-libraries" value="false"/>
         <property key="extra-lib-directories" value=""/>
         <property key="generate-16-bit-code" value="false"/>
@@ -295,11 +295,11 @@
         <property key="map-file" value="${DISTDIR}/${PROJECTNAME}.${IMAGE_TYPE}.map"/>
         <property key="no-startup-files" value="false"/>
         <property key="oXC32ld-extra-opts" value=""/>
-        <property key="optimization-level" value=""/>
+        <property key="optimization-level" value="-Os"/>
         <property key="preprocessor-macros" value=""/>
-        <property key="remove-unused-sections" value="false"/>
+        <property key="remove-unused-sections" value="true"/>
         <property key="report-memory-usage" value="true"/>
-        <property key="stack-size" value=""/>
+        <property key="stack-size" value="4096"/>
         <property key="symbol-stripping" value=""/>
         <property key="trace-symbols" value=""/>
         <property key="warn-section-align" value="true"/>
@@ -367,7 +367,7 @@
         <property key="TIMER4" value="true"/>
         <property key="TIMER5" value="true"/>
         <property key="ToolFirmwareFilePath"
-                  value="Press to browse for a specific firmware version"/>
+                  value="/opt/microchip/mplabx/mplab_ide/mplablibs/modules/ext/ICD3.jar/ICD3FW_012944.jam"/>
         <property key="ToolFirmwareOption.UseLatestFirmware" value="true"/>
         <property key="UART1" value="true"/>
         <property key="UART2" value="true"/>
@@ -382,7 +382,7 @@
         <property key="memories.programmemory" value="true"/>
         <property key="memories.programmemory.end" value="0x1d01ffff"/>
         <property key="memories.programmemory.start" value="0x1d000000"/>
-        <property key="poweroptions.powerenable" value="false"/>
+        <property key="poweroptions.powerenable" value="true"/>
         <property key="programoptions.eraseb4program" value="true"/>
         <property key="programoptions.preserveeeprom" value="false"/>
         <property key="programoptions.preserveprogramrange" value="false"/>

@@ -44,6 +44,7 @@ static esAction stateIdle           (struct wspace *, esEvent *);
 /*--  Support functions  -----------------------------------------------------*/
 
 static void initCodec(struct wspace *);
+static void startCodec(struct wspace *);
 static void codecTimeout(void *);
 
 /*=======================================================  LOCAL VARIABLES  ==*/
@@ -75,6 +76,8 @@ static esAction stateInit(struct wspace * wspace, esEvent * event) {
     switch (event->id) {
         case ES_INIT : {
             esVTimerInit(&wspace->timeout);
+            initCodec(wspace);
+            codecPowerDown();
 
             return (ES_STATE_TRANSITION(stateReset));
         }
@@ -91,6 +94,7 @@ static esAction stateReset(struct wspace * wspace, esEvent * event) {
 
     switch (event->id) {
         case ES_ENTRY : {
+            codecPowerUp();
             codecResetEnable();
             esVTimerStart(
                 &wspace->timeout,
@@ -102,8 +106,8 @@ static esAction stateReset(struct wspace * wspace, esEvent * event) {
         }
         case EVT_TIMEOUT_ : {
             codecResetDisable();
-            codecPowerUp();
-            initCodec(wspace);
+            codecClockEnable();
+            startCodec(wspace);
 
             return (ES_STATE_TRANSITION(stateIdle));
         }
@@ -131,7 +135,7 @@ static esAction stateIdle(struct wspace * wspace, esEvent * event) {
             return (ES_STATE_HANDLED());
         }
         case EVT_CODEC_ENABLE_AUDIO : {
-            codecAudioEnable();
+            
 
             return (ES_STATE_HANDLED());
         }
@@ -162,6 +166,48 @@ static void initCodec(
     spiConfig.speed     = 1000000ul;
     codecConfig.spi     = &spiConfig;
     codecOpen(&wspace->codec, &codecConfig);
+}
+
+static void startCodec(
+    struct wspace *     wspace) {
+    volatile uint32_t d;
+
+    /*--  Reset the codec to power on defaults  ------------------------------*/
+    codecWriteReg(&wspace->codec, CODEC_REG_RESET, CODEC_RESET_CODE);
+
+    /*--  Power control  -----------------------------------------------------*/
+    codecWriteReg(
+        &wspace->codec,
+        CODEC_REG_POWER_CTRL,
+        CODEC_POWER_CTRL_PWDNC_ON         | CODEC_POWER_CTRL_ASTPWD_OFF |
+        CODEC_POWER_CTRL_DAODRC_LOW_POWER | CODEC_POWER_CTRL_DAPWDN_ON  |
+        CODEC_POWER_CTRL_ADPWDN_ON        | CODEC_POWER_CTRL_VGPWDN_ON  |
+        CODEC_POWER_CTRL_ADWSF_POWERDOWN  | CODEC_POWER_CTRL_VBIAS_25   |
+        CODEC_POWER_CTRL_EFFCTL_OFF       | CODEC_POWER_CTRL_DEEMPF_OFF);
+
+    for (d = 0u; d < 1000000ul; d++);
+    /*--  Clock settings  ----------------------------------------------------*/
+    /*
+     * MCLK = 12MHz, Fsref = 48kHz, Q = N/A, P = 1, K = 8192, J = 8, D = 1920
+     */
+    codecWriteReg(
+        &wspace->codec,
+        CODEC_REG_PLL_1,
+        CODEC_PLL_1_PLLSEL_ON     | CODEC_PLL_1_QVAL_PAR(0x0) |
+        CODEC_PLL_1_PVAL_PAR(0x1) | CODEC_PLL_1_JVAL_PAR(0x8));
+    codecWriteReg(
+        &wspace->codec,
+        CODEC_REG_PLL_2,
+        CODEC_PLL_2_DVAL_PAR(1920));
+for (d = 0u; d < 1000000ul; d++);
+    /*--  DAC Volume, sampling rate, master/slave selection  -----------------*/
+    codecWriteReg(
+        &wspace->codec,
+        CODEC_REG_AUDIO_CTRL_3,
+        CODEC_AUDIO_CTRL3_DMSVOL_INDEPENDENT | CODEC_AUDIO_CTRL3_REFFS_48KHZ |
+        CODEC_AUDIO_CTRL3_DAXFM_CONTINUOS    | CODEC_AUDIO_CTRL3_SLVMS_SLAVE |
+        CODEC_AUDIO_CTRL3_DAPK2PK_2402       | CODEC_AUDIO_CTRL3_AGCNL_60DB  |
+        CODEC_AUDIO_CTRL3_CLPST_OFF);
 
     /*--  I2S, input, high-pass, Fsaaple settings  ---------------------------*/
     codecWriteReg(
@@ -170,6 +216,14 @@ static void initCodec(
         CODEC_AUDIO_CTRL_1_ADCHPF_DISABLED | CODEC_AUDIO_CTRL_1_ADCIN_SINGLE_MIC |
         CODEC_AUDIO_CTRL_1_WLEN_24BIT      | CODEC_AUDIO_CTRL_1_DATFM_I2S        |
         CODEC_AUDIO_CTRL_1_DACFS_DIV1      | CODEC_AUDIO_CTRL_1_ADCFS_DIV1);
+
+    /*--  Soft-stepping, keyclick settings  ----------------------------------*/
+    codecWriteReg(
+        &wspace->codec,
+        CODEC_REG_AUDIO_CTRL_2,
+        CODEC_AUDIO_CTRL_2_KCLEN_OFF     | CODEC_AUDIO_CTRL_2_KCLAC_LOW  |
+        CODEC_AUDIO_CTRL_2_APGASS_SINGLE | CODEC_AUDIO_CTRL_2_KCLFRQ_625 |
+        CODEC_AUDIO_CTRL_2_KCLLN_2       | CODEC_AUDIO_CTRL_2_DASTC_SINGLE);
 
     /*--  ADC settings  ------------------------------------------------------*/
     codecWriteReg(
@@ -192,38 +246,25 @@ static void initCodec(
         CODEC_REG_SIDETONE,
         CODEC_SIDETONE_ASTMU_MUTED | CODEC_SIDETONE_ASTG_M345 |
         CODEC_SIDETONE_DSTMU_MUTED | CODEC_SIDETONE_DSTG_0);
+ 
+    
+#if (CONFIG_DEBUG == 1)
+    {
+        volatile uint16_t reg;
 
-    /*--  Soft-stepping, keyclick settings  ----------------------------------*/
-    codecWriteReg(
-        &wspace->codec,
-        CODEC_REG_AUDIO_CTRL_2,
-        CODEC_AUDIO_CTRL_2_KCLEN_OFF     | CODEC_AUDIO_CTRL_2_KCLAC_LOW  |
-        CODEC_AUDIO_CTRL_2_APGASS_SINGLE | CODEC_AUDIO_CTRL_2_KCLFRQ_625 |
-        CODEC_AUDIO_CTRL_2_KCLLN_2       | CODEC_AUDIO_CTRL_2_DASTC_SINGLE);
-
-    /*--  Clock settings  ----------------------------------------------------*/
-    /*
-     * MCLK = 12MHz, Fsref = 48kHz, Q = N/A, P = 1, K = 8192, J = 8, D = 1920
-     */
-    codecWriteReg(
-        &wspace->codec,
-        CODEC_REG_PLL_1,
-        CODEC_PLL_1_PLLSEL_ON   | CODEC_PLL_1_QVAL_PAR(0x0) |
-        CODEC_PLL_1_PVAL_PAR(0x1) | CODEC_PLL_1_JVAL_PAR(0x8));
-    codecWriteReg(
-        &wspace->codec,
-        CODEC_REG_PLL_2,
-        CODEC_PLL_2_DVAL_PAR(1920));
-
-    /*--  Power control  -----------------------------------------------------*/
-    codecWriteReg(
-        &wspace->codec,
-        CODEC_REG_POWER_CTRL,
-        CODEC_POWER_CTRL_PWDNC_ON         | CODEC_POWER_CTRL_ASTPWD_OFF |
-        CODEC_POWER_CTRL_DAODRC_LOW_POWER | CODEC_POWER_CTRL_DAPWDN_ON  |
-        CODEC_POWER_CTRL_ADPWDN_ON        | CODEC_POWER_CTRL_VGPWDN_ON  |
-        CODEC_POWER_CTRL_ADWSF_POWERDOWN  | CODEC_POWER_CTRL_VBIAS_25   |
-        CODEC_POWER_CTRL_EFFCTL_OFF       | CODEC_POWER_CTRL_DEEMPF_OFF);
+        reg = codecReadReg(&wspace->codec, CODEC_REG_AUDIO_CTRL_1);
+        reg = codecReadReg(&wspace->codec, CODEC_REG_ADC_GAIN);
+        reg = codecReadReg(&wspace->codec, CODEC_REG_DAC_GAIN);
+        reg = codecReadReg(&wspace->codec, CODEC_REG_SIDETONE);
+        reg = codecReadReg(&wspace->codec, CODEC_REG_AUDIO_CTRL_2);
+        reg = codecReadReg(&wspace->codec, CODEC_REG_POWER_CTRL);
+        reg = codecReadReg(&wspace->codec, CODEC_REG_AUDIO_CTRL_3);
+        reg = codecReadReg(&wspace->codec, CODEC_REG_PLL_1);
+        reg = codecReadReg(&wspace->codec, CODEC_REG_PLL_2);
+        reg = codecReadReg(&wspace->codec, CODEC_REG_AUDIO_CTRL_4);
+        reg = codecReadReg(&wspace->codec, CODEC_REG_AUDIO_CTRL_5);
+    }
+#endif
 }
 
 void codecTimeout(

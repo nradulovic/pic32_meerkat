@@ -24,6 +24,12 @@ extern "C" {
  */
 #define CONFIG_PROJ_TEST_UART           0
 
+/**@brief       Enable/disable GPIO tests
+ * @details     0 - disable
+ *              1 - enable
+ */
+#define CONFIG_PROJ_TEST_GPIO           0
+
 #ifdef	__cplusplus
 }
 #endif

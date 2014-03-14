@@ -30,7 +30,10 @@
     entry(BT_SET_AUTH_NONE,             "SA,0",     0)                          \
     entry(BT_SET_MODULE_NAME,           "S-,",      8)                          \
     entry(BT_SET_DISCOVERY_MASK,        "SD,",      2)                          \
+    entry(BT_SET_CONNECTION_MASK,       "SK,",      2)                          \
     entry(BT_SET_AUDIO_I2S,             "S|,01",    0)                          \
+    entry(BT_SET_AUDIO_ANALOG,          "S|,00",    0)                          \
+    entry(BT_SET_MUTE_OFF,              "M,0",      0)                          \
     entry(BT_SET_DEVICE_NAME,           "SN,",      8)                          \
     entry(BT_SET_DISCOVERABLE,          "@,1",      0)                          \
     entry(BT_REBOOT,                    "R,1",      0)

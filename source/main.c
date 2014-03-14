@@ -57,7 +57,14 @@ static void execTests(
     void) {
 
 #if (CONFIG_PROJ_TEST_SPI == 1) ||                                              \
-    (CONFIG_PROJ_TEST_UART == 1)
+    (CONFIG_PROJ_TEST_UART == 1) ||                                             \
+    (CONFIG_PROJ_TEST_GPIO)
+    PORTBbits.RB10 = 0;
+    TRISBbits.TRISB10 = 0;
+    PORTBbits.RB10 = 0;
+    PORTBbits.RB10 = 1;
+    PORTBbits.RB10 = 0;
+    PORTBbits.RB10 = 1;
     for (;;) {
         execTestSpi();
         execTestUart();

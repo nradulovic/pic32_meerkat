@@ -19,15 +19,15 @@
 /*======================================================  GLOBAL VARIABLES  ==*/
 
 const struct gpio GpioA = {
-    &PORTA, &TRISA, &LATA, &LATASET, &LATACLR, &PORTAINV, &CNPUA, &CNPDA
+    &PORTA, &TRISA, &LATA, &LATASET, &LATACLR, &LATAINV, &CNPUA, &CNPDA
 };
 
 const struct gpio GpioB = {
-    &PORTB, &TRISB, &LATB, &LATBSET, &LATBCLR, &PORTBINV, &CNPUB, &CNPDB
+    &PORTB, &TRISB, &LATB, &LATBSET, &LATBCLR, &LATBINV, &CNPUB, &CNPDB
 };
 
 const struct gpio GpioC = {
-    &PORTC, &TRISC, &LATC, &LATCSET, &LATCCLR, &PORTCINV, &CNPUC, &CNPDC
+    &PORTC, &TRISC, &LATC, &LATCSET, &LATCCLR, &LATCINV, &CNPUC, &CNPDC
 };
 
 /*============================================  LOCAL FUNCTION DEFINITIONS  ==*/
