@@ -117,6 +117,32 @@ uint16_t codecReadReg(
     return (buff[1]);
 }
 
+void codecRegModify(
+    struct codecHandle * handle,
+    enum codecReg       reg,
+    uint16_t            mask,
+    uint16_t            value) {
+
+    uint16_t            regValue;
+
+    regValue  = codecReadReg(handle, reg);
+    regValue &= ~mask;
+    regValue |= value & mask;
+    codecWriteReg(handle, reg, regValue);
+}
+
+void codecWriteArray(
+    struct codecHandle * handle,
+    enum codecReg       reg,
+    uint16_t *          array,
+    size_t              size) {
+
+    spiSSActivate(&handle->spi);
+    spiExchange(&handle->spi, &reg, 1u);
+    spiExchange(&handle->spi, array, size);
+    spiSSDeactivate(&handle->spi);
+}
+
 void codecClockEnable(
     void) {
 

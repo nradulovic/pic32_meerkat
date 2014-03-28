@@ -44,6 +44,7 @@ void initBsp(
     initCPumpDriver();
     initRadioChargerDriver();
     initBattChargerDriver();
+    initAudioSwitch();
 }
 
 /*--  Charge pump control  ---------------------------------------------------*/
@@ -129,9 +130,24 @@ bool isBatteryCharging(
 
 /*--  Analog audio switch control  -------------------------------------------*/
 
+#define CONFIG_AUDIO_MUX_CB1_PORT       &GpioB
+#define CONFIG_AUDIO_MUX_CB1_PIN        6
+#define CONFIG_AUDIO_MUX_CB2_PORT       &GpioB
+#define CONFIG_AUDIO_MUX_CB2_PIN        7
+
 void initAudioSwitch(
     void) {
 
+    *(CONFIG_AUDIO_MUX_CB1_PORT)->tris &= ~(0x1u << CONFIG_AUDIO_MUX_CB1_PIN);
+    *(CONFIG_AUDIO_MUX_CB2_PORT)->tris &= ~(0x1u << CONFIG_AUDIO_MUX_CB2_PIN);
+    *(CONFIG_AUDIO_MUX_CB1_PORT)->clr   =  (0x1u << CONFIG_AUDIO_MUX_CB1_PIN);
+    *(CONFIG_AUDIO_MUX_CB2_PORT)->clr   =  (0x1u << CONFIG_AUDIO_MUX_CB2_PIN);
+}
+
+void audioSwitchSpeaker(
+    void) {
+
+    *(CONFIG_AUDIO_MUX_CB1_PORT)->set = (0x1u << CONFIG_AUDIO_MUX_CB1_PIN);
 }
 
 /*================================*//** @cond *//*==  CONFIGURATION ERRORS  ==*/

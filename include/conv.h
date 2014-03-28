@@ -1,17 +1,17 @@
 /* 
- * File:    bsp.h
+ * File:    conv.h
  * Author:  nenad
- * Details: Board Support Package
+ * Details: Converting functions
  *
- * Created on February 10, 2014, 7:11 PM
+ * Created on March 16, 2014, 7:11 PM
  */
 
-#ifndef BSP_H_
-#define	BSP_H_
+#ifndef CONV_H
+#define	CONV_H
 
 /*=========================================================  INCLUDE FILES  ==*/
 
-#include <stdbool.h>
+#include <stdint.h>
 
 /*===============================================================  MACRO's  ==*/
 
@@ -24,36 +24,8 @@ extern "C" {
 /*======================================================  GLOBAL VARIABLES  ==*/
 /*===================================================  FUNCTION PROTOTYPES  ==*/
 
-/**@brief       Initialize Board Support Package
- * @details     This function will initialize basic system clocks
- */
-void initBsp(
-    void);
-
-void initCPumpDriver(
-    void);
-void cpumpEnable(
-    void);
-void cpumpDisable(
-    void);
-
-void initRadioChargerDriver(
-    void);
-void radioChargerEnable(
-    void);
-void radioChargerDisable(
-    void);
-
-void initBattChargerDriver(
-    void);
-bool isBatteryCharging(
-    void);
-
-void initAudioSwitch(
-    void);
-
-void audioSwitchSpeaker(
-    void);
+uint8_t convToLower(unsigned char character);
+uint8_t convAsciiToHex(unsigned char character);
 
 /*--------------------------------------------------------  C++ extern end  --*/
 #ifdef __cplusplus
@@ -62,7 +34,7 @@ void audioSwitchSpeaker(
 
 /*================================*//** @cond *//*==  CONFIGURATION ERRORS  ==*/
 /** @endcond *//** @} *//** @} *//*********************************************
- * END of bsp.h
+ * END of conv.h
  ******************************************************************************/
-#endif /* BSP_H_ */
+#endif /* CONV_H */
 

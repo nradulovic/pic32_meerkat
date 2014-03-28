@@ -24,7 +24,7 @@
 #define CONFIG_BT_DRV_QUEUE_SIZE        10
 #define CONFIG_BT_DRV_EVENT_BASE        1000
 #define CONFIG_BT_UART_SPEED            115200
-#define CONFIG_BT_UART_TIMEOUT_MS       200u
+#define CONFIG_BT_UART_TIMEOUT_MS       400u
 
 #define BT_DRV_CMD_TABLE(entry)                                                 \
     entry(BT_SET_AUTH_NONE,             "SA,0",     0)                          \
@@ -36,6 +36,7 @@
     entry(BT_SET_MUTE_OFF,              "M,0",      0)                          \
     entry(BT_SET_DEVICE_NAME,           "SN,",      8)                          \
     entry(BT_SET_DISCOVERABLE,          "@,1",      0)                          \
+    entry(BT_QUERY,                     "Q",        0)                          \
     entry(BT_REBOOT,                    "R,1",      0)
 
 #define BT_DRV_CMD_EXPAND_ID(id, cmd, args)                                     \

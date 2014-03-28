@@ -34,7 +34,7 @@
 /**@brief       BT profiles
  * @details     See documentation about available options for BT profile
  */
-#define CONFIG_BT_PROFILE               "0A"
+#define CONFIG_BT_PROFILE               "06"
 
 /*------------------------------------------------------  C++ extern begin  --*/
 #ifdef	__cplusplus

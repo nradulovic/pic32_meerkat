@@ -132,10 +132,10 @@ struct wspace {
 
 static esAction stateInit      (struct wspace *, esEvent *);
 static esAction stateIdle      (struct wspace *, esEvent *);
-static esAction stateCmdBegin(struct wspace *, esEvent *);
+static esAction stateCmdBegin  (struct wspace *, esEvent *);
 static esAction stateCmdIdle   (struct wspace *, esEvent *);
 static esAction stateCmdSend   (struct wspace *, esEvent *);
-static esAction stateCmdEnd(struct wspace *, esEvent *);
+static esAction stateCmdEnd    (struct wspace *, esEvent *);
 static esAction stateDefToggle0(struct wspace *, esEvent *);
 static esAction stateDefToggle1(struct wspace *, esEvent *);
 static esAction stateDefToggle2(struct wspace *, esEvent *);
@@ -369,13 +369,14 @@ static esAction stateCmdBegin (struct wspace * space, esEvent * event) {
         case EVT_UART_RESPONSE_ : {
             esVTimerCancel(&space->timer);
             uartReadStop(&space->uart);
+            space->replyBuffer[sizeof(BT_CMD_BEGIN) - 1u] = '\0';
             
             if (strcmp(space->replyBuffer, BT_CMD_BEGIN) == 0) {
                 ES_ENSURE(esEventCreate(
                     sizeof(esEvent),
                     EVT_BT_NOTIFY_READY,
                     &event));
-                esEpaSendEvent(space->client, event);
+                ES_ENSURE(esEpaSendEvent(space->client, event));
 
                 return (ES_STATE_TRANSITION(stateCmdIdle));
             } else {
@@ -472,6 +473,7 @@ static esAction stateCmdSend (struct wspace * space, esEvent * event) {
                 ES_VTMR_TIME_TO_TICK_MS(CONFIG_BT_UART_TIMEOUT_MS),
                 btTimeoutHandler,
                 BtDrv);
+            memset(&space->replyBuffer, 0, sizeof(space->replyBuffer));
             uartReadStart(
                 &space->uart,
                 &space->replyBuffer,
@@ -512,7 +514,7 @@ static esAction stateCmdSend (struct wspace * space, esEvent * event) {
                 reply->arg     = (char *)(reply + 1u);
                 reply->argSize = ((struct uartEvent_ *)event)->size;
                 memcpy(reply->arg, space->replyBuffer, reply->argSize);
-                esEpaSendEvent(space->client, (esEvent *)reply);
+                ES_ENSURE(esEpaSendEvent(space->client, (esEvent *)reply));
             }
 
             return (ES_STATE_TRANSITION(stateCmdIdle));
@@ -533,7 +535,7 @@ static esAction stateCmdSend (struct wspace * space, esEvent * event) {
                 reply->status  = BT_ERR_COMM;
                 reply->arg     = NULL;
                 reply->argSize = 0;
-                esEpaSendEvent(space->client, (esEvent *)reply);
+                ES_ENSURE(esEpaSendEvent(space->client, (esEvent *)reply));
             }
 
             return (ES_STATE_TRANSITION(stateCmdIdle));
@@ -550,11 +552,46 @@ static esAction stateCmdEnd(struct wspace * space , esEvent * event) {
     
     switch (event->id) {
         case ES_INIT : {
+            esVTimerCancel(&space->timer);
+            esVTimerStart(
+                &space->timer,
+                ES_VTMR_TIME_TO_TICK_MS(CONFIG_BT_UART_TIMEOUT_MS),
+                btTimeoutHandler,
+                BtDrv);
+            memset(&space->replyBuffer, 0, sizeof(space->replyBuffer));
+            uartReadStart(
+                &space->uart,
+                space->replyBuffer,
+                sizeof(BT_CMD_BEGIN) - 1u);
             BT_CMD_HIGH();
+
+            return (ES_STATE_HANDLED());
+        }
+        case EVT_TIMEOUT_: {
+            uartReadCancel(&space->uart);
+
+            return (ES_STATE_HANDLED());
+        }
+        case EVT_UART_RESPONSE_ : {
+            esVTimerCancel(&space->timer);
+            uartReadStop(&space->uart);
+            space->replyBuffer[sizeof(BT_CMD_END) - 1u] = '\0';
+
+            if (strcmp(space->replyBuffer, BT_CMD_END) == 0) {
+                ES_ENSURE(esEventCreate(
+                    sizeof(esEvent),
+                    EVT_BT_NOTIFY_READY,
+                    &event));
+                ES_ENSURE(esEpaSendEvent(space->client, event));
+            }
+            return (ES_STATE_TRANSITION(stateIdle));
+        }
+        case EVT_UART_ERROR_ : {
 
             return (ES_STATE_TRANSITION(stateIdle));
         }
         default : {
+
             return (ES_STATE_IGNORED());
         }
     }

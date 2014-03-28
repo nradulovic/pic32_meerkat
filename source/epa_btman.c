@@ -12,6 +12,7 @@
 
 #include "events.h"
 #include "vtimer/vtimer.h"
+#include "conv.h"
 
 /*=========================================================  LOCAL MACRO's  ==*/
 
@@ -28,6 +29,10 @@
     entry(stateSetDiscoverable,     TOP)                                        \
     entry(stateSetAudio,            TOP)                                        \
     entry(stateSetVolume,           TOP)                                        \
+    entry(stateHartCmdBegin,        TOP)                                        \
+    entry(stateHartQuery,           TOP)                                        \
+    entry(stateHartCmdEnd,          TOP)                                        \
+    entry(stateHartSendData,        TOP)                                        \
     entry(stateHartBeat,            TOP)
 
 /*======================================================  LOCAL DATA TYPES  ==*/
@@ -40,21 +45,29 @@ enum localEvents {
     EVT_TIMEOUT_ = ES_EVENT_LOCAL_ID
 };
 
+struct wspace {
+    uint32_t            retry;
+};
+
 /*=============================================  LOCAL FUNCTION PROTOTYPES  ==*/
 
-static esAction stateInit           (void *, esEvent *);
-static esAction stateIdle           (void *, esEvent *);
-static esAction stateCmdBegin       (void *, esEvent *);
-static esAction stateCmdApply       (void *, esEvent *);
-static esAction stateCmdEnd         (void *, esEvent *);
-static esAction stateSetAuth        (void *, esEvent *);
-static esAction stateSetName        (void *, esEvent *);
-static esAction stateSetAudio       (void *, esEvent *);
-static esAction stateSetVolume      (void *, esEvent *);
-static esAction stateSetConnectionMask  (void *, esEvent *);
-static esAction stateSetDiscoveryMask   (void *, esEvent *);
-static esAction stateSetDiscoverable    (void *, esEvent *);
-static esAction stateHartBeat       (void *, esEvent *);
+static esAction stateInit           (struct wspace *, esEvent *);
+static esAction stateIdle           (struct wspace *, esEvent *);
+static esAction stateCmdBegin       (struct wspace *, esEvent *);
+static esAction stateCmdApply       (struct wspace *, esEvent *);
+static esAction stateCmdEnd         (struct wspace *, esEvent *);
+static esAction stateSetAuth        (struct wspace *, esEvent *);
+static esAction stateSetName        (struct wspace *, esEvent *);
+static esAction stateSetAudio       (struct wspace *, esEvent *);
+static esAction stateSetVolume      (struct wspace *, esEvent *);
+static esAction stateSetConnectionMask  (struct wspace *, esEvent *);
+static esAction stateSetDiscoveryMask   (struct wspace *, esEvent *);
+static esAction stateSetDiscoverable    (struct wspace *, esEvent *);
+static esAction stateHartBeat       (struct wspace *, esEvent *);
+static esAction stateHartCmdBegin   (struct wspace *, esEvent *);
+static esAction stateHartQuery      (struct wspace *, esEvent *);
+static esAction stateHartCmdEnd     (struct wspace *, esEvent *);
+static esAction stateHartSendData   (struct wspace *, esEvent *);
 
 static void btTimeoutHandler(void *);
 
@@ -63,6 +76,7 @@ static void btTimeoutHandler(void *);
 static const ES_MODULE_INFO_CREATE("BtMan", "Bluetooth manager", "Nenad Radulovic");
 
 static const esSmTable BtManTable[] = ES_STATE_TABLE_INIT(BT_MAN_TABLE);
+static uint32_t ConnectedProfiles;
 
 /*======================================================  GLOBAL VARIABLES  ==*/
 
@@ -73,7 +87,7 @@ const struct esEpaDefine BtManEpa = ES_EPA_DEFINE(
 
 const struct esSmDefine BtManSm = ES_SM_DEFINE(
     BtManTable,
-    0,
+    sizeof(struct wspace),
     stateInit);
 
 struct esEpa *   BtMan;
@@ -82,12 +96,13 @@ static esVTimer GlobalHartBeatTimer;
 
 /*============================================  LOCAL FUNCTION DEFINITIONS  ==*/
 
-static esAction stateInit(void * space, esEvent * event) {
+static esAction stateInit(struct wspace * space, esEvent * event) {
 
     (void)space;
     
     switch (event->id) {
         case ES_INIT : {
+            esVTimerInit(&GlobalHartBeatTimer);
 
             return (ES_STATE_TRANSITION(stateIdle));
         }
@@ -98,7 +113,7 @@ static esAction stateInit(void * space, esEvent * event) {
     }
 }
 
-static esAction stateIdle(void * space, esEvent * event) {
+static esAction stateIdle(struct wspace * space, esEvent * event) {
     (void)space;
 
     switch (event->id) {
@@ -113,7 +128,7 @@ static esAction stateIdle(void * space, esEvent * event) {
     }
 }
 
-static esAction stateCmdBegin(void * space, esEvent * event) {
+static esAction stateCmdBegin(struct wspace * space, esEvent * event) {
 
     (void)space;
 
@@ -123,7 +138,7 @@ static esAction stateCmdBegin(void * space, esEvent * event) {
                 sizeof(esEvent),
                 EVT_BT_CMD_MODE_ENTER,
                 &event));
-            esEpaSendEvent(BtDrv, event);
+            ES_ENSURE(esEpaSendEvent(BtDrv, event));
 
             return (ES_STATE_HANDLED());
         }
@@ -142,7 +157,7 @@ static esAction stateCmdBegin(void * space, esEvent * event) {
     }
 }
 
-static esAction stateCmdApply(void * space, esEvent * event) {
+static esAction stateCmdApply(struct wspace * space, esEvent * event) {
 
         (void)space;
 
@@ -154,7 +169,7 @@ static esAction stateCmdApply(void * space, esEvent * event) {
             ((struct BtReqEvent *)req)->cmd = BT_REBOOT;
             ((struct BtReqEvent *)req)->arg = NULL;
             ((struct BtReqEvent *)req)->argSize = 0;
-            esEpaSendEvent(BtDrv, req);
+            ES_ENSURE(esEpaSendEvent(BtDrv, req));
 
             return (ES_STATE_HANDLED());
         }
@@ -165,7 +180,12 @@ static esAction stateCmdApply(void * space, esEvent * event) {
                     sizeof(esEvent),
                     EVT_BT_CMD_MODE_EXIT,
                     &event));
-                esEpaSendEvent(BtDrv, event);
+                ES_ENSURE(esEpaSendEvent(BtDrv, event));
+                ES_ENSURE(esEventCreate(
+                    sizeof(esEvent),
+                    EVT_CODEC_ENABLE_AUDIO,
+                    &event));
+                ES_ENSURE(esEpaSendEvent(Codec, event));
 
                 return (ES_STATE_TRANSITION(stateHartBeat));
             } else {
@@ -180,9 +200,9 @@ static esAction stateCmdApply(void * space, esEvent * event) {
     }
 }
 
-static esAction stateCmdEnd(void * space, esEvent * event) {
+static esAction stateCmdEnd(struct wspace * space, esEvent * event) {
 
-        (void)space;
+    (void)space;
 
     switch (event->id) {
         case ES_INIT : {
@@ -201,7 +221,7 @@ static esAction stateCmdEnd(void * space, esEvent * event) {
     }
 }
 
-static esAction stateSetAuth(void * space, esEvent * event) {
+static esAction stateSetAuth(struct wspace * space, esEvent * event) {
 
     (void)space;
     
@@ -234,7 +254,7 @@ static esAction stateSetAuth(void * space, esEvent * event) {
     }
 }
 
-static esAction stateSetName(void * space, esEvent * event) {
+static esAction stateSetName(struct wspace * space, esEvent * event) {
 
     (void)space;
 
@@ -267,7 +287,7 @@ static esAction stateSetName(void * space, esEvent * event) {
     }
 }
 
-static esAction stateSetAudio(void * space, esEvent * event) {
+static esAction stateSetAudio(struct wspace * space, esEvent * event) {
     (void)space;
 
     switch (event->id) {
@@ -299,7 +319,7 @@ static esAction stateSetAudio(void * space, esEvent * event) {
     }
 }
 
-static esAction stateSetVolume(void * space, esEvent * event) {
+static esAction stateSetVolume(struct wspace * space, esEvent * event) {
     (void)space;
 
     switch (event->id) {
@@ -331,7 +351,7 @@ static esAction stateSetVolume(void * space, esEvent * event) {
     }
 }
 
-static esAction stateSetConnectionMask(void * space, esEvent * event) {
+static esAction stateSetConnectionMask(struct wspace * space, esEvent * event) {
     (void)space;
 
     switch (event->id) {
@@ -363,7 +383,7 @@ static esAction stateSetConnectionMask(void * space, esEvent * event) {
     }
 }
 
-static esAction stateSetDiscoveryMask(void * space, esEvent * event) {
+static esAction stateSetDiscoveryMask(struct wspace * space, esEvent * event) {
     (void)space;
 
     switch (event->id) {
@@ -395,7 +415,7 @@ static esAction stateSetDiscoveryMask(void * space, esEvent * event) {
     }
 }
 
-static esAction stateSetDiscoverable(void * space, esEvent * event) {
+static esAction stateSetDiscoverable(struct wspace * space, esEvent * event) {
     (void)space;
 
     switch (event->id) {
@@ -427,36 +447,147 @@ static esAction stateSetDiscoverable(void * space, esEvent * event) {
     }
 }
 
+#define CONFIG_HART_BEAT_PERIOD         5000u
 
-static esAction stateHartBeat(void * space, esEvent * event) {
+static esAction stateHartBeat(struct wspace * space, esEvent * event) {
     (void)space;
 
     switch (event->id) {
         case ES_ENTRY : {
-            esEvent *   enableAudio;
-            
+            esVTimerCancel(&GlobalHartBeatTimer);
             esVTimerStart(
                 &GlobalHartBeatTimer,
-                ES_VTMR_TIME_TO_TICK_MS(10000u),
+                ES_VTMR_TIME_TO_TICK_MS(CONFIG_HART_BEAT_PERIOD),
                 btTimeoutHandler,
                 NULL);
-            esEventCreate(sizeof(esEvent), EVT_CODEC_ENABLE_AUDIO, &enableAudio);
-            esEpaSendEvent(Codec, enableAudio);
 
             return (ES_STATE_HANDLED());
         }
         case EVT_TIMEOUT_ : {
+
+            return (ES_STATE_TRANSITION(stateHartCmdBegin));
+        }
+        default : {
+
+            return (ES_STATE_IGNORED());
+        }
+    }
+}
+
+static esAction stateHartCmdBegin(struct wspace * wspace, esEvent * event) {
+    (void)wspace;
+
+    switch (event->id) {
+        case ES_ENTRY : {
+            ES_ENSURE(esEventCreate(
+                sizeof(esEvent),
+                EVT_BT_CMD_MODE_ENTER,
+                &event));
+            ES_ENSURE(esEpaSendEvent(BtDrv, event));
+
+            return (ES_STATE_HANDLED());
+        }
+        case EVT_BT_NOTIFY_READY : {
+
+            return (ES_STATE_TRANSITION(stateHartQuery));
+        }
+        case EVT_BT_REPLY : {
+
+            return (ES_STATE_TRANSITION(stateHartBeat));
+        }
+        default : {
+
+            return (ES_STATE_IGNORED());
+        }
+    }
+}
+
+static esAction stateHartQuery(struct wspace * space, esEvent * event) {
+
+    (void)space;
+    
+    switch (event->id) {
+        case ES_ENTRY : {
+            esEvent *   req;
+
+            ES_ENSURE(esEventCreate(sizeof(struct BtReqEvent), EVT_BT_REQ, &req));
+            ((struct BtReqEvent *)req)->cmd = BT_QUERY;
+            ((struct BtReqEvent *)req)->arg = NULL;
+            ((struct BtReqEvent *)req)->argSize = 0;
+            ES_ENSURE(esEpaSendEvent(BtDrv, req));
+
+            return (ES_STATE_HANDLED());
+        }
+        case EVT_BT_REPLY : {
+            struct BtReplyEvent * reply;
+
+            reply = (struct BtReplyEvent *)event;
+
+            if (reply->argSize == 0u) {
+
+                return (ES_STATE_TRANSITION(stateHartQuery));
+            } else {
+                ConnectedProfiles = convAsciiToHex(reply->arg[1]);
+
+                return (ES_STATE_TRANSITION(stateHartCmdEnd));
+            }
+        }
+        default : {
+
+            return (ES_STATE_IGNORED());
+        }
+    }
+}
+
+#define CONFIG_ALIVE_MESSAGE            "I am alive!\r\n"
+
+static esAction stateHartCmdEnd(struct wspace * space, esEvent * event) {
+
+    (void)space;
+
+    switch (event->id) {
+        case ES_INIT : {
+            ES_ENSURE(esEventCreate(
+                sizeof(esEvent),
+                EVT_BT_CMD_MODE_EXIT,
+                &event));
+            ES_ENSURE(esEpaSendEvent(BtDrv, event));
+
+            return (ES_STATE_HANDLED());
+        }
+        case EVT_BT_NOTIFY_READY : {
+            
+            if (ConnectedProfiles & BT_DRV_PROFILE_SPP_Msk) {
+
+                return (ES_STATE_TRANSITION(stateHartSendData));
+            } else {
+
+                return (ES_STATE_TRANSITION(stateHartBeat));
+            }
+        }
+        default : {
+
+            return (ES_STATE_IGNORED());
+        }
+    }
+}
+
+static esAction stateHartSendData(struct wspace * space, esEvent * event) {
+    (void)space;
+
+    switch (event->id) {
+        case ES_INIT : {
             struct BtSendEvent * data;
 
             ES_ENSURE(esEventCreate(
                 sizeof(struct BtSendEvent),
                 EVT_BT_SEND_DATA,
                 (esEvent **)&data));
-            data->arg = "I am alive\r\n";
-            data->argSize = sizeof("I am alive\r\n");
+            data->arg = CONFIG_ALIVE_MESSAGE;
+            data->argSize = sizeof(CONFIG_ALIVE_MESSAGE);
             ES_ENSURE(esEpaSendEvent(BtDrv, (esEvent *)data));
 
-            return (ES_STATE_HANDLED());
+            return (ES_STATE_TRANSITION(stateHartBeat));
         }
         default : {
 
@@ -472,7 +603,7 @@ static void btTimeoutHandler(void * arg) {
     (void)arg;
     esVTimerStart(
         &GlobalHartBeatTimer,
-        ES_VTMR_TIME_TO_TICK_MS(10000u),
+        ES_VTMR_TIME_TO_TICK_MS(CONFIG_HART_BEAT_PERIOD),
         btTimeoutHandler,
         NULL);
     ES_ENSURE(error = esEventCreate(
