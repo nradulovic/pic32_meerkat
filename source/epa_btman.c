@@ -73,6 +73,8 @@ static esAction stateHartQuery      (struct wspace *, esEvent *);
 static esAction stateHartCmdEnd     (struct wspace *, esEvent *);
 static esAction stateHartSendData   (struct wspace *, esEvent *);
 
+/*--  Support functions  -----------------------------------------------------*/
+
 static void btTimeoutHandler(void *);
 
 /*=======================================================  LOCAL VARIABLES  ==*/
