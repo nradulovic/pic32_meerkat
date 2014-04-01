@@ -12,7 +12,6 @@
 #include <xc.h>
 
 #include "driver/spi.h"
-#include "bsp.h"
 
 /*=========================================================  LOCAL MACRO's  ==*/
 
