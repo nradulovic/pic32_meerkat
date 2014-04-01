@@ -84,10 +84,10 @@
 #define BT_DRV_TABLE(entry)                                                     \
     entry(stateInit,            TOP)                                            \
     entry(stateIdle,            TOP)                                            \
-    entry(stateCmdBegin,    TOP)                                            \
+    entry(stateCmdBegin,        TOP)                                            \
     entry(stateCmdIdle,         TOP)                                            \
     entry(stateCmdSend,         TOP)                                            \
-    entry(stateCmdEnd,      TOP)                                            \
+    entry(stateCmdEnd,          TOP)                                            \
     entry(stateDefToggle0,      TOP)                                            \
     entry(stateDefToggle1,      TOP)                                            \
     entry(stateDefToggle2,      TOP)                                            \
@@ -143,11 +143,8 @@ static esAction stateDefToggle3(struct wspace *, esEvent *);
 
 /*--  Support functions  -----------------------------------------------------*/
 
-static size_t btUartReadHandler(
-    enum uartError, void *, size_t);
-
+static size_t btUartReadHandler(enum uartError, void *, size_t);
 static void btTimeoutHandler(void *);
-
 static void initBtDrv(struct wspace *);
 
 /*=======================================================  LOCAL VARIABLES  ==*/
@@ -287,11 +284,8 @@ static esAction stateDefToggle3 (struct wspace * space, esEvent * event) {
             /*
              * TODO: Should broadcast here it is ready
              */
-            ES_ENSURE(esEventCreate(
-                sizeof(esEvent),
-                EVT_BT_NOTIFY_READY,
-                &event));
-            esEpaSendEvent(BtMan, event);
+            ES_ENSURE(esEventCreate(sizeof(esEvent), EVT_BT_NOTIFY_READY, &event));
+            ES_ENSURE(esEpaSendEvent(BtMan, event));
             BT_DEF_HIGH();
             BT_DEF_INIT_IN();
 

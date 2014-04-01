@@ -45,8 +45,12 @@ enum localEvents {
     EVT_TIMEOUT_ = ES_EVENT_LOCAL_ID
 };
 
+/**@brief       Epa workspace
+ */
 struct wspace {
+    struct esVTimer     timeout;
     uint32_t            retry;
+    uint32_t            connectedProfiles;
 };
 
 /*=============================================  LOCAL FUNCTION PROTOTYPES  ==*/
@@ -69,6 +73,8 @@ static esAction stateHartQuery      (struct wspace *, esEvent *);
 static esAction stateHartCmdEnd     (struct wspace *, esEvent *);
 static esAction stateHartSendData   (struct wspace *, esEvent *);
 
+/*--  Support functions  -----------------------------------------------------*/
+
 static void btTimeoutHandler(void *);
 
 /*=======================================================  LOCAL VARIABLES  ==*/
@@ -76,7 +82,6 @@ static void btTimeoutHandler(void *);
 static const ES_MODULE_INFO_CREATE("BtMan", "Bluetooth manager", "Nenad Radulovic");
 
 static const esSmTable BtManTable[] = ES_STATE_TABLE_INIT(BT_MAN_TABLE);
-static uint32_t ConnectedProfiles;
 
 /*======================================================  GLOBAL VARIABLES  ==*/
 
@@ -92,17 +97,15 @@ const struct esSmDefine BtManSm = ES_SM_DEFINE(
 
 struct esEpa *   BtMan;
 
-static esVTimer GlobalHartBeatTimer;
-
 /*============================================  LOCAL FUNCTION DEFINITIONS  ==*/
 
-static esAction stateInit(struct wspace * space, esEvent * event) {
+static esAction stateInit(struct wspace * wspace, esEvent * event) {
 
-    (void)space;
+    (void)wspace;
     
     switch (event->id) {
         case ES_INIT : {
-            esVTimerInit(&GlobalHartBeatTimer);
+            esVTimerInit(&wspace->timeout);
 
             return (ES_STATE_TRANSITION(stateIdle));
         }
@@ -113,8 +116,9 @@ static esAction stateInit(struct wspace * space, esEvent * event) {
     }
 }
 
-static esAction stateIdle(struct wspace * space, esEvent * event) {
-    (void)space;
+static esAction stateIdle(struct wspace * wspace, esEvent * event) {
+
+    (void)wspace;
 
     switch (event->id) {
         case EVT_BT_NOTIFY_READY : {
@@ -128,9 +132,9 @@ static esAction stateIdle(struct wspace * space, esEvent * event) {
     }
 }
 
-static esAction stateCmdBegin(struct wspace * space, esEvent * event) {
+static esAction stateCmdBegin(struct wspace * wspace, esEvent * event) {
 
-    (void)space;
+    (void)wspace;
 
     switch (event->id) {
         case ES_ENTRY : {
@@ -157,9 +161,9 @@ static esAction stateCmdBegin(struct wspace * space, esEvent * event) {
     }
 }
 
-static esAction stateCmdApply(struct wspace * space, esEvent * event) {
+static esAction stateCmdApply(struct wspace * wspace, esEvent * event) {
 
-        (void)space;
+    (void)wspace;
 
     switch (event->id) {
         case ES_ENTRY : {
@@ -200,9 +204,9 @@ static esAction stateCmdApply(struct wspace * space, esEvent * event) {
     }
 }
 
-static esAction stateCmdEnd(struct wspace * space, esEvent * event) {
+static esAction stateCmdEnd(struct wspace * wspace, esEvent * event) {
 
-    (void)space;
+    (void)wspace;
 
     switch (event->id) {
         case ES_INIT : {
@@ -221,9 +225,9 @@ static esAction stateCmdEnd(struct wspace * space, esEvent * event) {
     }
 }
 
-static esAction stateSetAuth(struct wspace * space, esEvent * event) {
+static esAction stateSetAuth(struct wspace * wspace, esEvent * event) {
 
-    (void)space;
+    (void)wspace;
     
     switch (event->id) {
         case ES_ENTRY : {
@@ -254,9 +258,9 @@ static esAction stateSetAuth(struct wspace * space, esEvent * event) {
     }
 }
 
-static esAction stateSetName(struct wspace * space, esEvent * event) {
+static esAction stateSetName(struct wspace * wspace, esEvent * event) {
 
-    (void)space;
+    (void)wspace;
 
     switch (event->id) {
         case ES_ENTRY : {
@@ -287,8 +291,9 @@ static esAction stateSetName(struct wspace * space, esEvent * event) {
     }
 }
 
-static esAction stateSetAudio(struct wspace * space, esEvent * event) {
-    (void)space;
+static esAction stateSetAudio(struct wspace * wspace, esEvent * event) {
+
+    (void)wspace;
 
     switch (event->id) {
         case ES_ENTRY : {
@@ -319,8 +324,9 @@ static esAction stateSetAudio(struct wspace * space, esEvent * event) {
     }
 }
 
-static esAction stateSetVolume(struct wspace * space, esEvent * event) {
-    (void)space;
+static esAction stateSetVolume(struct wspace * wspace, esEvent * event) {
+
+    (void)wspace;
 
     switch (event->id) {
         case ES_ENTRY : {
@@ -351,8 +357,9 @@ static esAction stateSetVolume(struct wspace * space, esEvent * event) {
     }
 }
 
-static esAction stateSetConnectionMask(struct wspace * space, esEvent * event) {
-    (void)space;
+static esAction stateSetConnectionMask(struct wspace * wspace, esEvent * event) {
+
+    (void)wspace;
 
     switch (event->id) {
         case ES_ENTRY : {
@@ -383,8 +390,8 @@ static esAction stateSetConnectionMask(struct wspace * space, esEvent * event) {
     }
 }
 
-static esAction stateSetDiscoveryMask(struct wspace * space, esEvent * event) {
-    (void)space;
+static esAction stateSetDiscoveryMask(struct wspace * wspace, esEvent * event) {
+    (void)wspace;
 
     switch (event->id) {
         case ES_ENTRY : {
@@ -415,8 +422,8 @@ static esAction stateSetDiscoveryMask(struct wspace * space, esEvent * event) {
     }
 }
 
-static esAction stateSetDiscoverable(struct wspace * space, esEvent * event) {
-    (void)space;
+static esAction stateSetDiscoverable(struct wspace * wspace, esEvent * event) {
+    (void)wspace;
 
     switch (event->id) {
         case ES_ENTRY : {
@@ -447,16 +454,14 @@ static esAction stateSetDiscoverable(struct wspace * space, esEvent * event) {
     }
 }
 
-#define CONFIG_HART_BEAT_PERIOD         5000u
-
-static esAction stateHartBeat(struct wspace * space, esEvent * event) {
-    (void)space;
+static esAction stateHartBeat(struct wspace * wspace, esEvent * event) {
+    (void)wspace;
 
     switch (event->id) {
         case ES_ENTRY : {
-            esVTimerCancel(&GlobalHartBeatTimer);
+            esVTimerCancel(&wspace->timeout);
             esVTimerStart(
-                &GlobalHartBeatTimer,
+                &wspace->timeout,
                 ES_VTMR_TIME_TO_TICK_MS(CONFIG_HART_BEAT_PERIOD),
                 btTimeoutHandler,
                 NULL);
@@ -502,9 +507,9 @@ static esAction stateHartCmdBegin(struct wspace * wspace, esEvent * event) {
     }
 }
 
-static esAction stateHartQuery(struct wspace * space, esEvent * event) {
+static esAction stateHartQuery(struct wspace * wspace, esEvent * event) {
 
-    (void)space;
+    (void)wspace;
     
     switch (event->id) {
         case ES_ENTRY : {
@@ -527,7 +532,7 @@ static esAction stateHartQuery(struct wspace * space, esEvent * event) {
 
                 return (ES_STATE_TRANSITION(stateHartQuery));
             } else {
-                ConnectedProfiles = convAsciiToHex(reply->arg[1]);
+                wspace->connectedProfiles = convAsciiToHex(reply->arg[1]);
 
                 return (ES_STATE_TRANSITION(stateHartCmdEnd));
             }
@@ -541,9 +546,9 @@ static esAction stateHartQuery(struct wspace * space, esEvent * event) {
 
 #define CONFIG_ALIVE_MESSAGE            "I am alive!\r\n"
 
-static esAction stateHartCmdEnd(struct wspace * space, esEvent * event) {
+static esAction stateHartCmdEnd(struct wspace * wspace, esEvent * event) {
 
-    (void)space;
+    (void)wspace;
 
     switch (event->id) {
         case ES_INIT : {
@@ -557,7 +562,7 @@ static esAction stateHartCmdEnd(struct wspace * space, esEvent * event) {
         }
         case EVT_BT_NOTIFY_READY : {
             
-            if (ConnectedProfiles & BT_DRV_PROFILE_SPP_Msk) {
+            if (wspace->connectedProfiles & BT_DRV_PROFILE_SPP_Msk) {
 
                 return (ES_STATE_TRANSITION(stateHartSendData));
             } else {
@@ -601,11 +606,6 @@ static void btTimeoutHandler(void * arg) {
     esError             error;
 
     (void)arg;
-    esVTimerStart(
-        &GlobalHartBeatTimer,
-        ES_VTMR_TIME_TO_TICK_MS(CONFIG_HART_BEAT_PERIOD),
-        btTimeoutHandler,
-        NULL);
     ES_ENSURE(error = esEventCreate(
         sizeof(struct esEvent),
         EVT_TIMEOUT_,

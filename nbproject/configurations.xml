@@ -203,9 +203,8 @@
     <Elem>esolid-vtimer</Elem>
     <Elem>esolid-eds</Elem>
     <Elem>lld</Elem>
-    <Elem>source/driver</Elem>
-    <Elem>include/driver</Elem>
-    <Elem>source/test</Elem>
+    <Elem>source</Elem>
+    <Elem>include</Elem>
   </sourceRootList>
   <projectmakefile>Makefile</projectmakefile>
   <confs>

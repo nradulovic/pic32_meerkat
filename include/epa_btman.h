@@ -36,6 +36,10 @@
  */
 #define CONFIG_BT_PROFILE               "06"
 
+/**@brief       Defines polling period
+ */
+#define CONFIG_HART_BEAT_PERIOD         5000u
+
 /*------------------------------------------------------  C++ extern begin  --*/
 #ifdef	__cplusplus
 extern "C" {
