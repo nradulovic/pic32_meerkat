@@ -77,7 +77,7 @@ void codecOpen(
 
     struct spiConfig spiConfig;
 
-    spiConfig.flags     = config->spi->flags & ~(SPI_MASTER_SS);        /* Hardware is not controlling SS pin                       */
+    spiConfig.flags     = config->spi->flags & ~(SPI_MASTER_SS);                /* Hardware is not controlling SS pin                       */
     spiConfig.id        = config->spi->id;
     spiConfig.isrPrio   = config->spi->isrPrio;
     spiConfig.remap.sck = config->spi->remap.sck;

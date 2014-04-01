@@ -15,8 +15,6 @@
 #include <stdbool.h>
 #include <stddef.h>
 
-#include "plat/compiler.h"
-#include "arch/systimer.h"
 #include "driver/lld_spi1.h"
 #include "driver/lld_spis.h"
 
