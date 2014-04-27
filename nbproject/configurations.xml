@@ -15,6 +15,7 @@
         <itemPath>application/include/epa_btman.h</itemPath>
         <itemPath>application/include/epa_codec.h</itemPath>
         <itemPath>application/include/main.h</itemPath>
+        <itemPath>application/include/epa_radio.h</itemPath>
       </logicalFolder>
       <logicalFolder name="source" displayName="source" projectFiles="true">
         <itemPath>application/source/epa_btman.c</itemPath>
@@ -24,6 +25,7 @@
         <itemPath>application/source/epa_btdrv.c</itemPath>
         <itemPath>application/source/support.c</itemPath>
         <itemPath>application/source/conv.c</itemPath>
+        <itemPath>application/source/epa_radio.c</itemPath>
       </logicalFolder>
     </logicalFolder>
     <logicalFolder name="driver" displayName="driver" projectFiles="true">
@@ -43,6 +45,7 @@
           <itemPath>driver/include/driver/codec.h</itemPath>
           <itemPath>driver/include/driver/uart.h</itemPath>
           <itemPath>driver/include/driver/lld_uart1.h</itemPath>
+          <itemPath>driver/include/driver/lld_uart2.h</itemPath>
         </logicalFolder>
       </logicalFolder>
       <logicalFolder name="source" displayName="source" projectFiles="true">
@@ -61,6 +64,7 @@
         <itemPath>driver/source/codec.c</itemPath>
         <itemPath>driver/source/lld_uart1.c</itemPath>
         <itemPath>driver/source/uart.c</itemPath>
+        <itemPath>driver/source/lld_uart2.c</itemPath>
       </logicalFolder>
     </logicalFolder>
     <logicalFolder name="esolid-base" displayName="esolid-base" projectFiles="true">
