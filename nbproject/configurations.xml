@@ -1,195 +1,168 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configurationDescriptor version="62">
   <logicalFolder name="root" displayName="root" projectFiles="true">
-    <logicalFolder name="f1" displayName="config" projectFiles="true">
-      <itemPath>include/config/config_mcu.h</itemPath>
-      <itemPath>include/config/config_pins.h</itemPath>
-      <itemPath>include/config/config_project.h</itemPath>
-      <itemPath>include/config/config_test.h</itemPath>
+    <logicalFolder name="application" displayName="application" projectFiles="true">
+      <logicalFolder name="include" displayName="include" projectFiles="true">
+        <logicalFolder name="config" displayName="config" projectFiles="true">
+          <itemPath>application/include/config/config_pins.h</itemPath>
+          <itemPath>application/include/config/config_mcu.h</itemPath>
+          <itemPath>application/include/config/config_project.h</itemPath>
+        </logicalFolder>
+        <itemPath>application/include/conv.h</itemPath>
+        <itemPath>application/include/epa_btdrv.h</itemPath>
+        <itemPath>application/include/events.h</itemPath>
+        <itemPath>application/include/bsp.h</itemPath>
+        <itemPath>application/include/epa_btman.h</itemPath>
+        <itemPath>application/include/epa_codec.h</itemPath>
+        <itemPath>application/include/main.h</itemPath>
+      </logicalFolder>
+      <logicalFolder name="source" displayName="source" projectFiles="true">
+        <itemPath>application/source/epa_btman.c</itemPath>
+        <itemPath>application/source/bsp.c</itemPath>
+        <itemPath>application/source/epa_codec.c</itemPath>
+        <itemPath>application/source/main.c</itemPath>
+        <itemPath>application/source/epa_btdrv.c</itemPath>
+        <itemPath>application/source/support.c</itemPath>
+        <itemPath>application/source/conv.c</itemPath>
+      </logicalFolder>
     </logicalFolder>
-    <logicalFolder name="HeaderFiles"
-                   displayName="Header Files"
-                   projectFiles="true">
-      <logicalFolder name="driver" displayName="driver" projectFiles="true">
-        <itemPath>include/driver/spi.h</itemPath>
-        <itemPath>include/driver/lld_spi1.h</itemPath>
-        <itemPath>include/driver/uart.h</itemPath>
-        <itemPath>include/driver/lld_spis.h</itemPath>
-        <itemPath>include/driver/i2c.h</itemPath>
-        <itemPath>include/driver/lld_uart1.h</itemPath>
-        <itemPath>include/driver/gpio.h</itemPath>
-        <itemPath>include/driver/clock.h</itemPath>
-        <itemPath>include/driver/intr.h</itemPath>
-        <itemPath>include/driver/codec.h</itemPath>
-      </logicalFolder>
-      <logicalFolder name="esolid-base" displayName="esolid-base" projectFiles="true">
-        <logicalFolder name="inc" displayName="inc" projectFiles="true">
-          <logicalFolder name="base" displayName="base" projectFiles="true">
-            <itemPath>esolid-base/inc/base/base.h</itemPath>
-            <itemPath>esolid-base/inc/base/queue.h</itemPath>
-            <itemPath>esolid-base/inc/base/error.h</itemPath>
-            <itemPath>esolid-base/inc/base/prio_queue.h</itemPath>
-            <itemPath>esolid-base/inc/base/debug.h</itemPath>
-            <itemPath>esolid-base/inc/base/bitop.h</itemPath>
-            <itemPath>esolid-base/inc/base/debug_config.h</itemPath>
-            <itemPath>esolid-base/inc/base/prio_queue_config.h</itemPath>
-            <itemPath>esolid-base/inc/base/list.h</itemPath>
-          </logicalFolder>
+    <logicalFolder name="driver" displayName="driver" projectFiles="true">
+      <logicalFolder name="include" displayName="include" projectFiles="true">
+        <logicalFolder name="driver" displayName="driver" projectFiles="true">
+          <itemPath>driver/include/driver/lld_spi2.h</itemPath>
+          <itemPath>driver/include/driver/lld_spi1.h</itemPath>
+          <itemPath>driver/include/driver/adc.h</itemPath>
+          <itemPath>driver/include/driver/lld_spis.h</itemPath>
+          <itemPath>driver/include/driver/intr.h</itemPath>
+          <itemPath>driver/include/driver/gpio.h</itemPath>
+          <itemPath>driver/include/driver/rtc.h</itemPath>
+          <itemPath>driver/include/driver/spi.h</itemPath>
+          <itemPath>driver/include/driver/systick.h</itemPath>
+          <itemPath>driver/include/driver/clock.h</itemPath>
+          <itemPath>driver/include/driver/s25fl.h</itemPath>
+          <itemPath>driver/include/driver/codec.h</itemPath>
+          <itemPath>driver/include/driver/uart.h</itemPath>
+          <itemPath>driver/include/driver/lld_uart1.h</itemPath>
         </logicalFolder>
-        <logicalFolder name="port" displayName="port" projectFiles="true">
-          <logicalFolder name="pic32-none-gcc"
-                         displayName="pic32-none-gcc"
+      </logicalFolder>
+      <logicalFolder name="source" displayName="source" projectFiles="true">
+        <itemPath>driver/source/adc.c</itemPath>
+        <itemPath>driver/source/i2c.c</itemPath>
+        <itemPath>driver/source/lld_spis.c</itemPath>
+        <itemPath>driver/source/lld_spi2.c</itemPath>
+        <itemPath>driver/source/clock.c</itemPath>
+        <itemPath>driver/source/gpio.c</itemPath>
+        <itemPath>driver/source/s25fl.c</itemPath>
+        <itemPath>driver/source/lld_spi1.c</itemPath>
+        <itemPath>driver/source/rtc.c</itemPath>
+        <itemPath>driver/source/spi.c</itemPath>
+        <itemPath>driver/source/intr.c</itemPath>
+        <itemPath>driver/source/systick.c</itemPath>
+        <itemPath>driver/source/codec.c</itemPath>
+        <itemPath>driver/source/lld_uart1.c</itemPath>
+        <itemPath>driver/source/uart.c</itemPath>
+      </logicalFolder>
+    </logicalFolder>
+    <logicalFolder name="esolid-base" displayName="esolid-base" projectFiles="true">
+      <logicalFolder name="inc" displayName="inc" projectFiles="true">
+        <logicalFolder name="base" displayName="base" projectFiles="true">
+          <itemPath>esolid-base/inc/base/base.h</itemPath>
+          <itemPath>esolid-base/inc/base/queue.h</itemPath>
+          <itemPath>esolid-base/inc/base/error.h</itemPath>
+          <itemPath>esolid-base/inc/base/prio_queue.h</itemPath>
+          <itemPath>esolid-base/inc/base/debug.h</itemPath>
+          <itemPath>esolid-base/inc/base/bitop.h</itemPath>
+          <itemPath>esolid-base/inc/base/debug_config.h</itemPath>
+          <itemPath>esolid-base/inc/base/prio_queue_config.h</itemPath>
+          <itemPath>esolid-base/inc/base/list.h</itemPath>
+        </logicalFolder>
+      </logicalFolder>
+      <logicalFolder name="port" displayName="port" projectFiles="true">
+        <logicalFolder name="pic32-none-gcc"
+                       displayName="pic32-none-gcc"
+                       projectFiles="true">
+          <logicalFolder name="common" displayName="common" projectFiles="true">
+            <logicalFolder name="plat" displayName="plat" projectFiles="true">
+              <itemPath>esolid-base/port/pic32-none-gcc/common/plat/critical.h</itemPath>
+              <itemPath>esolid-base/port/pic32-none-gcc/common/plat/compiler.h</itemPath>
+            </logicalFolder>
+          </logicalFolder>
+          <logicalFolder name="mips-m4k" displayName="mips-m4k" projectFiles="true">
+            <logicalFolder name="arch" displayName="arch" projectFiles="true">
+              <itemPath>esolid-base/port/pic32-none-gcc/mips-m4k/arch/intr_config.h</itemPath>
+              <itemPath>esolid-base/port/pic32-none-gcc/mips-m4k/arch/systimer_config.h</itemPath>
+              <itemPath>esolid-base/port/pic32-none-gcc/mips-m4k/arch/intr.h</itemPath>
+              <itemPath>esolid-base/port/pic32-none-gcc/mips-m4k/arch/cpu.h</itemPath>
+              <itemPath>esolid-base/port/pic32-none-gcc/mips-m4k/arch/systimer.h</itemPath>
+            </logicalFolder>
+            <itemPath>esolid-base/port/pic32-none-gcc/mips-m4k/cpu.c</itemPath>
+            <itemPath>esolid-base/port/pic32-none-gcc/mips-m4k/intr.c</itemPath>
+            <itemPath>esolid-base/port/pic32-none-gcc/mips-m4k/systimer.c</itemPath>
+          </logicalFolder>
+          <logicalFolder name="pic32mx150f128d"
+                         displayName="pic32mx150f128d"
                          projectFiles="true">
-            <logicalFolder name="common" displayName="common" projectFiles="true">
-              <logicalFolder name="plat" displayName="plat" projectFiles="true">
-                <itemPath>esolid-base/port/pic32-none-gcc/common/plat/critical.h</itemPath>
-                <itemPath>esolid-base/port/pic32-none-gcc/common/plat/compiler.h</itemPath>
-              </logicalFolder>
-            </logicalFolder>
-            <logicalFolder name="mips-m4k" displayName="mips-m4k" projectFiles="true">
-              <logicalFolder name="arch" displayName="arch" projectFiles="true">
-                <itemPath>esolid-base/port/pic32-none-gcc/mips-m4k/arch/intr_config.h</itemPath>
-                <itemPath>esolid-base/port/pic32-none-gcc/mips-m4k/arch/systimer_config.h</itemPath>
-                <itemPath>esolid-base/port/pic32-none-gcc/mips-m4k/arch/intr.h</itemPath>
-                <itemPath>esolid-base/port/pic32-none-gcc/mips-m4k/arch/cpu.h</itemPath>
-                <itemPath>esolid-base/port/pic32-none-gcc/mips-m4k/arch/systimer.h</itemPath>
-              </logicalFolder>
-            </logicalFolder>
-            <logicalFolder name="pic32mx150f128d"
-                           displayName="pic32mx150f128d"
-                           projectFiles="true">
-              <logicalFolder name="family" displayName="family" projectFiles="true">
-                <itemPath>esolid-base/port/pic32-none-gcc/pic32mx150f128d/family/profile.h</itemPath>
-              </logicalFolder>
+            <logicalFolder name="family" displayName="family" projectFiles="true">
+              <itemPath>esolid-base/port/pic32-none-gcc/pic32mx150f128d/family/profile.h</itemPath>
             </logicalFolder>
           </logicalFolder>
         </logicalFolder>
       </logicalFolder>
-      <logicalFolder name="esolid-eds" displayName="esolid-eds" projectFiles="true">
-        <logicalFolder name="inc" displayName="inc" projectFiles="true">
-          <logicalFolder name="eds" displayName="eds" projectFiles="true">
-            <itemPath>esolid-eds/inc/eds/smp.h</itemPath>
-            <itemPath>esolid-eds/inc/eds/epa_config.h</itemPath>
-            <itemPath>esolid-eds/inc/eds/epa.h</itemPath>
-            <itemPath>esolid-eds/inc/eds/event_config.h</itemPath>
-            <itemPath>esolid-eds/inc/eds/event.h</itemPath>
-            <itemPath>esolid-eds/inc/eds/smp_config.h</itemPath>
-          </logicalFolder>
+      <logicalFolder name="src" displayName="src" projectFiles="true">
+        <itemPath>esolid-base/src/debug.c</itemPath>
+        <itemPath>esolid-base/src/base.c</itemPath>
+        <itemPath>esolid-base/src/error.c</itemPath>
+        <itemPath>esolid-base/src/prio_queue.c</itemPath>
+      </logicalFolder>
+    </logicalFolder>
+    <logicalFolder name="esolid-eds" displayName="esolid-eds" projectFiles="true">
+      <logicalFolder name="inc" displayName="inc" projectFiles="true">
+        <logicalFolder name="eds" displayName="eds" projectFiles="true">
+          <itemPath>esolid-eds/inc/eds/smp.h</itemPath>
+          <itemPath>esolid-eds/inc/eds/epa_config.h</itemPath>
+          <itemPath>esolid-eds/inc/eds/epa.h</itemPath>
+          <itemPath>esolid-eds/inc/eds/event_config.h</itemPath>
+          <itemPath>esolid-eds/inc/eds/event.h</itemPath>
+          <itemPath>esolid-eds/inc/eds/smp_config.h</itemPath>
         </logicalFolder>
       </logicalFolder>
-      <logicalFolder name="esolid-mem" displayName="esolid-mem" projectFiles="true">
-        <logicalFolder name="inc" displayName="inc" projectFiles="true">
-          <logicalFolder name="mem" displayName="mem" projectFiles="true">
-            <itemPath>esolid-mem/inc/mem/pool.h</itemPath>
-            <itemPath>esolid-mem/inc/mem/mem_class.h</itemPath>
-            <itemPath>esolid-mem/inc/mem/heap.h</itemPath>
-            <itemPath>esolid-mem/inc/mem/static.h</itemPath>
-          </logicalFolder>
+      <logicalFolder name="src" displayName="src" projectFiles="true">
+        <itemPath>esolid-eds/src/smp.c</itemPath>
+        <itemPath>esolid-eds/src/event.c</itemPath>
+        <itemPath>esolid-eds/src/epa.c</itemPath>
+      </logicalFolder>
+    </logicalFolder>
+    <logicalFolder name="esolid-mem" displayName="esolid-mem" projectFiles="true">
+      <logicalFolder name="inc" displayName="inc" projectFiles="true">
+        <logicalFolder name="mem" displayName="mem" projectFiles="true">
+          <itemPath>esolid-mem/inc/mem/pool.h</itemPath>
+          <itemPath>esolid-mem/inc/mem/mem_class.h</itemPath>
+          <itemPath>esolid-mem/inc/mem/heap.h</itemPath>
+          <itemPath>esolid-mem/inc/mem/static.h</itemPath>
         </logicalFolder>
       </logicalFolder>
-      <logicalFolder name="esolid-vtimer"
-                     displayName="esolid-vtimer"
-                     projectFiles="true">
-        <logicalFolder name="inc" displayName="inc" projectFiles="true">
-          <logicalFolder name="vtimer" displayName="vtimer" projectFiles="true">
-            <itemPath>esolid-vtimer/inc/vtimer/vtimer.h</itemPath>
-          </logicalFolder>
+      <logicalFolder name="src" displayName="src" projectFiles="true">
+        <itemPath>esolid-mem/src/mem_class.c</itemPath>
+        <itemPath>esolid-mem/src/heap.c</itemPath>
+        <itemPath>esolid-mem/src/static.c</itemPath>
+        <itemPath>esolid-mem/src/pool.c</itemPath>
+      </logicalFolder>
+    </logicalFolder>
+    <logicalFolder name="esolid-vtimer"
+                   displayName="esolid-vtimer"
+                   projectFiles="true">
+      <logicalFolder name="inc" displayName="inc" projectFiles="true">
+        <logicalFolder name="vtimer" displayName="vtimer" projectFiles="true">
+          <itemPath>esolid-vtimer/inc/vtimer/vtimer.h</itemPath>
         </logicalFolder>
       </logicalFolder>
-      <logicalFolder name="f1" displayName="test" projectFiles="true">
-        <itemPath>include/test/test_spi.h</itemPath>
-        <itemPath>include/test/test_uart.h</itemPath>
+      <logicalFolder name="src" displayName="src" projectFiles="true">
+        <itemPath>esolid-vtimer/src/vtimer.c</itemPath>
       </logicalFolder>
-      <itemPath>include/bsp.h</itemPath>
-      <itemPath>include/main.h</itemPath>
-      <itemPath>include/events.h</itemPath>
-      <itemPath>include/epa_codec.h</itemPath>
-      <itemPath>include/epa_btdrv.h</itemPath>
-      <itemPath>include/epa_btman.h</itemPath>
-      <itemPath>include/conv.h</itemPath>
     </logicalFolder>
     <logicalFolder name="LinkerScript"
                    displayName="Linker Files"
                    projectFiles="true">
-    </logicalFolder>
-    <logicalFolder name="SourceFiles"
-                   displayName="Source Files"
-                   projectFiles="true">
-      <logicalFolder name="driver" displayName="driver" projectFiles="true">
-        <itemPath>source/driver/lld_spi1.c</itemPath>
-        <itemPath>source/driver/spi.c</itemPath>
-        <itemPath>source/driver/uart.c</itemPath>
-        <itemPath>source/driver/lld_spis.c</itemPath>
-        <itemPath>source/driver/lld_uart1.c</itemPath>
-        <itemPath>source/driver/gpio.c</itemPath>
-        <itemPath>source/driver/clock.c</itemPath>
-        <itemPath>source/driver/intr.c</itemPath>
-        <itemPath>source/driver/codec.c</itemPath>
-      </logicalFolder>
-      <logicalFolder name="esolid-base" displayName="esolid-base" projectFiles="true">
-        <logicalFolder name="port" displayName="port" projectFiles="true">
-          <logicalFolder name="pic32-none-gcc"
-                         displayName="pic32-none-gcc"
-                         projectFiles="true">
-            <logicalFolder name="common" displayName="common" projectFiles="true">
-              <logicalFolder name="plat" displayName="plat" projectFiles="true">
-              </logicalFolder>
-            </logicalFolder>
-            <logicalFolder name="mips-m4k" displayName="mips-m4k" projectFiles="true">
-              <logicalFolder name="arch" displayName="arch" projectFiles="true">
-              </logicalFolder>
-              <itemPath>esolid-base/port/pic32-none-gcc/mips-m4k/cpu.c</itemPath>
-              <itemPath>esolid-base/port/pic32-none-gcc/mips-m4k/intr.c</itemPath>
-              <itemPath>esolid-base/port/pic32-none-gcc/mips-m4k/systimer.c</itemPath>
-            </logicalFolder>
-            <logicalFolder name="pic32mx150f128d"
-                           displayName="pic32mx150f128d"
-                           projectFiles="true">
-              <logicalFolder name="family" displayName="family" projectFiles="true">
-              </logicalFolder>
-            </logicalFolder>
-          </logicalFolder>
-        </logicalFolder>
-        <logicalFolder name="src" displayName="src" projectFiles="true">
-          <itemPath>esolid-base/src/debug.c</itemPath>
-          <itemPath>esolid-base/src/base.c</itemPath>
-          <itemPath>esolid-base/src/error.c</itemPath>
-          <itemPath>esolid-base/src/prio_queue.c</itemPath>
-        </logicalFolder>
-      </logicalFolder>
-      <logicalFolder name="esolid-eds" displayName="esolid-eds" projectFiles="true">
-        <logicalFolder name="src" displayName="src" projectFiles="true">
-          <itemPath>esolid-eds/src/smp.c</itemPath>
-          <itemPath>esolid-eds/src/event.c</itemPath>
-          <itemPath>esolid-eds/src/epa.c</itemPath>
-        </logicalFolder>
-      </logicalFolder>
-      <logicalFolder name="esolid-mem" displayName="esolid-mem" projectFiles="true">
-        <logicalFolder name="src" displayName="src" projectFiles="true">
-          <itemPath>esolid-mem/src/mem_class.c</itemPath>
-          <itemPath>esolid-mem/src/heap.c</itemPath>
-          <itemPath>esolid-mem/src/static.c</itemPath>
-          <itemPath>esolid-mem/src/pool.c</itemPath>
-        </logicalFolder>
-      </logicalFolder>
-      <logicalFolder name="esolid-vtimer"
-                     displayName="esolid-vtimer"
-                     projectFiles="true">
-        <logicalFolder name="src" displayName="src" projectFiles="true">
-          <itemPath>esolid-vtimer/src/vtimer.c</itemPath>
-        </logicalFolder>
-      </logicalFolder>
-      <logicalFolder name="f1" displayName="test" projectFiles="true">
-        <itemPath>source/test/test_spi.c</itemPath>
-        <itemPath>source/test/test_uart.c</itemPath>
-      </logicalFolder>
-      <itemPath>source/main.c</itemPath>
-      <itemPath>source/bsp.c</itemPath>
-      <itemPath>source/support.c</itemPath>
-      <itemPath>source/epa_btman.c</itemPath>
-      <itemPath>source/epa_btdrv.c</itemPath>
-      <itemPath>source/epa_codec.c</itemPath>
-      <itemPath>source/conv.c</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
@@ -205,6 +178,8 @@
     <Elem>lld</Elem>
     <Elem>source</Elem>
     <Elem>include</Elem>
+    <Elem>driver</Elem>
+    <Elem>application</Elem>
   </sourceRootList>
   <projectmakefile>Makefile</projectmakefile>
   <confs>
@@ -246,8 +221,8 @@
         <property key="enable-unroll-loops" value="false"/>
         <property key="exclude-floating-point" value="true"/>
         <property key="extra-include-directories"
-                  value="esolid-base/inc;esolid-base/port/pic32-none-gcc/common;esolid-base/port/pic32-none-gcc/mips-m4k;esolid-base/port/pic32-none-gcc/pic32mx150f128d;esolid-mem/inc;esolid-vtimer/inc;esolid-eds/inc;include;include/test"/>
-        <property key="generate-16-bit-code" value="false"/>
+                  value="driver/include;application/include;esolid-base/inc;esolid-base/port/pic32-none-gcc/common;esolid-base/port/pic32-none-gcc/mips-m4k;esolid-base/port/pic32-none-gcc/pic32mx150f128d;esolid-eds/inc;esolid-mem/inc;esolid-vtimer/inc"/>
+        <property key="generate-16-bit-code" value="true"/>
         <property key="generate-micro-compressed-code" value="false"/>
         <property key="isolate-each-function" value="true"/>
         <property key="make-warnings-into-errors" value="false"/>
@@ -287,6 +262,13 @@
         <property key="exclude-floating-point-library" value="true"/>
         <property key="exclude-standard-libraries" value="false"/>
         <property key="extra-lib-directories" value=""/>
+        <property key="fill-flash-options-addr" value=""/>
+        <property key="fill-flash-options-const" value=""/>
+        <property key="fill-flash-options-how" value="0"/>
+        <property key="fill-flash-options-inc-const" value="1"/>
+        <property key="fill-flash-options-increment" value=""/>
+        <property key="fill-flash-options-seq" value=""/>
+        <property key="fill-flash-options-what" value="0"/>
         <property key="generate-16-bit-code" value="false"/>
         <property key="generate-cross-reference-file" value="false"/>
         <property key="generate-micro-compressed-code" value="false"/>
@@ -373,7 +355,6 @@
         <property key="UART1" value="true"/>
         <property key="UART2" value="true"/>
         <property key="debugoptions.useswbreakpoints" value="false"/>
-        <property key="firmware.download.all" value="false"/>
         <property key="hwtoolclock.frcindebug" value="false"/>
         <property key="memories.aux" value="false"/>
         <property key="memories.bootflash" value="false"/>

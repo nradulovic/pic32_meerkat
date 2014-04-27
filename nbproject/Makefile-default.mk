@@ -45,17 +45,17 @@ OBJECTDIR=build/${CND_CONF}/${IMAGE_TYPE}
 DISTDIR=dist/${CND_CONF}/${IMAGE_TYPE}
 
 # Source Files Quoted if spaced
-SOURCEFILES_QUOTED_IF_SPACED=source/driver/lld_spi1.c source/driver/spi.c source/driver/uart.c source/driver/lld_spis.c source/driver/lld_uart1.c source/driver/gpio.c source/driver/clock.c source/driver/intr.c source/driver/codec.c esolid-base/port/pic32-none-gcc/mips-m4k/cpu.c esolid-base/port/pic32-none-gcc/mips-m4k/intr.c esolid-base/port/pic32-none-gcc/mips-m4k/systimer.c esolid-base/src/debug.c esolid-base/src/base.c esolid-base/src/error.c esolid-base/src/prio_queue.c esolid-eds/src/smp.c esolid-eds/src/event.c esolid-eds/src/epa.c esolid-mem/src/mem_class.c esolid-mem/src/heap.c esolid-mem/src/static.c esolid-mem/src/pool.c esolid-vtimer/src/vtimer.c source/test/test_spi.c source/test/test_uart.c source/main.c source/bsp.c source/support.c source/epa_btman.c source/epa_btdrv.c source/epa_codec.c source/conv.c
+SOURCEFILES_QUOTED_IF_SPACED=driver/source/adc.c driver/source/i2c.c driver/source/lld_spis.c driver/source/lld_spi2.c driver/source/clock.c driver/source/gpio.c driver/source/s25fl.c driver/source/lld_spi1.c driver/source/rtc.c driver/source/spi.c driver/source/intr.c driver/source/systick.c esolid-base/src/debug.c esolid-base/src/base.c esolid-base/src/error.c esolid-base/src/prio_queue.c esolid-base/port/pic32-none-gcc/mips-m4k/cpu.c esolid-base/port/pic32-none-gcc/mips-m4k/intr.c esolid-base/port/pic32-none-gcc/mips-m4k/systimer.c esolid-eds/src/smp.c esolid-eds/src/event.c esolid-eds/src/epa.c esolid-mem/src/mem_class.c esolid-mem/src/heap.c esolid-mem/src/static.c esolid-mem/src/pool.c esolid-vtimer/src/vtimer.c application/source/epa_btman.c application/source/bsp.c application/source/epa_codec.c application/source/main.c application/source/epa_btdrv.c application/source/support.c application/source/conv.c driver/source/codec.c driver/source/lld_uart1.c driver/source/uart.c
 
 # Object Files Quoted if spaced
-OBJECTFILES_QUOTED_IF_SPACED=${OBJECTDIR}/source/driver/lld_spi1.o ${OBJECTDIR}/source/driver/spi.o ${OBJECTDIR}/source/driver/uart.o ${OBJECTDIR}/source/driver/lld_spis.o ${OBJECTDIR}/source/driver/lld_uart1.o ${OBJECTDIR}/source/driver/gpio.o ${OBJECTDIR}/source/driver/clock.o ${OBJECTDIR}/source/driver/intr.o ${OBJECTDIR}/source/driver/codec.o ${OBJECTDIR}/esolid-base/port/pic32-none-gcc/mips-m4k/cpu.o ${OBJECTDIR}/esolid-base/port/pic32-none-gcc/mips-m4k/intr.o ${OBJECTDIR}/esolid-base/port/pic32-none-gcc/mips-m4k/systimer.o ${OBJECTDIR}/esolid-base/src/debug.o ${OBJECTDIR}/esolid-base/src/base.o ${OBJECTDIR}/esolid-base/src/error.o ${OBJECTDIR}/esolid-base/src/prio_queue.o ${OBJECTDIR}/esolid-eds/src/smp.o ${OBJECTDIR}/esolid-eds/src/event.o ${OBJECTDIR}/esolid-eds/src/epa.o ${OBJECTDIR}/esolid-mem/src/mem_class.o ${OBJECTDIR}/esolid-mem/src/heap.o ${OBJECTDIR}/esolid-mem/src/static.o ${OBJECTDIR}/esolid-mem/src/pool.o ${OBJECTDIR}/esolid-vtimer/src/vtimer.o ${OBJECTDIR}/source/test/test_spi.o ${OBJECTDIR}/source/test/test_uart.o ${OBJECTDIR}/source/main.o ${OBJECTDIR}/source/bsp.o ${OBJECTDIR}/source/support.o ${OBJECTDIR}/source/epa_btman.o ${OBJECTDIR}/source/epa_btdrv.o ${OBJECTDIR}/source/epa_codec.o ${OBJECTDIR}/source/conv.o
-POSSIBLE_DEPFILES=${OBJECTDIR}/source/driver/lld_spi1.o.d ${OBJECTDIR}/source/driver/spi.o.d ${OBJECTDIR}/source/driver/uart.o.d ${OBJECTDIR}/source/driver/lld_spis.o.d ${OBJECTDIR}/source/driver/lld_uart1.o.d ${OBJECTDIR}/source/driver/gpio.o.d ${OBJECTDIR}/source/driver/clock.o.d ${OBJECTDIR}/source/driver/intr.o.d ${OBJECTDIR}/source/driver/codec.o.d ${OBJECTDIR}/esolid-base/port/pic32-none-gcc/mips-m4k/cpu.o.d ${OBJECTDIR}/esolid-base/port/pic32-none-gcc/mips-m4k/intr.o.d ${OBJECTDIR}/esolid-base/port/pic32-none-gcc/mips-m4k/systimer.o.d ${OBJECTDIR}/esolid-base/src/debug.o.d ${OBJECTDIR}/esolid-base/src/base.o.d ${OBJECTDIR}/esolid-base/src/error.o.d ${OBJECTDIR}/esolid-base/src/prio_queue.o.d ${OBJECTDIR}/esolid-eds/src/smp.o.d ${OBJECTDIR}/esolid-eds/src/event.o.d ${OBJECTDIR}/esolid-eds/src/epa.o.d ${OBJECTDIR}/esolid-mem/src/mem_class.o.d ${OBJECTDIR}/esolid-mem/src/heap.o.d ${OBJECTDIR}/esolid-mem/src/static.o.d ${OBJECTDIR}/esolid-mem/src/pool.o.d ${OBJECTDIR}/esolid-vtimer/src/vtimer.o.d ${OBJECTDIR}/source/test/test_spi.o.d ${OBJECTDIR}/source/test/test_uart.o.d ${OBJECTDIR}/source/main.o.d ${OBJECTDIR}/source/bsp.o.d ${OBJECTDIR}/source/support.o.d ${OBJECTDIR}/source/epa_btman.o.d ${OBJECTDIR}/source/epa_btdrv.o.d ${OBJECTDIR}/source/epa_codec.o.d ${OBJECTDIR}/source/conv.o.d
+OBJECTFILES_QUOTED_IF_SPACED=${OBJECTDIR}/driver/source/adc.o ${OBJECTDIR}/driver/source/i2c.o ${OBJECTDIR}/driver/source/lld_spis.o ${OBJECTDIR}/driver/source/lld_spi2.o ${OBJECTDIR}/driver/source/clock.o ${OBJECTDIR}/driver/source/gpio.o ${OBJECTDIR}/driver/source/s25fl.o ${OBJECTDIR}/driver/source/lld_spi1.o ${OBJECTDIR}/driver/source/rtc.o ${OBJECTDIR}/driver/source/spi.o ${OBJECTDIR}/driver/source/intr.o ${OBJECTDIR}/driver/source/systick.o ${OBJECTDIR}/esolid-base/src/debug.o ${OBJECTDIR}/esolid-base/src/base.o ${OBJECTDIR}/esolid-base/src/error.o ${OBJECTDIR}/esolid-base/src/prio_queue.o ${OBJECTDIR}/esolid-base/port/pic32-none-gcc/mips-m4k/cpu.o ${OBJECTDIR}/esolid-base/port/pic32-none-gcc/mips-m4k/intr.o ${OBJECTDIR}/esolid-base/port/pic32-none-gcc/mips-m4k/systimer.o ${OBJECTDIR}/esolid-eds/src/smp.o ${OBJECTDIR}/esolid-eds/src/event.o ${OBJECTDIR}/esolid-eds/src/epa.o ${OBJECTDIR}/esolid-mem/src/mem_class.o ${OBJECTDIR}/esolid-mem/src/heap.o ${OBJECTDIR}/esolid-mem/src/static.o ${OBJECTDIR}/esolid-mem/src/pool.o ${OBJECTDIR}/esolid-vtimer/src/vtimer.o ${OBJECTDIR}/application/source/epa_btman.o ${OBJECTDIR}/application/source/bsp.o ${OBJECTDIR}/application/source/epa_codec.o ${OBJECTDIR}/application/source/main.o ${OBJECTDIR}/application/source/epa_btdrv.o ${OBJECTDIR}/application/source/support.o ${OBJECTDIR}/application/source/conv.o ${OBJECTDIR}/driver/source/codec.o ${OBJECTDIR}/driver/source/lld_uart1.o ${OBJECTDIR}/driver/source/uart.o
+POSSIBLE_DEPFILES=${OBJECTDIR}/driver/source/adc.o.d ${OBJECTDIR}/driver/source/i2c.o.d ${OBJECTDIR}/driver/source/lld_spis.o.d ${OBJECTDIR}/driver/source/lld_spi2.o.d ${OBJECTDIR}/driver/source/clock.o.d ${OBJECTDIR}/driver/source/gpio.o.d ${OBJECTDIR}/driver/source/s25fl.o.d ${OBJECTDIR}/driver/source/lld_spi1.o.d ${OBJECTDIR}/driver/source/rtc.o.d ${OBJECTDIR}/driver/source/spi.o.d ${OBJECTDIR}/driver/source/intr.o.d ${OBJECTDIR}/driver/source/systick.o.d ${OBJECTDIR}/esolid-base/src/debug.o.d ${OBJECTDIR}/esolid-base/src/base.o.d ${OBJECTDIR}/esolid-base/src/error.o.d ${OBJECTDIR}/esolid-base/src/prio_queue.o.d ${OBJECTDIR}/esolid-base/port/pic32-none-gcc/mips-m4k/cpu.o.d ${OBJECTDIR}/esolid-base/port/pic32-none-gcc/mips-m4k/intr.o.d ${OBJECTDIR}/esolid-base/port/pic32-none-gcc/mips-m4k/systimer.o.d ${OBJECTDIR}/esolid-eds/src/smp.o.d ${OBJECTDIR}/esolid-eds/src/event.o.d ${OBJECTDIR}/esolid-eds/src/epa.o.d ${OBJECTDIR}/esolid-mem/src/mem_class.o.d ${OBJECTDIR}/esolid-mem/src/heap.o.d ${OBJECTDIR}/esolid-mem/src/static.o.d ${OBJECTDIR}/esolid-mem/src/pool.o.d ${OBJECTDIR}/esolid-vtimer/src/vtimer.o.d ${OBJECTDIR}/application/source/epa_btman.o.d ${OBJECTDIR}/application/source/bsp.o.d ${OBJECTDIR}/application/source/epa_codec.o.d ${OBJECTDIR}/application/source/main.o.d ${OBJECTDIR}/application/source/epa_btdrv.o.d ${OBJECTDIR}/application/source/support.o.d ${OBJECTDIR}/application/source/conv.o.d ${OBJECTDIR}/driver/source/codec.o.d ${OBJECTDIR}/driver/source/lld_uart1.o.d ${OBJECTDIR}/driver/source/uart.o.d
 
 # Object Files
-OBJECTFILES=${OBJECTDIR}/source/driver/lld_spi1.o ${OBJECTDIR}/source/driver/spi.o ${OBJECTDIR}/source/driver/uart.o ${OBJECTDIR}/source/driver/lld_spis.o ${OBJECTDIR}/source/driver/lld_uart1.o ${OBJECTDIR}/source/driver/gpio.o ${OBJECTDIR}/source/driver/clock.o ${OBJECTDIR}/source/driver/intr.o ${OBJECTDIR}/source/driver/codec.o ${OBJECTDIR}/esolid-base/port/pic32-none-gcc/mips-m4k/cpu.o ${OBJECTDIR}/esolid-base/port/pic32-none-gcc/mips-m4k/intr.o ${OBJECTDIR}/esolid-base/port/pic32-none-gcc/mips-m4k/systimer.o ${OBJECTDIR}/esolid-base/src/debug.o ${OBJECTDIR}/esolid-base/src/base.o ${OBJECTDIR}/esolid-base/src/error.o ${OBJECTDIR}/esolid-base/src/prio_queue.o ${OBJECTDIR}/esolid-eds/src/smp.o ${OBJECTDIR}/esolid-eds/src/event.o ${OBJECTDIR}/esolid-eds/src/epa.o ${OBJECTDIR}/esolid-mem/src/mem_class.o ${OBJECTDIR}/esolid-mem/src/heap.o ${OBJECTDIR}/esolid-mem/src/static.o ${OBJECTDIR}/esolid-mem/src/pool.o ${OBJECTDIR}/esolid-vtimer/src/vtimer.o ${OBJECTDIR}/source/test/test_spi.o ${OBJECTDIR}/source/test/test_uart.o ${OBJECTDIR}/source/main.o ${OBJECTDIR}/source/bsp.o ${OBJECTDIR}/source/support.o ${OBJECTDIR}/source/epa_btman.o ${OBJECTDIR}/source/epa_btdrv.o ${OBJECTDIR}/source/epa_codec.o ${OBJECTDIR}/source/conv.o
+OBJECTFILES=${OBJECTDIR}/driver/source/adc.o ${OBJECTDIR}/driver/source/i2c.o ${OBJECTDIR}/driver/source/lld_spis.o ${OBJECTDIR}/driver/source/lld_spi2.o ${OBJECTDIR}/driver/source/clock.o ${OBJECTDIR}/driver/source/gpio.o ${OBJECTDIR}/driver/source/s25fl.o ${OBJECTDIR}/driver/source/lld_spi1.o ${OBJECTDIR}/driver/source/rtc.o ${OBJECTDIR}/driver/source/spi.o ${OBJECTDIR}/driver/source/intr.o ${OBJECTDIR}/driver/source/systick.o ${OBJECTDIR}/esolid-base/src/debug.o ${OBJECTDIR}/esolid-base/src/base.o ${OBJECTDIR}/esolid-base/src/error.o ${OBJECTDIR}/esolid-base/src/prio_queue.o ${OBJECTDIR}/esolid-base/port/pic32-none-gcc/mips-m4k/cpu.o ${OBJECTDIR}/esolid-base/port/pic32-none-gcc/mips-m4k/intr.o ${OBJECTDIR}/esolid-base/port/pic32-none-gcc/mips-m4k/systimer.o ${OBJECTDIR}/esolid-eds/src/smp.o ${OBJECTDIR}/esolid-eds/src/event.o ${OBJECTDIR}/esolid-eds/src/epa.o ${OBJECTDIR}/esolid-mem/src/mem_class.o ${OBJECTDIR}/esolid-mem/src/heap.o ${OBJECTDIR}/esolid-mem/src/static.o ${OBJECTDIR}/esolid-mem/src/pool.o ${OBJECTDIR}/esolid-vtimer/src/vtimer.o ${OBJECTDIR}/application/source/epa_btman.o ${OBJECTDIR}/application/source/bsp.o ${OBJECTDIR}/application/source/epa_codec.o ${OBJECTDIR}/application/source/main.o ${OBJECTDIR}/application/source/epa_btdrv.o ${OBJECTDIR}/application/source/support.o ${OBJECTDIR}/application/source/conv.o ${OBJECTDIR}/driver/source/codec.o ${OBJECTDIR}/driver/source/lld_uart1.o ${OBJECTDIR}/driver/source/uart.o
 
 # Source Files
-SOURCEFILES=source/driver/lld_spi1.c source/driver/spi.c source/driver/uart.c source/driver/lld_spis.c source/driver/lld_uart1.c source/driver/gpio.c source/driver/clock.c source/driver/intr.c source/driver/codec.c esolid-base/port/pic32-none-gcc/mips-m4k/cpu.c esolid-base/port/pic32-none-gcc/mips-m4k/intr.c esolid-base/port/pic32-none-gcc/mips-m4k/systimer.c esolid-base/src/debug.c esolid-base/src/base.c esolid-base/src/error.c esolid-base/src/prio_queue.c esolid-eds/src/smp.c esolid-eds/src/event.c esolid-eds/src/epa.c esolid-mem/src/mem_class.c esolid-mem/src/heap.c esolid-mem/src/static.c esolid-mem/src/pool.c esolid-vtimer/src/vtimer.c source/test/test_spi.c source/test/test_uart.c source/main.c source/bsp.c source/support.c source/epa_btman.c source/epa_btdrv.c source/epa_codec.c source/conv.c
+SOURCEFILES=driver/source/adc.c driver/source/i2c.c driver/source/lld_spis.c driver/source/lld_spi2.c driver/source/clock.c driver/source/gpio.c driver/source/s25fl.c driver/source/lld_spi1.c driver/source/rtc.c driver/source/spi.c driver/source/intr.c driver/source/systick.c esolid-base/src/debug.c esolid-base/src/base.c esolid-base/src/error.c esolid-base/src/prio_queue.c esolid-base/port/pic32-none-gcc/mips-m4k/cpu.c esolid-base/port/pic32-none-gcc/mips-m4k/intr.c esolid-base/port/pic32-none-gcc/mips-m4k/systimer.c esolid-eds/src/smp.c esolid-eds/src/event.c esolid-eds/src/epa.c esolid-mem/src/mem_class.c esolid-mem/src/heap.c esolid-mem/src/static.c esolid-mem/src/pool.c esolid-vtimer/src/vtimer.c application/source/epa_btman.c application/source/bsp.c application/source/epa_codec.c application/source/main.c application/source/epa_btdrv.c application/source/support.c application/source/conv.c driver/source/codec.c driver/source/lld_uart1.c driver/source/uart.c
 
 
 CFLAGS=
@@ -91,402 +91,450 @@ endif
 # ------------------------------------------------------------------------------------
 # Rules for buildStep: compile
 ifeq ($(TYPE_IMAGE), DEBUG_RUN)
-${OBJECTDIR}/source/driver/lld_spi1.o: source/driver/lld_spi1.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} ${OBJECTDIR}/source/driver 
-	@${RM} ${OBJECTDIR}/source/driver/lld_spi1.o.d 
-	@${RM} ${OBJECTDIR}/source/driver/lld_spi1.o 
-	@${FIXDEPS} "${OBJECTDIR}/source/driver/lld_spi1.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1 -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -ffunction-sections -fdata-sections -mno-float -D_PLIB_DISABLE_LEGACY -I"esolid-base/inc" -I"esolid-base/port/pic32-none-gcc/common" -I"esolid-base/port/pic32-none-gcc/mips-m4k" -I"esolid-base/port/pic32-none-gcc/pic32mx150f128d" -I"esolid-mem/inc" -I"esolid-vtimer/inc" -I"esolid-eds/inc" -I"include" -I"include/test" -Wall -pedantic -MMD -MF "${OBJECTDIR}/source/driver/lld_spi1.o.d" -o ${OBJECTDIR}/source/driver/lld_spi1.o source/driver/lld_spi1.c    -Wextra
+${OBJECTDIR}/driver/source/adc.o: driver/source/adc.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} ${OBJECTDIR}/driver/source 
+	@${RM} ${OBJECTDIR}/driver/source/adc.o.d 
+	@${RM} ${OBJECTDIR}/driver/source/adc.o 
+	@${FIXDEPS} "${OBJECTDIR}/driver/source/adc.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1 -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -ffunction-sections -fdata-sections -mips16 -mno-float -D_PLIB_DISABLE_LEGACY -I"driver/include" -I"application/include" -I"esolid-base/inc" -I"esolid-base/port/pic32-none-gcc/common" -I"esolid-base/port/pic32-none-gcc/mips-m4k" -I"esolid-base/port/pic32-none-gcc/pic32mx150f128d" -I"esolid-eds/inc" -I"esolid-mem/inc" -I"esolid-vtimer/inc" -Wall -pedantic -MMD -MF "${OBJECTDIR}/driver/source/adc.o.d" -o ${OBJECTDIR}/driver/source/adc.o driver/source/adc.c    -Wextra
 	
-${OBJECTDIR}/source/driver/spi.o: source/driver/spi.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} ${OBJECTDIR}/source/driver 
-	@${RM} ${OBJECTDIR}/source/driver/spi.o.d 
-	@${RM} ${OBJECTDIR}/source/driver/spi.o 
-	@${FIXDEPS} "${OBJECTDIR}/source/driver/spi.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1 -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -ffunction-sections -fdata-sections -mno-float -D_PLIB_DISABLE_LEGACY -I"esolid-base/inc" -I"esolid-base/port/pic32-none-gcc/common" -I"esolid-base/port/pic32-none-gcc/mips-m4k" -I"esolid-base/port/pic32-none-gcc/pic32mx150f128d" -I"esolid-mem/inc" -I"esolid-vtimer/inc" -I"esolid-eds/inc" -I"include" -I"include/test" -Wall -pedantic -MMD -MF "${OBJECTDIR}/source/driver/spi.o.d" -o ${OBJECTDIR}/source/driver/spi.o source/driver/spi.c    -Wextra
+${OBJECTDIR}/driver/source/i2c.o: driver/source/i2c.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} ${OBJECTDIR}/driver/source 
+	@${RM} ${OBJECTDIR}/driver/source/i2c.o.d 
+	@${RM} ${OBJECTDIR}/driver/source/i2c.o 
+	@${FIXDEPS} "${OBJECTDIR}/driver/source/i2c.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1 -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -ffunction-sections -fdata-sections -mips16 -mno-float -D_PLIB_DISABLE_LEGACY -I"driver/include" -I"application/include" -I"esolid-base/inc" -I"esolid-base/port/pic32-none-gcc/common" -I"esolid-base/port/pic32-none-gcc/mips-m4k" -I"esolid-base/port/pic32-none-gcc/pic32mx150f128d" -I"esolid-eds/inc" -I"esolid-mem/inc" -I"esolid-vtimer/inc" -Wall -pedantic -MMD -MF "${OBJECTDIR}/driver/source/i2c.o.d" -o ${OBJECTDIR}/driver/source/i2c.o driver/source/i2c.c    -Wextra
 	
-${OBJECTDIR}/source/driver/uart.o: source/driver/uart.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} ${OBJECTDIR}/source/driver 
-	@${RM} ${OBJECTDIR}/source/driver/uart.o.d 
-	@${RM} ${OBJECTDIR}/source/driver/uart.o 
-	@${FIXDEPS} "${OBJECTDIR}/source/driver/uart.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1 -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -ffunction-sections -fdata-sections -mno-float -D_PLIB_DISABLE_LEGACY -I"esolid-base/inc" -I"esolid-base/port/pic32-none-gcc/common" -I"esolid-base/port/pic32-none-gcc/mips-m4k" -I"esolid-base/port/pic32-none-gcc/pic32mx150f128d" -I"esolid-mem/inc" -I"esolid-vtimer/inc" -I"esolid-eds/inc" -I"include" -I"include/test" -Wall -pedantic -MMD -MF "${OBJECTDIR}/source/driver/uart.o.d" -o ${OBJECTDIR}/source/driver/uart.o source/driver/uart.c    -Wextra
+${OBJECTDIR}/driver/source/lld_spis.o: driver/source/lld_spis.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} ${OBJECTDIR}/driver/source 
+	@${RM} ${OBJECTDIR}/driver/source/lld_spis.o.d 
+	@${RM} ${OBJECTDIR}/driver/source/lld_spis.o 
+	@${FIXDEPS} "${OBJECTDIR}/driver/source/lld_spis.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1 -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -ffunction-sections -fdata-sections -mips16 -mno-float -D_PLIB_DISABLE_LEGACY -I"driver/include" -I"application/include" -I"esolid-base/inc" -I"esolid-base/port/pic32-none-gcc/common" -I"esolid-base/port/pic32-none-gcc/mips-m4k" -I"esolid-base/port/pic32-none-gcc/pic32mx150f128d" -I"esolid-eds/inc" -I"esolid-mem/inc" -I"esolid-vtimer/inc" -Wall -pedantic -MMD -MF "${OBJECTDIR}/driver/source/lld_spis.o.d" -o ${OBJECTDIR}/driver/source/lld_spis.o driver/source/lld_spis.c    -Wextra
 	
-${OBJECTDIR}/source/driver/lld_spis.o: source/driver/lld_spis.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} ${OBJECTDIR}/source/driver 
-	@${RM} ${OBJECTDIR}/source/driver/lld_spis.o.d 
-	@${RM} ${OBJECTDIR}/source/driver/lld_spis.o 
-	@${FIXDEPS} "${OBJECTDIR}/source/driver/lld_spis.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1 -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -ffunction-sections -fdata-sections -mno-float -D_PLIB_DISABLE_LEGACY -I"esolid-base/inc" -I"esolid-base/port/pic32-none-gcc/common" -I"esolid-base/port/pic32-none-gcc/mips-m4k" -I"esolid-base/port/pic32-none-gcc/pic32mx150f128d" -I"esolid-mem/inc" -I"esolid-vtimer/inc" -I"esolid-eds/inc" -I"include" -I"include/test" -Wall -pedantic -MMD -MF "${OBJECTDIR}/source/driver/lld_spis.o.d" -o ${OBJECTDIR}/source/driver/lld_spis.o source/driver/lld_spis.c    -Wextra
+${OBJECTDIR}/driver/source/lld_spi2.o: driver/source/lld_spi2.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} ${OBJECTDIR}/driver/source 
+	@${RM} ${OBJECTDIR}/driver/source/lld_spi2.o.d 
+	@${RM} ${OBJECTDIR}/driver/source/lld_spi2.o 
+	@${FIXDEPS} "${OBJECTDIR}/driver/source/lld_spi2.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1 -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -ffunction-sections -fdata-sections -mips16 -mno-float -D_PLIB_DISABLE_LEGACY -I"driver/include" -I"application/include" -I"esolid-base/inc" -I"esolid-base/port/pic32-none-gcc/common" -I"esolid-base/port/pic32-none-gcc/mips-m4k" -I"esolid-base/port/pic32-none-gcc/pic32mx150f128d" -I"esolid-eds/inc" -I"esolid-mem/inc" -I"esolid-vtimer/inc" -Wall -pedantic -MMD -MF "${OBJECTDIR}/driver/source/lld_spi2.o.d" -o ${OBJECTDIR}/driver/source/lld_spi2.o driver/source/lld_spi2.c    -Wextra
 	
-${OBJECTDIR}/source/driver/lld_uart1.o: source/driver/lld_uart1.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} ${OBJECTDIR}/source/driver 
-	@${RM} ${OBJECTDIR}/source/driver/lld_uart1.o.d 
-	@${RM} ${OBJECTDIR}/source/driver/lld_uart1.o 
-	@${FIXDEPS} "${OBJECTDIR}/source/driver/lld_uart1.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1 -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -ffunction-sections -fdata-sections -mno-float -D_PLIB_DISABLE_LEGACY -I"esolid-base/inc" -I"esolid-base/port/pic32-none-gcc/common" -I"esolid-base/port/pic32-none-gcc/mips-m4k" -I"esolid-base/port/pic32-none-gcc/pic32mx150f128d" -I"esolid-mem/inc" -I"esolid-vtimer/inc" -I"esolid-eds/inc" -I"include" -I"include/test" -Wall -pedantic -MMD -MF "${OBJECTDIR}/source/driver/lld_uart1.o.d" -o ${OBJECTDIR}/source/driver/lld_uart1.o source/driver/lld_uart1.c    -Wextra
+${OBJECTDIR}/driver/source/clock.o: driver/source/clock.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} ${OBJECTDIR}/driver/source 
+	@${RM} ${OBJECTDIR}/driver/source/clock.o.d 
+	@${RM} ${OBJECTDIR}/driver/source/clock.o 
+	@${FIXDEPS} "${OBJECTDIR}/driver/source/clock.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1 -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -ffunction-sections -fdata-sections -mips16 -mno-float -D_PLIB_DISABLE_LEGACY -I"driver/include" -I"application/include" -I"esolid-base/inc" -I"esolid-base/port/pic32-none-gcc/common" -I"esolid-base/port/pic32-none-gcc/mips-m4k" -I"esolid-base/port/pic32-none-gcc/pic32mx150f128d" -I"esolid-eds/inc" -I"esolid-mem/inc" -I"esolid-vtimer/inc" -Wall -pedantic -MMD -MF "${OBJECTDIR}/driver/source/clock.o.d" -o ${OBJECTDIR}/driver/source/clock.o driver/source/clock.c    -Wextra
 	
-${OBJECTDIR}/source/driver/gpio.o: source/driver/gpio.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} ${OBJECTDIR}/source/driver 
-	@${RM} ${OBJECTDIR}/source/driver/gpio.o.d 
-	@${RM} ${OBJECTDIR}/source/driver/gpio.o 
-	@${FIXDEPS} "${OBJECTDIR}/source/driver/gpio.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1 -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -ffunction-sections -fdata-sections -mno-float -D_PLIB_DISABLE_LEGACY -I"esolid-base/inc" -I"esolid-base/port/pic32-none-gcc/common" -I"esolid-base/port/pic32-none-gcc/mips-m4k" -I"esolid-base/port/pic32-none-gcc/pic32mx150f128d" -I"esolid-mem/inc" -I"esolid-vtimer/inc" -I"esolid-eds/inc" -I"include" -I"include/test" -Wall -pedantic -MMD -MF "${OBJECTDIR}/source/driver/gpio.o.d" -o ${OBJECTDIR}/source/driver/gpio.o source/driver/gpio.c    -Wextra
+${OBJECTDIR}/driver/source/gpio.o: driver/source/gpio.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} ${OBJECTDIR}/driver/source 
+	@${RM} ${OBJECTDIR}/driver/source/gpio.o.d 
+	@${RM} ${OBJECTDIR}/driver/source/gpio.o 
+	@${FIXDEPS} "${OBJECTDIR}/driver/source/gpio.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1 -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -ffunction-sections -fdata-sections -mips16 -mno-float -D_PLIB_DISABLE_LEGACY -I"driver/include" -I"application/include" -I"esolid-base/inc" -I"esolid-base/port/pic32-none-gcc/common" -I"esolid-base/port/pic32-none-gcc/mips-m4k" -I"esolid-base/port/pic32-none-gcc/pic32mx150f128d" -I"esolid-eds/inc" -I"esolid-mem/inc" -I"esolid-vtimer/inc" -Wall -pedantic -MMD -MF "${OBJECTDIR}/driver/source/gpio.o.d" -o ${OBJECTDIR}/driver/source/gpio.o driver/source/gpio.c    -Wextra
 	
-${OBJECTDIR}/source/driver/clock.o: source/driver/clock.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} ${OBJECTDIR}/source/driver 
-	@${RM} ${OBJECTDIR}/source/driver/clock.o.d 
-	@${RM} ${OBJECTDIR}/source/driver/clock.o 
-	@${FIXDEPS} "${OBJECTDIR}/source/driver/clock.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1 -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -ffunction-sections -fdata-sections -mno-float -D_PLIB_DISABLE_LEGACY -I"esolid-base/inc" -I"esolid-base/port/pic32-none-gcc/common" -I"esolid-base/port/pic32-none-gcc/mips-m4k" -I"esolid-base/port/pic32-none-gcc/pic32mx150f128d" -I"esolid-mem/inc" -I"esolid-vtimer/inc" -I"esolid-eds/inc" -I"include" -I"include/test" -Wall -pedantic -MMD -MF "${OBJECTDIR}/source/driver/clock.o.d" -o ${OBJECTDIR}/source/driver/clock.o source/driver/clock.c    -Wextra
+${OBJECTDIR}/driver/source/s25fl.o: driver/source/s25fl.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} ${OBJECTDIR}/driver/source 
+	@${RM} ${OBJECTDIR}/driver/source/s25fl.o.d 
+	@${RM} ${OBJECTDIR}/driver/source/s25fl.o 
+	@${FIXDEPS} "${OBJECTDIR}/driver/source/s25fl.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1 -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -ffunction-sections -fdata-sections -mips16 -mno-float -D_PLIB_DISABLE_LEGACY -I"driver/include" -I"application/include" -I"esolid-base/inc" -I"esolid-base/port/pic32-none-gcc/common" -I"esolid-base/port/pic32-none-gcc/mips-m4k" -I"esolid-base/port/pic32-none-gcc/pic32mx150f128d" -I"esolid-eds/inc" -I"esolid-mem/inc" -I"esolid-vtimer/inc" -Wall -pedantic -MMD -MF "${OBJECTDIR}/driver/source/s25fl.o.d" -o ${OBJECTDIR}/driver/source/s25fl.o driver/source/s25fl.c    -Wextra
 	
-${OBJECTDIR}/source/driver/intr.o: source/driver/intr.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} ${OBJECTDIR}/source/driver 
-	@${RM} ${OBJECTDIR}/source/driver/intr.o.d 
-	@${RM} ${OBJECTDIR}/source/driver/intr.o 
-	@${FIXDEPS} "${OBJECTDIR}/source/driver/intr.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1 -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -ffunction-sections -fdata-sections -mno-float -D_PLIB_DISABLE_LEGACY -I"esolid-base/inc" -I"esolid-base/port/pic32-none-gcc/common" -I"esolid-base/port/pic32-none-gcc/mips-m4k" -I"esolid-base/port/pic32-none-gcc/pic32mx150f128d" -I"esolid-mem/inc" -I"esolid-vtimer/inc" -I"esolid-eds/inc" -I"include" -I"include/test" -Wall -pedantic -MMD -MF "${OBJECTDIR}/source/driver/intr.o.d" -o ${OBJECTDIR}/source/driver/intr.o source/driver/intr.c    -Wextra
+${OBJECTDIR}/driver/source/lld_spi1.o: driver/source/lld_spi1.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} ${OBJECTDIR}/driver/source 
+	@${RM} ${OBJECTDIR}/driver/source/lld_spi1.o.d 
+	@${RM} ${OBJECTDIR}/driver/source/lld_spi1.o 
+	@${FIXDEPS} "${OBJECTDIR}/driver/source/lld_spi1.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1 -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -ffunction-sections -fdata-sections -mips16 -mno-float -D_PLIB_DISABLE_LEGACY -I"driver/include" -I"application/include" -I"esolid-base/inc" -I"esolid-base/port/pic32-none-gcc/common" -I"esolid-base/port/pic32-none-gcc/mips-m4k" -I"esolid-base/port/pic32-none-gcc/pic32mx150f128d" -I"esolid-eds/inc" -I"esolid-mem/inc" -I"esolid-vtimer/inc" -Wall -pedantic -MMD -MF "${OBJECTDIR}/driver/source/lld_spi1.o.d" -o ${OBJECTDIR}/driver/source/lld_spi1.o driver/source/lld_spi1.c    -Wextra
 	
-${OBJECTDIR}/source/driver/codec.o: source/driver/codec.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} ${OBJECTDIR}/source/driver 
-	@${RM} ${OBJECTDIR}/source/driver/codec.o.d 
-	@${RM} ${OBJECTDIR}/source/driver/codec.o 
-	@${FIXDEPS} "${OBJECTDIR}/source/driver/codec.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1 -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -ffunction-sections -fdata-sections -mno-float -D_PLIB_DISABLE_LEGACY -I"esolid-base/inc" -I"esolid-base/port/pic32-none-gcc/common" -I"esolid-base/port/pic32-none-gcc/mips-m4k" -I"esolid-base/port/pic32-none-gcc/pic32mx150f128d" -I"esolid-mem/inc" -I"esolid-vtimer/inc" -I"esolid-eds/inc" -I"include" -I"include/test" -Wall -pedantic -MMD -MF "${OBJECTDIR}/source/driver/codec.o.d" -o ${OBJECTDIR}/source/driver/codec.o source/driver/codec.c    -Wextra
+${OBJECTDIR}/driver/source/rtc.o: driver/source/rtc.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} ${OBJECTDIR}/driver/source 
+	@${RM} ${OBJECTDIR}/driver/source/rtc.o.d 
+	@${RM} ${OBJECTDIR}/driver/source/rtc.o 
+	@${FIXDEPS} "${OBJECTDIR}/driver/source/rtc.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1 -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -ffunction-sections -fdata-sections -mips16 -mno-float -D_PLIB_DISABLE_LEGACY -I"driver/include" -I"application/include" -I"esolid-base/inc" -I"esolid-base/port/pic32-none-gcc/common" -I"esolid-base/port/pic32-none-gcc/mips-m4k" -I"esolid-base/port/pic32-none-gcc/pic32mx150f128d" -I"esolid-eds/inc" -I"esolid-mem/inc" -I"esolid-vtimer/inc" -Wall -pedantic -MMD -MF "${OBJECTDIR}/driver/source/rtc.o.d" -o ${OBJECTDIR}/driver/source/rtc.o driver/source/rtc.c    -Wextra
 	
-${OBJECTDIR}/esolid-base/port/pic32-none-gcc/mips-m4k/cpu.o: esolid-base/port/pic32-none-gcc/mips-m4k/cpu.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} ${OBJECTDIR}/esolid-base/port/pic32-none-gcc/mips-m4k 
-	@${RM} ${OBJECTDIR}/esolid-base/port/pic32-none-gcc/mips-m4k/cpu.o.d 
-	@${RM} ${OBJECTDIR}/esolid-base/port/pic32-none-gcc/mips-m4k/cpu.o 
-	@${FIXDEPS} "${OBJECTDIR}/esolid-base/port/pic32-none-gcc/mips-m4k/cpu.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1 -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -ffunction-sections -fdata-sections -mno-float -D_PLIB_DISABLE_LEGACY -I"esolid-base/inc" -I"esolid-base/port/pic32-none-gcc/common" -I"esolid-base/port/pic32-none-gcc/mips-m4k" -I"esolid-base/port/pic32-none-gcc/pic32mx150f128d" -I"esolid-mem/inc" -I"esolid-vtimer/inc" -I"esolid-eds/inc" -I"include" -I"include/test" -Wall -pedantic -MMD -MF "${OBJECTDIR}/esolid-base/port/pic32-none-gcc/mips-m4k/cpu.o.d" -o ${OBJECTDIR}/esolid-base/port/pic32-none-gcc/mips-m4k/cpu.o esolid-base/port/pic32-none-gcc/mips-m4k/cpu.c    -Wextra
+${OBJECTDIR}/driver/source/spi.o: driver/source/spi.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} ${OBJECTDIR}/driver/source 
+	@${RM} ${OBJECTDIR}/driver/source/spi.o.d 
+	@${RM} ${OBJECTDIR}/driver/source/spi.o 
+	@${FIXDEPS} "${OBJECTDIR}/driver/source/spi.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1 -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -ffunction-sections -fdata-sections -mips16 -mno-float -D_PLIB_DISABLE_LEGACY -I"driver/include" -I"application/include" -I"esolid-base/inc" -I"esolid-base/port/pic32-none-gcc/common" -I"esolid-base/port/pic32-none-gcc/mips-m4k" -I"esolid-base/port/pic32-none-gcc/pic32mx150f128d" -I"esolid-eds/inc" -I"esolid-mem/inc" -I"esolid-vtimer/inc" -Wall -pedantic -MMD -MF "${OBJECTDIR}/driver/source/spi.o.d" -o ${OBJECTDIR}/driver/source/spi.o driver/source/spi.c    -Wextra
 	
-${OBJECTDIR}/esolid-base/port/pic32-none-gcc/mips-m4k/intr.o: esolid-base/port/pic32-none-gcc/mips-m4k/intr.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} ${OBJECTDIR}/esolid-base/port/pic32-none-gcc/mips-m4k 
-	@${RM} ${OBJECTDIR}/esolid-base/port/pic32-none-gcc/mips-m4k/intr.o.d 
-	@${RM} ${OBJECTDIR}/esolid-base/port/pic32-none-gcc/mips-m4k/intr.o 
-	@${FIXDEPS} "${OBJECTDIR}/esolid-base/port/pic32-none-gcc/mips-m4k/intr.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1 -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -ffunction-sections -fdata-sections -mno-float -D_PLIB_DISABLE_LEGACY -I"esolid-base/inc" -I"esolid-base/port/pic32-none-gcc/common" -I"esolid-base/port/pic32-none-gcc/mips-m4k" -I"esolid-base/port/pic32-none-gcc/pic32mx150f128d" -I"esolid-mem/inc" -I"esolid-vtimer/inc" -I"esolid-eds/inc" -I"include" -I"include/test" -Wall -pedantic -MMD -MF "${OBJECTDIR}/esolid-base/port/pic32-none-gcc/mips-m4k/intr.o.d" -o ${OBJECTDIR}/esolid-base/port/pic32-none-gcc/mips-m4k/intr.o esolid-base/port/pic32-none-gcc/mips-m4k/intr.c    -Wextra
+${OBJECTDIR}/driver/source/intr.o: driver/source/intr.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} ${OBJECTDIR}/driver/source 
+	@${RM} ${OBJECTDIR}/driver/source/intr.o.d 
+	@${RM} ${OBJECTDIR}/driver/source/intr.o 
+	@${FIXDEPS} "${OBJECTDIR}/driver/source/intr.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1 -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -ffunction-sections -fdata-sections -mips16 -mno-float -D_PLIB_DISABLE_LEGACY -I"driver/include" -I"application/include" -I"esolid-base/inc" -I"esolid-base/port/pic32-none-gcc/common" -I"esolid-base/port/pic32-none-gcc/mips-m4k" -I"esolid-base/port/pic32-none-gcc/pic32mx150f128d" -I"esolid-eds/inc" -I"esolid-mem/inc" -I"esolid-vtimer/inc" -Wall -pedantic -MMD -MF "${OBJECTDIR}/driver/source/intr.o.d" -o ${OBJECTDIR}/driver/source/intr.o driver/source/intr.c    -Wextra
 	
-${OBJECTDIR}/esolid-base/port/pic32-none-gcc/mips-m4k/systimer.o: esolid-base/port/pic32-none-gcc/mips-m4k/systimer.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} ${OBJECTDIR}/esolid-base/port/pic32-none-gcc/mips-m4k 
-	@${RM} ${OBJECTDIR}/esolid-base/port/pic32-none-gcc/mips-m4k/systimer.o.d 
-	@${RM} ${OBJECTDIR}/esolid-base/port/pic32-none-gcc/mips-m4k/systimer.o 
-	@${FIXDEPS} "${OBJECTDIR}/esolid-base/port/pic32-none-gcc/mips-m4k/systimer.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1 -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -ffunction-sections -fdata-sections -mno-float -D_PLIB_DISABLE_LEGACY -I"esolid-base/inc" -I"esolid-base/port/pic32-none-gcc/common" -I"esolid-base/port/pic32-none-gcc/mips-m4k" -I"esolid-base/port/pic32-none-gcc/pic32mx150f128d" -I"esolid-mem/inc" -I"esolid-vtimer/inc" -I"esolid-eds/inc" -I"include" -I"include/test" -Wall -pedantic -MMD -MF "${OBJECTDIR}/esolid-base/port/pic32-none-gcc/mips-m4k/systimer.o.d" -o ${OBJECTDIR}/esolid-base/port/pic32-none-gcc/mips-m4k/systimer.o esolid-base/port/pic32-none-gcc/mips-m4k/systimer.c    -Wextra
+${OBJECTDIR}/driver/source/systick.o: driver/source/systick.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} ${OBJECTDIR}/driver/source 
+	@${RM} ${OBJECTDIR}/driver/source/systick.o.d 
+	@${RM} ${OBJECTDIR}/driver/source/systick.o 
+	@${FIXDEPS} "${OBJECTDIR}/driver/source/systick.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1 -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -ffunction-sections -fdata-sections -mips16 -mno-float -D_PLIB_DISABLE_LEGACY -I"driver/include" -I"application/include" -I"esolid-base/inc" -I"esolid-base/port/pic32-none-gcc/common" -I"esolid-base/port/pic32-none-gcc/mips-m4k" -I"esolid-base/port/pic32-none-gcc/pic32mx150f128d" -I"esolid-eds/inc" -I"esolid-mem/inc" -I"esolid-vtimer/inc" -Wall -pedantic -MMD -MF "${OBJECTDIR}/driver/source/systick.o.d" -o ${OBJECTDIR}/driver/source/systick.o driver/source/systick.c    -Wextra
 	
 ${OBJECTDIR}/esolid-base/src/debug.o: esolid-base/src/debug.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} ${OBJECTDIR}/esolid-base/src 
 	@${RM} ${OBJECTDIR}/esolid-base/src/debug.o.d 
 	@${RM} ${OBJECTDIR}/esolid-base/src/debug.o 
-	@${FIXDEPS} "${OBJECTDIR}/esolid-base/src/debug.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1 -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -ffunction-sections -fdata-sections -mno-float -D_PLIB_DISABLE_LEGACY -I"esolid-base/inc" -I"esolid-base/port/pic32-none-gcc/common" -I"esolid-base/port/pic32-none-gcc/mips-m4k" -I"esolid-base/port/pic32-none-gcc/pic32mx150f128d" -I"esolid-mem/inc" -I"esolid-vtimer/inc" -I"esolid-eds/inc" -I"include" -I"include/test" -Wall -pedantic -MMD -MF "${OBJECTDIR}/esolid-base/src/debug.o.d" -o ${OBJECTDIR}/esolid-base/src/debug.o esolid-base/src/debug.c    -Wextra
+	@${FIXDEPS} "${OBJECTDIR}/esolid-base/src/debug.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1 -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -ffunction-sections -fdata-sections -mips16 -mno-float -D_PLIB_DISABLE_LEGACY -I"driver/include" -I"application/include" -I"esolid-base/inc" -I"esolid-base/port/pic32-none-gcc/common" -I"esolid-base/port/pic32-none-gcc/mips-m4k" -I"esolid-base/port/pic32-none-gcc/pic32mx150f128d" -I"esolid-eds/inc" -I"esolid-mem/inc" -I"esolid-vtimer/inc" -Wall -pedantic -MMD -MF "${OBJECTDIR}/esolid-base/src/debug.o.d" -o ${OBJECTDIR}/esolid-base/src/debug.o esolid-base/src/debug.c    -Wextra
 	
 ${OBJECTDIR}/esolid-base/src/base.o: esolid-base/src/base.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} ${OBJECTDIR}/esolid-base/src 
 	@${RM} ${OBJECTDIR}/esolid-base/src/base.o.d 
 	@${RM} ${OBJECTDIR}/esolid-base/src/base.o 
-	@${FIXDEPS} "${OBJECTDIR}/esolid-base/src/base.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1 -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -ffunction-sections -fdata-sections -mno-float -D_PLIB_DISABLE_LEGACY -I"esolid-base/inc" -I"esolid-base/port/pic32-none-gcc/common" -I"esolid-base/port/pic32-none-gcc/mips-m4k" -I"esolid-base/port/pic32-none-gcc/pic32mx150f128d" -I"esolid-mem/inc" -I"esolid-vtimer/inc" -I"esolid-eds/inc" -I"include" -I"include/test" -Wall -pedantic -MMD -MF "${OBJECTDIR}/esolid-base/src/base.o.d" -o ${OBJECTDIR}/esolid-base/src/base.o esolid-base/src/base.c    -Wextra
+	@${FIXDEPS} "${OBJECTDIR}/esolid-base/src/base.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1 -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -ffunction-sections -fdata-sections -mips16 -mno-float -D_PLIB_DISABLE_LEGACY -I"driver/include" -I"application/include" -I"esolid-base/inc" -I"esolid-base/port/pic32-none-gcc/common" -I"esolid-base/port/pic32-none-gcc/mips-m4k" -I"esolid-base/port/pic32-none-gcc/pic32mx150f128d" -I"esolid-eds/inc" -I"esolid-mem/inc" -I"esolid-vtimer/inc" -Wall -pedantic -MMD -MF "${OBJECTDIR}/esolid-base/src/base.o.d" -o ${OBJECTDIR}/esolid-base/src/base.o esolid-base/src/base.c    -Wextra
 	
 ${OBJECTDIR}/esolid-base/src/error.o: esolid-base/src/error.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} ${OBJECTDIR}/esolid-base/src 
 	@${RM} ${OBJECTDIR}/esolid-base/src/error.o.d 
 	@${RM} ${OBJECTDIR}/esolid-base/src/error.o 
-	@${FIXDEPS} "${OBJECTDIR}/esolid-base/src/error.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1 -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -ffunction-sections -fdata-sections -mno-float -D_PLIB_DISABLE_LEGACY -I"esolid-base/inc" -I"esolid-base/port/pic32-none-gcc/common" -I"esolid-base/port/pic32-none-gcc/mips-m4k" -I"esolid-base/port/pic32-none-gcc/pic32mx150f128d" -I"esolid-mem/inc" -I"esolid-vtimer/inc" -I"esolid-eds/inc" -I"include" -I"include/test" -Wall -pedantic -MMD -MF "${OBJECTDIR}/esolid-base/src/error.o.d" -o ${OBJECTDIR}/esolid-base/src/error.o esolid-base/src/error.c    -Wextra
+	@${FIXDEPS} "${OBJECTDIR}/esolid-base/src/error.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1 -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -ffunction-sections -fdata-sections -mips16 -mno-float -D_PLIB_DISABLE_LEGACY -I"driver/include" -I"application/include" -I"esolid-base/inc" -I"esolid-base/port/pic32-none-gcc/common" -I"esolid-base/port/pic32-none-gcc/mips-m4k" -I"esolid-base/port/pic32-none-gcc/pic32mx150f128d" -I"esolid-eds/inc" -I"esolid-mem/inc" -I"esolid-vtimer/inc" -Wall -pedantic -MMD -MF "${OBJECTDIR}/esolid-base/src/error.o.d" -o ${OBJECTDIR}/esolid-base/src/error.o esolid-base/src/error.c    -Wextra
 	
 ${OBJECTDIR}/esolid-base/src/prio_queue.o: esolid-base/src/prio_queue.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} ${OBJECTDIR}/esolid-base/src 
 	@${RM} ${OBJECTDIR}/esolid-base/src/prio_queue.o.d 
 	@${RM} ${OBJECTDIR}/esolid-base/src/prio_queue.o 
-	@${FIXDEPS} "${OBJECTDIR}/esolid-base/src/prio_queue.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1 -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -ffunction-sections -fdata-sections -mno-float -D_PLIB_DISABLE_LEGACY -I"esolid-base/inc" -I"esolid-base/port/pic32-none-gcc/common" -I"esolid-base/port/pic32-none-gcc/mips-m4k" -I"esolid-base/port/pic32-none-gcc/pic32mx150f128d" -I"esolid-mem/inc" -I"esolid-vtimer/inc" -I"esolid-eds/inc" -I"include" -I"include/test" -Wall -pedantic -MMD -MF "${OBJECTDIR}/esolid-base/src/prio_queue.o.d" -o ${OBJECTDIR}/esolid-base/src/prio_queue.o esolid-base/src/prio_queue.c    -Wextra
+	@${FIXDEPS} "${OBJECTDIR}/esolid-base/src/prio_queue.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1 -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -ffunction-sections -fdata-sections -mips16 -mno-float -D_PLIB_DISABLE_LEGACY -I"driver/include" -I"application/include" -I"esolid-base/inc" -I"esolid-base/port/pic32-none-gcc/common" -I"esolid-base/port/pic32-none-gcc/mips-m4k" -I"esolid-base/port/pic32-none-gcc/pic32mx150f128d" -I"esolid-eds/inc" -I"esolid-mem/inc" -I"esolid-vtimer/inc" -Wall -pedantic -MMD -MF "${OBJECTDIR}/esolid-base/src/prio_queue.o.d" -o ${OBJECTDIR}/esolid-base/src/prio_queue.o esolid-base/src/prio_queue.c    -Wextra
+	
+${OBJECTDIR}/esolid-base/port/pic32-none-gcc/mips-m4k/cpu.o: esolid-base/port/pic32-none-gcc/mips-m4k/cpu.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} ${OBJECTDIR}/esolid-base/port/pic32-none-gcc/mips-m4k 
+	@${RM} ${OBJECTDIR}/esolid-base/port/pic32-none-gcc/mips-m4k/cpu.o.d 
+	@${RM} ${OBJECTDIR}/esolid-base/port/pic32-none-gcc/mips-m4k/cpu.o 
+	@${FIXDEPS} "${OBJECTDIR}/esolid-base/port/pic32-none-gcc/mips-m4k/cpu.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1 -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -ffunction-sections -fdata-sections -mips16 -mno-float -D_PLIB_DISABLE_LEGACY -I"driver/include" -I"application/include" -I"esolid-base/inc" -I"esolid-base/port/pic32-none-gcc/common" -I"esolid-base/port/pic32-none-gcc/mips-m4k" -I"esolid-base/port/pic32-none-gcc/pic32mx150f128d" -I"esolid-eds/inc" -I"esolid-mem/inc" -I"esolid-vtimer/inc" -Wall -pedantic -MMD -MF "${OBJECTDIR}/esolid-base/port/pic32-none-gcc/mips-m4k/cpu.o.d" -o ${OBJECTDIR}/esolid-base/port/pic32-none-gcc/mips-m4k/cpu.o esolid-base/port/pic32-none-gcc/mips-m4k/cpu.c    -Wextra
+	
+${OBJECTDIR}/esolid-base/port/pic32-none-gcc/mips-m4k/intr.o: esolid-base/port/pic32-none-gcc/mips-m4k/intr.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} ${OBJECTDIR}/esolid-base/port/pic32-none-gcc/mips-m4k 
+	@${RM} ${OBJECTDIR}/esolid-base/port/pic32-none-gcc/mips-m4k/intr.o.d 
+	@${RM} ${OBJECTDIR}/esolid-base/port/pic32-none-gcc/mips-m4k/intr.o 
+	@${FIXDEPS} "${OBJECTDIR}/esolid-base/port/pic32-none-gcc/mips-m4k/intr.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1 -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -ffunction-sections -fdata-sections -mips16 -mno-float -D_PLIB_DISABLE_LEGACY -I"driver/include" -I"application/include" -I"esolid-base/inc" -I"esolid-base/port/pic32-none-gcc/common" -I"esolid-base/port/pic32-none-gcc/mips-m4k" -I"esolid-base/port/pic32-none-gcc/pic32mx150f128d" -I"esolid-eds/inc" -I"esolid-mem/inc" -I"esolid-vtimer/inc" -Wall -pedantic -MMD -MF "${OBJECTDIR}/esolid-base/port/pic32-none-gcc/mips-m4k/intr.o.d" -o ${OBJECTDIR}/esolid-base/port/pic32-none-gcc/mips-m4k/intr.o esolid-base/port/pic32-none-gcc/mips-m4k/intr.c    -Wextra
+	
+${OBJECTDIR}/esolid-base/port/pic32-none-gcc/mips-m4k/systimer.o: esolid-base/port/pic32-none-gcc/mips-m4k/systimer.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} ${OBJECTDIR}/esolid-base/port/pic32-none-gcc/mips-m4k 
+	@${RM} ${OBJECTDIR}/esolid-base/port/pic32-none-gcc/mips-m4k/systimer.o.d 
+	@${RM} ${OBJECTDIR}/esolid-base/port/pic32-none-gcc/mips-m4k/systimer.o 
+	@${FIXDEPS} "${OBJECTDIR}/esolid-base/port/pic32-none-gcc/mips-m4k/systimer.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1 -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -ffunction-sections -fdata-sections -mips16 -mno-float -D_PLIB_DISABLE_LEGACY -I"driver/include" -I"application/include" -I"esolid-base/inc" -I"esolid-base/port/pic32-none-gcc/common" -I"esolid-base/port/pic32-none-gcc/mips-m4k" -I"esolid-base/port/pic32-none-gcc/pic32mx150f128d" -I"esolid-eds/inc" -I"esolid-mem/inc" -I"esolid-vtimer/inc" -Wall -pedantic -MMD -MF "${OBJECTDIR}/esolid-base/port/pic32-none-gcc/mips-m4k/systimer.o.d" -o ${OBJECTDIR}/esolid-base/port/pic32-none-gcc/mips-m4k/systimer.o esolid-base/port/pic32-none-gcc/mips-m4k/systimer.c    -Wextra
 	
 ${OBJECTDIR}/esolid-eds/src/smp.o: esolid-eds/src/smp.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} ${OBJECTDIR}/esolid-eds/src 
 	@${RM} ${OBJECTDIR}/esolid-eds/src/smp.o.d 
 	@${RM} ${OBJECTDIR}/esolid-eds/src/smp.o 
-	@${FIXDEPS} "${OBJECTDIR}/esolid-eds/src/smp.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1 -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -ffunction-sections -fdata-sections -mno-float -D_PLIB_DISABLE_LEGACY -I"esolid-base/inc" -I"esolid-base/port/pic32-none-gcc/common" -I"esolid-base/port/pic32-none-gcc/mips-m4k" -I"esolid-base/port/pic32-none-gcc/pic32mx150f128d" -I"esolid-mem/inc" -I"esolid-vtimer/inc" -I"esolid-eds/inc" -I"include" -I"include/test" -Wall -pedantic -MMD -MF "${OBJECTDIR}/esolid-eds/src/smp.o.d" -o ${OBJECTDIR}/esolid-eds/src/smp.o esolid-eds/src/smp.c    -Wextra
+	@${FIXDEPS} "${OBJECTDIR}/esolid-eds/src/smp.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1 -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -ffunction-sections -fdata-sections -mips16 -mno-float -D_PLIB_DISABLE_LEGACY -I"driver/include" -I"application/include" -I"esolid-base/inc" -I"esolid-base/port/pic32-none-gcc/common" -I"esolid-base/port/pic32-none-gcc/mips-m4k" -I"esolid-base/port/pic32-none-gcc/pic32mx150f128d" -I"esolid-eds/inc" -I"esolid-mem/inc" -I"esolid-vtimer/inc" -Wall -pedantic -MMD -MF "${OBJECTDIR}/esolid-eds/src/smp.o.d" -o ${OBJECTDIR}/esolid-eds/src/smp.o esolid-eds/src/smp.c    -Wextra
 	
 ${OBJECTDIR}/esolid-eds/src/event.o: esolid-eds/src/event.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} ${OBJECTDIR}/esolid-eds/src 
 	@${RM} ${OBJECTDIR}/esolid-eds/src/event.o.d 
 	@${RM} ${OBJECTDIR}/esolid-eds/src/event.o 
-	@${FIXDEPS} "${OBJECTDIR}/esolid-eds/src/event.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1 -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -ffunction-sections -fdata-sections -mno-float -D_PLIB_DISABLE_LEGACY -I"esolid-base/inc" -I"esolid-base/port/pic32-none-gcc/common" -I"esolid-base/port/pic32-none-gcc/mips-m4k" -I"esolid-base/port/pic32-none-gcc/pic32mx150f128d" -I"esolid-mem/inc" -I"esolid-vtimer/inc" -I"esolid-eds/inc" -I"include" -I"include/test" -Wall -pedantic -MMD -MF "${OBJECTDIR}/esolid-eds/src/event.o.d" -o ${OBJECTDIR}/esolid-eds/src/event.o esolid-eds/src/event.c    -Wextra
+	@${FIXDEPS} "${OBJECTDIR}/esolid-eds/src/event.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1 -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -ffunction-sections -fdata-sections -mips16 -mno-float -D_PLIB_DISABLE_LEGACY -I"driver/include" -I"application/include" -I"esolid-base/inc" -I"esolid-base/port/pic32-none-gcc/common" -I"esolid-base/port/pic32-none-gcc/mips-m4k" -I"esolid-base/port/pic32-none-gcc/pic32mx150f128d" -I"esolid-eds/inc" -I"esolid-mem/inc" -I"esolid-vtimer/inc" -Wall -pedantic -MMD -MF "${OBJECTDIR}/esolid-eds/src/event.o.d" -o ${OBJECTDIR}/esolid-eds/src/event.o esolid-eds/src/event.c    -Wextra
 	
 ${OBJECTDIR}/esolid-eds/src/epa.o: esolid-eds/src/epa.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} ${OBJECTDIR}/esolid-eds/src 
 	@${RM} ${OBJECTDIR}/esolid-eds/src/epa.o.d 
 	@${RM} ${OBJECTDIR}/esolid-eds/src/epa.o 
-	@${FIXDEPS} "${OBJECTDIR}/esolid-eds/src/epa.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1 -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -ffunction-sections -fdata-sections -mno-float -D_PLIB_DISABLE_LEGACY -I"esolid-base/inc" -I"esolid-base/port/pic32-none-gcc/common" -I"esolid-base/port/pic32-none-gcc/mips-m4k" -I"esolid-base/port/pic32-none-gcc/pic32mx150f128d" -I"esolid-mem/inc" -I"esolid-vtimer/inc" -I"esolid-eds/inc" -I"include" -I"include/test" -Wall -pedantic -MMD -MF "${OBJECTDIR}/esolid-eds/src/epa.o.d" -o ${OBJECTDIR}/esolid-eds/src/epa.o esolid-eds/src/epa.c    -Wextra
+	@${FIXDEPS} "${OBJECTDIR}/esolid-eds/src/epa.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1 -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -ffunction-sections -fdata-sections -mips16 -mno-float -D_PLIB_DISABLE_LEGACY -I"driver/include" -I"application/include" -I"esolid-base/inc" -I"esolid-base/port/pic32-none-gcc/common" -I"esolid-base/port/pic32-none-gcc/mips-m4k" -I"esolid-base/port/pic32-none-gcc/pic32mx150f128d" -I"esolid-eds/inc" -I"esolid-mem/inc" -I"esolid-vtimer/inc" -Wall -pedantic -MMD -MF "${OBJECTDIR}/esolid-eds/src/epa.o.d" -o ${OBJECTDIR}/esolid-eds/src/epa.o esolid-eds/src/epa.c    -Wextra
 	
 ${OBJECTDIR}/esolid-mem/src/mem_class.o: esolid-mem/src/mem_class.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} ${OBJECTDIR}/esolid-mem/src 
 	@${RM} ${OBJECTDIR}/esolid-mem/src/mem_class.o.d 
 	@${RM} ${OBJECTDIR}/esolid-mem/src/mem_class.o 
-	@${FIXDEPS} "${OBJECTDIR}/esolid-mem/src/mem_class.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1 -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -ffunction-sections -fdata-sections -mno-float -D_PLIB_DISABLE_LEGACY -I"esolid-base/inc" -I"esolid-base/port/pic32-none-gcc/common" -I"esolid-base/port/pic32-none-gcc/mips-m4k" -I"esolid-base/port/pic32-none-gcc/pic32mx150f128d" -I"esolid-mem/inc" -I"esolid-vtimer/inc" -I"esolid-eds/inc" -I"include" -I"include/test" -Wall -pedantic -MMD -MF "${OBJECTDIR}/esolid-mem/src/mem_class.o.d" -o ${OBJECTDIR}/esolid-mem/src/mem_class.o esolid-mem/src/mem_class.c    -Wextra
+	@${FIXDEPS} "${OBJECTDIR}/esolid-mem/src/mem_class.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1 -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -ffunction-sections -fdata-sections -mips16 -mno-float -D_PLIB_DISABLE_LEGACY -I"driver/include" -I"application/include" -I"esolid-base/inc" -I"esolid-base/port/pic32-none-gcc/common" -I"esolid-base/port/pic32-none-gcc/mips-m4k" -I"esolid-base/port/pic32-none-gcc/pic32mx150f128d" -I"esolid-eds/inc" -I"esolid-mem/inc" -I"esolid-vtimer/inc" -Wall -pedantic -MMD -MF "${OBJECTDIR}/esolid-mem/src/mem_class.o.d" -o ${OBJECTDIR}/esolid-mem/src/mem_class.o esolid-mem/src/mem_class.c    -Wextra
 	
 ${OBJECTDIR}/esolid-mem/src/heap.o: esolid-mem/src/heap.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} ${OBJECTDIR}/esolid-mem/src 
 	@${RM} ${OBJECTDIR}/esolid-mem/src/heap.o.d 
 	@${RM} ${OBJECTDIR}/esolid-mem/src/heap.o 
-	@${FIXDEPS} "${OBJECTDIR}/esolid-mem/src/heap.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1 -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -ffunction-sections -fdata-sections -mno-float -D_PLIB_DISABLE_LEGACY -I"esolid-base/inc" -I"esolid-base/port/pic32-none-gcc/common" -I"esolid-base/port/pic32-none-gcc/mips-m4k" -I"esolid-base/port/pic32-none-gcc/pic32mx150f128d" -I"esolid-mem/inc" -I"esolid-vtimer/inc" -I"esolid-eds/inc" -I"include" -I"include/test" -Wall -pedantic -MMD -MF "${OBJECTDIR}/esolid-mem/src/heap.o.d" -o ${OBJECTDIR}/esolid-mem/src/heap.o esolid-mem/src/heap.c    -Wextra
+	@${FIXDEPS} "${OBJECTDIR}/esolid-mem/src/heap.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1 -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -ffunction-sections -fdata-sections -mips16 -mno-float -D_PLIB_DISABLE_LEGACY -I"driver/include" -I"application/include" -I"esolid-base/inc" -I"esolid-base/port/pic32-none-gcc/common" -I"esolid-base/port/pic32-none-gcc/mips-m4k" -I"esolid-base/port/pic32-none-gcc/pic32mx150f128d" -I"esolid-eds/inc" -I"esolid-mem/inc" -I"esolid-vtimer/inc" -Wall -pedantic -MMD -MF "${OBJECTDIR}/esolid-mem/src/heap.o.d" -o ${OBJECTDIR}/esolid-mem/src/heap.o esolid-mem/src/heap.c    -Wextra
 	
 ${OBJECTDIR}/esolid-mem/src/static.o: esolid-mem/src/static.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} ${OBJECTDIR}/esolid-mem/src 
 	@${RM} ${OBJECTDIR}/esolid-mem/src/static.o.d 
 	@${RM} ${OBJECTDIR}/esolid-mem/src/static.o 
-	@${FIXDEPS} "${OBJECTDIR}/esolid-mem/src/static.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1 -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -ffunction-sections -fdata-sections -mno-float -D_PLIB_DISABLE_LEGACY -I"esolid-base/inc" -I"esolid-base/port/pic32-none-gcc/common" -I"esolid-base/port/pic32-none-gcc/mips-m4k" -I"esolid-base/port/pic32-none-gcc/pic32mx150f128d" -I"esolid-mem/inc" -I"esolid-vtimer/inc" -I"esolid-eds/inc" -I"include" -I"include/test" -Wall -pedantic -MMD -MF "${OBJECTDIR}/esolid-mem/src/static.o.d" -o ${OBJECTDIR}/esolid-mem/src/static.o esolid-mem/src/static.c    -Wextra
+	@${FIXDEPS} "${OBJECTDIR}/esolid-mem/src/static.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1 -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -ffunction-sections -fdata-sections -mips16 -mno-float -D_PLIB_DISABLE_LEGACY -I"driver/include" -I"application/include" -I"esolid-base/inc" -I"esolid-base/port/pic32-none-gcc/common" -I"esolid-base/port/pic32-none-gcc/mips-m4k" -I"esolid-base/port/pic32-none-gcc/pic32mx150f128d" -I"esolid-eds/inc" -I"esolid-mem/inc" -I"esolid-vtimer/inc" -Wall -pedantic -MMD -MF "${OBJECTDIR}/esolid-mem/src/static.o.d" -o ${OBJECTDIR}/esolid-mem/src/static.o esolid-mem/src/static.c    -Wextra
 	
 ${OBJECTDIR}/esolid-mem/src/pool.o: esolid-mem/src/pool.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} ${OBJECTDIR}/esolid-mem/src 
 	@${RM} ${OBJECTDIR}/esolid-mem/src/pool.o.d 
 	@${RM} ${OBJECTDIR}/esolid-mem/src/pool.o 
-	@${FIXDEPS} "${OBJECTDIR}/esolid-mem/src/pool.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1 -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -ffunction-sections -fdata-sections -mno-float -D_PLIB_DISABLE_LEGACY -I"esolid-base/inc" -I"esolid-base/port/pic32-none-gcc/common" -I"esolid-base/port/pic32-none-gcc/mips-m4k" -I"esolid-base/port/pic32-none-gcc/pic32mx150f128d" -I"esolid-mem/inc" -I"esolid-vtimer/inc" -I"esolid-eds/inc" -I"include" -I"include/test" -Wall -pedantic -MMD -MF "${OBJECTDIR}/esolid-mem/src/pool.o.d" -o ${OBJECTDIR}/esolid-mem/src/pool.o esolid-mem/src/pool.c    -Wextra
+	@${FIXDEPS} "${OBJECTDIR}/esolid-mem/src/pool.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1 -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -ffunction-sections -fdata-sections -mips16 -mno-float -D_PLIB_DISABLE_LEGACY -I"driver/include" -I"application/include" -I"esolid-base/inc" -I"esolid-base/port/pic32-none-gcc/common" -I"esolid-base/port/pic32-none-gcc/mips-m4k" -I"esolid-base/port/pic32-none-gcc/pic32mx150f128d" -I"esolid-eds/inc" -I"esolid-mem/inc" -I"esolid-vtimer/inc" -Wall -pedantic -MMD -MF "${OBJECTDIR}/esolid-mem/src/pool.o.d" -o ${OBJECTDIR}/esolid-mem/src/pool.o esolid-mem/src/pool.c    -Wextra
 	
 ${OBJECTDIR}/esolid-vtimer/src/vtimer.o: esolid-vtimer/src/vtimer.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} ${OBJECTDIR}/esolid-vtimer/src 
 	@${RM} ${OBJECTDIR}/esolid-vtimer/src/vtimer.o.d 
 	@${RM} ${OBJECTDIR}/esolid-vtimer/src/vtimer.o 
-	@${FIXDEPS} "${OBJECTDIR}/esolid-vtimer/src/vtimer.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1 -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -ffunction-sections -fdata-sections -mno-float -D_PLIB_DISABLE_LEGACY -I"esolid-base/inc" -I"esolid-base/port/pic32-none-gcc/common" -I"esolid-base/port/pic32-none-gcc/mips-m4k" -I"esolid-base/port/pic32-none-gcc/pic32mx150f128d" -I"esolid-mem/inc" -I"esolid-vtimer/inc" -I"esolid-eds/inc" -I"include" -I"include/test" -Wall -pedantic -MMD -MF "${OBJECTDIR}/esolid-vtimer/src/vtimer.o.d" -o ${OBJECTDIR}/esolid-vtimer/src/vtimer.o esolid-vtimer/src/vtimer.c    -Wextra
+	@${FIXDEPS} "${OBJECTDIR}/esolid-vtimer/src/vtimer.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1 -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -ffunction-sections -fdata-sections -mips16 -mno-float -D_PLIB_DISABLE_LEGACY -I"driver/include" -I"application/include" -I"esolid-base/inc" -I"esolid-base/port/pic32-none-gcc/common" -I"esolid-base/port/pic32-none-gcc/mips-m4k" -I"esolid-base/port/pic32-none-gcc/pic32mx150f128d" -I"esolid-eds/inc" -I"esolid-mem/inc" -I"esolid-vtimer/inc" -Wall -pedantic -MMD -MF "${OBJECTDIR}/esolid-vtimer/src/vtimer.o.d" -o ${OBJECTDIR}/esolid-vtimer/src/vtimer.o esolid-vtimer/src/vtimer.c    -Wextra
 	
-${OBJECTDIR}/source/test/test_spi.o: source/test/test_spi.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} ${OBJECTDIR}/source/test 
-	@${RM} ${OBJECTDIR}/source/test/test_spi.o.d 
-	@${RM} ${OBJECTDIR}/source/test/test_spi.o 
-	@${FIXDEPS} "${OBJECTDIR}/source/test/test_spi.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1 -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -ffunction-sections -fdata-sections -mno-float -D_PLIB_DISABLE_LEGACY -I"esolid-base/inc" -I"esolid-base/port/pic32-none-gcc/common" -I"esolid-base/port/pic32-none-gcc/mips-m4k" -I"esolid-base/port/pic32-none-gcc/pic32mx150f128d" -I"esolid-mem/inc" -I"esolid-vtimer/inc" -I"esolid-eds/inc" -I"include" -I"include/test" -Wall -pedantic -MMD -MF "${OBJECTDIR}/source/test/test_spi.o.d" -o ${OBJECTDIR}/source/test/test_spi.o source/test/test_spi.c    -Wextra
+${OBJECTDIR}/application/source/epa_btman.o: application/source/epa_btman.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} ${OBJECTDIR}/application/source 
+	@${RM} ${OBJECTDIR}/application/source/epa_btman.o.d 
+	@${RM} ${OBJECTDIR}/application/source/epa_btman.o 
+	@${FIXDEPS} "${OBJECTDIR}/application/source/epa_btman.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1 -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -ffunction-sections -fdata-sections -mips16 -mno-float -D_PLIB_DISABLE_LEGACY -I"driver/include" -I"application/include" -I"esolid-base/inc" -I"esolid-base/port/pic32-none-gcc/common" -I"esolid-base/port/pic32-none-gcc/mips-m4k" -I"esolid-base/port/pic32-none-gcc/pic32mx150f128d" -I"esolid-eds/inc" -I"esolid-mem/inc" -I"esolid-vtimer/inc" -Wall -pedantic -MMD -MF "${OBJECTDIR}/application/source/epa_btman.o.d" -o ${OBJECTDIR}/application/source/epa_btman.o application/source/epa_btman.c    -Wextra
 	
-${OBJECTDIR}/source/test/test_uart.o: source/test/test_uart.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} ${OBJECTDIR}/source/test 
-	@${RM} ${OBJECTDIR}/source/test/test_uart.o.d 
-	@${RM} ${OBJECTDIR}/source/test/test_uart.o 
-	@${FIXDEPS} "${OBJECTDIR}/source/test/test_uart.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1 -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -ffunction-sections -fdata-sections -mno-float -D_PLIB_DISABLE_LEGACY -I"esolid-base/inc" -I"esolid-base/port/pic32-none-gcc/common" -I"esolid-base/port/pic32-none-gcc/mips-m4k" -I"esolid-base/port/pic32-none-gcc/pic32mx150f128d" -I"esolid-mem/inc" -I"esolid-vtimer/inc" -I"esolid-eds/inc" -I"include" -I"include/test" -Wall -pedantic -MMD -MF "${OBJECTDIR}/source/test/test_uart.o.d" -o ${OBJECTDIR}/source/test/test_uart.o source/test/test_uart.c    -Wextra
+${OBJECTDIR}/application/source/bsp.o: application/source/bsp.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} ${OBJECTDIR}/application/source 
+	@${RM} ${OBJECTDIR}/application/source/bsp.o.d 
+	@${RM} ${OBJECTDIR}/application/source/bsp.o 
+	@${FIXDEPS} "${OBJECTDIR}/application/source/bsp.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1 -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -ffunction-sections -fdata-sections -mips16 -mno-float -D_PLIB_DISABLE_LEGACY -I"driver/include" -I"application/include" -I"esolid-base/inc" -I"esolid-base/port/pic32-none-gcc/common" -I"esolid-base/port/pic32-none-gcc/mips-m4k" -I"esolid-base/port/pic32-none-gcc/pic32mx150f128d" -I"esolid-eds/inc" -I"esolid-mem/inc" -I"esolid-vtimer/inc" -Wall -pedantic -MMD -MF "${OBJECTDIR}/application/source/bsp.o.d" -o ${OBJECTDIR}/application/source/bsp.o application/source/bsp.c    -Wextra
 	
-${OBJECTDIR}/source/main.o: source/main.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} ${OBJECTDIR}/source 
-	@${RM} ${OBJECTDIR}/source/main.o.d 
-	@${RM} ${OBJECTDIR}/source/main.o 
-	@${FIXDEPS} "${OBJECTDIR}/source/main.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1 -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -ffunction-sections -fdata-sections -mno-float -D_PLIB_DISABLE_LEGACY -I"esolid-base/inc" -I"esolid-base/port/pic32-none-gcc/common" -I"esolid-base/port/pic32-none-gcc/mips-m4k" -I"esolid-base/port/pic32-none-gcc/pic32mx150f128d" -I"esolid-mem/inc" -I"esolid-vtimer/inc" -I"esolid-eds/inc" -I"include" -I"include/test" -Wall -pedantic -MMD -MF "${OBJECTDIR}/source/main.o.d" -o ${OBJECTDIR}/source/main.o source/main.c    -Wextra
+${OBJECTDIR}/application/source/epa_codec.o: application/source/epa_codec.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} ${OBJECTDIR}/application/source 
+	@${RM} ${OBJECTDIR}/application/source/epa_codec.o.d 
+	@${RM} ${OBJECTDIR}/application/source/epa_codec.o 
+	@${FIXDEPS} "${OBJECTDIR}/application/source/epa_codec.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1 -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -ffunction-sections -fdata-sections -mips16 -mno-float -D_PLIB_DISABLE_LEGACY -I"driver/include" -I"application/include" -I"esolid-base/inc" -I"esolid-base/port/pic32-none-gcc/common" -I"esolid-base/port/pic32-none-gcc/mips-m4k" -I"esolid-base/port/pic32-none-gcc/pic32mx150f128d" -I"esolid-eds/inc" -I"esolid-mem/inc" -I"esolid-vtimer/inc" -Wall -pedantic -MMD -MF "${OBJECTDIR}/application/source/epa_codec.o.d" -o ${OBJECTDIR}/application/source/epa_codec.o application/source/epa_codec.c    -Wextra
 	
-${OBJECTDIR}/source/bsp.o: source/bsp.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} ${OBJECTDIR}/source 
-	@${RM} ${OBJECTDIR}/source/bsp.o.d 
-	@${RM} ${OBJECTDIR}/source/bsp.o 
-	@${FIXDEPS} "${OBJECTDIR}/source/bsp.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1 -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -ffunction-sections -fdata-sections -mno-float -D_PLIB_DISABLE_LEGACY -I"esolid-base/inc" -I"esolid-base/port/pic32-none-gcc/common" -I"esolid-base/port/pic32-none-gcc/mips-m4k" -I"esolid-base/port/pic32-none-gcc/pic32mx150f128d" -I"esolid-mem/inc" -I"esolid-vtimer/inc" -I"esolid-eds/inc" -I"include" -I"include/test" -Wall -pedantic -MMD -MF "${OBJECTDIR}/source/bsp.o.d" -o ${OBJECTDIR}/source/bsp.o source/bsp.c    -Wextra
+${OBJECTDIR}/application/source/main.o: application/source/main.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} ${OBJECTDIR}/application/source 
+	@${RM} ${OBJECTDIR}/application/source/main.o.d 
+	@${RM} ${OBJECTDIR}/application/source/main.o 
+	@${FIXDEPS} "${OBJECTDIR}/application/source/main.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1 -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -ffunction-sections -fdata-sections -mips16 -mno-float -D_PLIB_DISABLE_LEGACY -I"driver/include" -I"application/include" -I"esolid-base/inc" -I"esolid-base/port/pic32-none-gcc/common" -I"esolid-base/port/pic32-none-gcc/mips-m4k" -I"esolid-base/port/pic32-none-gcc/pic32mx150f128d" -I"esolid-eds/inc" -I"esolid-mem/inc" -I"esolid-vtimer/inc" -Wall -pedantic -MMD -MF "${OBJECTDIR}/application/source/main.o.d" -o ${OBJECTDIR}/application/source/main.o application/source/main.c    -Wextra
 	
-${OBJECTDIR}/source/support.o: source/support.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} ${OBJECTDIR}/source 
-	@${RM} ${OBJECTDIR}/source/support.o.d 
-	@${RM} ${OBJECTDIR}/source/support.o 
-	@${FIXDEPS} "${OBJECTDIR}/source/support.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1 -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -ffunction-sections -fdata-sections -mno-float -D_PLIB_DISABLE_LEGACY -I"esolid-base/inc" -I"esolid-base/port/pic32-none-gcc/common" -I"esolid-base/port/pic32-none-gcc/mips-m4k" -I"esolid-base/port/pic32-none-gcc/pic32mx150f128d" -I"esolid-mem/inc" -I"esolid-vtimer/inc" -I"esolid-eds/inc" -I"include" -I"include/test" -Wall -pedantic -MMD -MF "${OBJECTDIR}/source/support.o.d" -o ${OBJECTDIR}/source/support.o source/support.c    -Wextra
+${OBJECTDIR}/application/source/epa_btdrv.o: application/source/epa_btdrv.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} ${OBJECTDIR}/application/source 
+	@${RM} ${OBJECTDIR}/application/source/epa_btdrv.o.d 
+	@${RM} ${OBJECTDIR}/application/source/epa_btdrv.o 
+	@${FIXDEPS} "${OBJECTDIR}/application/source/epa_btdrv.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1 -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -ffunction-sections -fdata-sections -mips16 -mno-float -D_PLIB_DISABLE_LEGACY -I"driver/include" -I"application/include" -I"esolid-base/inc" -I"esolid-base/port/pic32-none-gcc/common" -I"esolid-base/port/pic32-none-gcc/mips-m4k" -I"esolid-base/port/pic32-none-gcc/pic32mx150f128d" -I"esolid-eds/inc" -I"esolid-mem/inc" -I"esolid-vtimer/inc" -Wall -pedantic -MMD -MF "${OBJECTDIR}/application/source/epa_btdrv.o.d" -o ${OBJECTDIR}/application/source/epa_btdrv.o application/source/epa_btdrv.c    -Wextra
 	
-${OBJECTDIR}/source/epa_btman.o: source/epa_btman.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} ${OBJECTDIR}/source 
-	@${RM} ${OBJECTDIR}/source/epa_btman.o.d 
-	@${RM} ${OBJECTDIR}/source/epa_btman.o 
-	@${FIXDEPS} "${OBJECTDIR}/source/epa_btman.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1 -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -ffunction-sections -fdata-sections -mno-float -D_PLIB_DISABLE_LEGACY -I"esolid-base/inc" -I"esolid-base/port/pic32-none-gcc/common" -I"esolid-base/port/pic32-none-gcc/mips-m4k" -I"esolid-base/port/pic32-none-gcc/pic32mx150f128d" -I"esolid-mem/inc" -I"esolid-vtimer/inc" -I"esolid-eds/inc" -I"include" -I"include/test" -Wall -pedantic -MMD -MF "${OBJECTDIR}/source/epa_btman.o.d" -o ${OBJECTDIR}/source/epa_btman.o source/epa_btman.c    -Wextra
+${OBJECTDIR}/application/source/support.o: application/source/support.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} ${OBJECTDIR}/application/source 
+	@${RM} ${OBJECTDIR}/application/source/support.o.d 
+	@${RM} ${OBJECTDIR}/application/source/support.o 
+	@${FIXDEPS} "${OBJECTDIR}/application/source/support.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1 -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -ffunction-sections -fdata-sections -mips16 -mno-float -D_PLIB_DISABLE_LEGACY -I"driver/include" -I"application/include" -I"esolid-base/inc" -I"esolid-base/port/pic32-none-gcc/common" -I"esolid-base/port/pic32-none-gcc/mips-m4k" -I"esolid-base/port/pic32-none-gcc/pic32mx150f128d" -I"esolid-eds/inc" -I"esolid-mem/inc" -I"esolid-vtimer/inc" -Wall -pedantic -MMD -MF "${OBJECTDIR}/application/source/support.o.d" -o ${OBJECTDIR}/application/source/support.o application/source/support.c    -Wextra
 	
-${OBJECTDIR}/source/epa_btdrv.o: source/epa_btdrv.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} ${OBJECTDIR}/source 
-	@${RM} ${OBJECTDIR}/source/epa_btdrv.o.d 
-	@${RM} ${OBJECTDIR}/source/epa_btdrv.o 
-	@${FIXDEPS} "${OBJECTDIR}/source/epa_btdrv.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1 -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -ffunction-sections -fdata-sections -mno-float -D_PLIB_DISABLE_LEGACY -I"esolid-base/inc" -I"esolid-base/port/pic32-none-gcc/common" -I"esolid-base/port/pic32-none-gcc/mips-m4k" -I"esolid-base/port/pic32-none-gcc/pic32mx150f128d" -I"esolid-mem/inc" -I"esolid-vtimer/inc" -I"esolid-eds/inc" -I"include" -I"include/test" -Wall -pedantic -MMD -MF "${OBJECTDIR}/source/epa_btdrv.o.d" -o ${OBJECTDIR}/source/epa_btdrv.o source/epa_btdrv.c    -Wextra
+${OBJECTDIR}/application/source/conv.o: application/source/conv.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} ${OBJECTDIR}/application/source 
+	@${RM} ${OBJECTDIR}/application/source/conv.o.d 
+	@${RM} ${OBJECTDIR}/application/source/conv.o 
+	@${FIXDEPS} "${OBJECTDIR}/application/source/conv.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1 -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -ffunction-sections -fdata-sections -mips16 -mno-float -D_PLIB_DISABLE_LEGACY -I"driver/include" -I"application/include" -I"esolid-base/inc" -I"esolid-base/port/pic32-none-gcc/common" -I"esolid-base/port/pic32-none-gcc/mips-m4k" -I"esolid-base/port/pic32-none-gcc/pic32mx150f128d" -I"esolid-eds/inc" -I"esolid-mem/inc" -I"esolid-vtimer/inc" -Wall -pedantic -MMD -MF "${OBJECTDIR}/application/source/conv.o.d" -o ${OBJECTDIR}/application/source/conv.o application/source/conv.c    -Wextra
 	
-${OBJECTDIR}/source/epa_codec.o: source/epa_codec.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} ${OBJECTDIR}/source 
-	@${RM} ${OBJECTDIR}/source/epa_codec.o.d 
-	@${RM} ${OBJECTDIR}/source/epa_codec.o 
-	@${FIXDEPS} "${OBJECTDIR}/source/epa_codec.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1 -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -ffunction-sections -fdata-sections -mno-float -D_PLIB_DISABLE_LEGACY -I"esolid-base/inc" -I"esolid-base/port/pic32-none-gcc/common" -I"esolid-base/port/pic32-none-gcc/mips-m4k" -I"esolid-base/port/pic32-none-gcc/pic32mx150f128d" -I"esolid-mem/inc" -I"esolid-vtimer/inc" -I"esolid-eds/inc" -I"include" -I"include/test" -Wall -pedantic -MMD -MF "${OBJECTDIR}/source/epa_codec.o.d" -o ${OBJECTDIR}/source/epa_codec.o source/epa_codec.c    -Wextra
+${OBJECTDIR}/driver/source/codec.o: driver/source/codec.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} ${OBJECTDIR}/driver/source 
+	@${RM} ${OBJECTDIR}/driver/source/codec.o.d 
+	@${RM} ${OBJECTDIR}/driver/source/codec.o 
+	@${FIXDEPS} "${OBJECTDIR}/driver/source/codec.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1 -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -ffunction-sections -fdata-sections -mips16 -mno-float -D_PLIB_DISABLE_LEGACY -I"driver/include" -I"application/include" -I"esolid-base/inc" -I"esolid-base/port/pic32-none-gcc/common" -I"esolid-base/port/pic32-none-gcc/mips-m4k" -I"esolid-base/port/pic32-none-gcc/pic32mx150f128d" -I"esolid-eds/inc" -I"esolid-mem/inc" -I"esolid-vtimer/inc" -Wall -pedantic -MMD -MF "${OBJECTDIR}/driver/source/codec.o.d" -o ${OBJECTDIR}/driver/source/codec.o driver/source/codec.c    -Wextra
 	
-${OBJECTDIR}/source/conv.o: source/conv.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} ${OBJECTDIR}/source 
-	@${RM} ${OBJECTDIR}/source/conv.o.d 
-	@${RM} ${OBJECTDIR}/source/conv.o 
-	@${FIXDEPS} "${OBJECTDIR}/source/conv.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1 -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -ffunction-sections -fdata-sections -mno-float -D_PLIB_DISABLE_LEGACY -I"esolid-base/inc" -I"esolid-base/port/pic32-none-gcc/common" -I"esolid-base/port/pic32-none-gcc/mips-m4k" -I"esolid-base/port/pic32-none-gcc/pic32mx150f128d" -I"esolid-mem/inc" -I"esolid-vtimer/inc" -I"esolid-eds/inc" -I"include" -I"include/test" -Wall -pedantic -MMD -MF "${OBJECTDIR}/source/conv.o.d" -o ${OBJECTDIR}/source/conv.o source/conv.c    -Wextra
+${OBJECTDIR}/driver/source/lld_uart1.o: driver/source/lld_uart1.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} ${OBJECTDIR}/driver/source 
+	@${RM} ${OBJECTDIR}/driver/source/lld_uart1.o.d 
+	@${RM} ${OBJECTDIR}/driver/source/lld_uart1.o 
+	@${FIXDEPS} "${OBJECTDIR}/driver/source/lld_uart1.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1 -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -ffunction-sections -fdata-sections -mips16 -mno-float -D_PLIB_DISABLE_LEGACY -I"driver/include" -I"application/include" -I"esolid-base/inc" -I"esolid-base/port/pic32-none-gcc/common" -I"esolid-base/port/pic32-none-gcc/mips-m4k" -I"esolid-base/port/pic32-none-gcc/pic32mx150f128d" -I"esolid-eds/inc" -I"esolid-mem/inc" -I"esolid-vtimer/inc" -Wall -pedantic -MMD -MF "${OBJECTDIR}/driver/source/lld_uart1.o.d" -o ${OBJECTDIR}/driver/source/lld_uart1.o driver/source/lld_uart1.c    -Wextra
+	
+${OBJECTDIR}/driver/source/uart.o: driver/source/uart.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} ${OBJECTDIR}/driver/source 
+	@${RM} ${OBJECTDIR}/driver/source/uart.o.d 
+	@${RM} ${OBJECTDIR}/driver/source/uart.o 
+	@${FIXDEPS} "${OBJECTDIR}/driver/source/uart.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE) -g -D__DEBUG -D__MPLAB_DEBUGGER_ICD3=1 -fframe-base-loclist  -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -ffunction-sections -fdata-sections -mips16 -mno-float -D_PLIB_DISABLE_LEGACY -I"driver/include" -I"application/include" -I"esolid-base/inc" -I"esolid-base/port/pic32-none-gcc/common" -I"esolid-base/port/pic32-none-gcc/mips-m4k" -I"esolid-base/port/pic32-none-gcc/pic32mx150f128d" -I"esolid-eds/inc" -I"esolid-mem/inc" -I"esolid-vtimer/inc" -Wall -pedantic -MMD -MF "${OBJECTDIR}/driver/source/uart.o.d" -o ${OBJECTDIR}/driver/source/uart.o driver/source/uart.c    -Wextra
 	
 else
-${OBJECTDIR}/source/driver/lld_spi1.o: source/driver/lld_spi1.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} ${OBJECTDIR}/source/driver 
-	@${RM} ${OBJECTDIR}/source/driver/lld_spi1.o.d 
-	@${RM} ${OBJECTDIR}/source/driver/lld_spi1.o 
-	@${FIXDEPS} "${OBJECTDIR}/source/driver/lld_spi1.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -ffunction-sections -fdata-sections -mno-float -D_PLIB_DISABLE_LEGACY -I"esolid-base/inc" -I"esolid-base/port/pic32-none-gcc/common" -I"esolid-base/port/pic32-none-gcc/mips-m4k" -I"esolid-base/port/pic32-none-gcc/pic32mx150f128d" -I"esolid-mem/inc" -I"esolid-vtimer/inc" -I"esolid-eds/inc" -I"include" -I"include/test" -Wall -pedantic -MMD -MF "${OBJECTDIR}/source/driver/lld_spi1.o.d" -o ${OBJECTDIR}/source/driver/lld_spi1.o source/driver/lld_spi1.c    -Wextra
+${OBJECTDIR}/driver/source/adc.o: driver/source/adc.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} ${OBJECTDIR}/driver/source 
+	@${RM} ${OBJECTDIR}/driver/source/adc.o.d 
+	@${RM} ${OBJECTDIR}/driver/source/adc.o 
+	@${FIXDEPS} "${OBJECTDIR}/driver/source/adc.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -ffunction-sections -fdata-sections -mips16 -mno-float -D_PLIB_DISABLE_LEGACY -I"driver/include" -I"application/include" -I"esolid-base/inc" -I"esolid-base/port/pic32-none-gcc/common" -I"esolid-base/port/pic32-none-gcc/mips-m4k" -I"esolid-base/port/pic32-none-gcc/pic32mx150f128d" -I"esolid-eds/inc" -I"esolid-mem/inc" -I"esolid-vtimer/inc" -Wall -pedantic -MMD -MF "${OBJECTDIR}/driver/source/adc.o.d" -o ${OBJECTDIR}/driver/source/adc.o driver/source/adc.c    -Wextra
 	
-${OBJECTDIR}/source/driver/spi.o: source/driver/spi.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} ${OBJECTDIR}/source/driver 
-	@${RM} ${OBJECTDIR}/source/driver/spi.o.d 
-	@${RM} ${OBJECTDIR}/source/driver/spi.o 
-	@${FIXDEPS} "${OBJECTDIR}/source/driver/spi.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -ffunction-sections -fdata-sections -mno-float -D_PLIB_DISABLE_LEGACY -I"esolid-base/inc" -I"esolid-base/port/pic32-none-gcc/common" -I"esolid-base/port/pic32-none-gcc/mips-m4k" -I"esolid-base/port/pic32-none-gcc/pic32mx150f128d" -I"esolid-mem/inc" -I"esolid-vtimer/inc" -I"esolid-eds/inc" -I"include" -I"include/test" -Wall -pedantic -MMD -MF "${OBJECTDIR}/source/driver/spi.o.d" -o ${OBJECTDIR}/source/driver/spi.o source/driver/spi.c    -Wextra
+${OBJECTDIR}/driver/source/i2c.o: driver/source/i2c.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} ${OBJECTDIR}/driver/source 
+	@${RM} ${OBJECTDIR}/driver/source/i2c.o.d 
+	@${RM} ${OBJECTDIR}/driver/source/i2c.o 
+	@${FIXDEPS} "${OBJECTDIR}/driver/source/i2c.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -ffunction-sections -fdata-sections -mips16 -mno-float -D_PLIB_DISABLE_LEGACY -I"driver/include" -I"application/include" -I"esolid-base/inc" -I"esolid-base/port/pic32-none-gcc/common" -I"esolid-base/port/pic32-none-gcc/mips-m4k" -I"esolid-base/port/pic32-none-gcc/pic32mx150f128d" -I"esolid-eds/inc" -I"esolid-mem/inc" -I"esolid-vtimer/inc" -Wall -pedantic -MMD -MF "${OBJECTDIR}/driver/source/i2c.o.d" -o ${OBJECTDIR}/driver/source/i2c.o driver/source/i2c.c    -Wextra
 	
-${OBJECTDIR}/source/driver/uart.o: source/driver/uart.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} ${OBJECTDIR}/source/driver 
-	@${RM} ${OBJECTDIR}/source/driver/uart.o.d 
-	@${RM} ${OBJECTDIR}/source/driver/uart.o 
-	@${FIXDEPS} "${OBJECTDIR}/source/driver/uart.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -ffunction-sections -fdata-sections -mno-float -D_PLIB_DISABLE_LEGACY -I"esolid-base/inc" -I"esolid-base/port/pic32-none-gcc/common" -I"esolid-base/port/pic32-none-gcc/mips-m4k" -I"esolid-base/port/pic32-none-gcc/pic32mx150f128d" -I"esolid-mem/inc" -I"esolid-vtimer/inc" -I"esolid-eds/inc" -I"include" -I"include/test" -Wall -pedantic -MMD -MF "${OBJECTDIR}/source/driver/uart.o.d" -o ${OBJECTDIR}/source/driver/uart.o source/driver/uart.c    -Wextra
+${OBJECTDIR}/driver/source/lld_spis.o: driver/source/lld_spis.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} ${OBJECTDIR}/driver/source 
+	@${RM} ${OBJECTDIR}/driver/source/lld_spis.o.d 
+	@${RM} ${OBJECTDIR}/driver/source/lld_spis.o 
+	@${FIXDEPS} "${OBJECTDIR}/driver/source/lld_spis.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -ffunction-sections -fdata-sections -mips16 -mno-float -D_PLIB_DISABLE_LEGACY -I"driver/include" -I"application/include" -I"esolid-base/inc" -I"esolid-base/port/pic32-none-gcc/common" -I"esolid-base/port/pic32-none-gcc/mips-m4k" -I"esolid-base/port/pic32-none-gcc/pic32mx150f128d" -I"esolid-eds/inc" -I"esolid-mem/inc" -I"esolid-vtimer/inc" -Wall -pedantic -MMD -MF "${OBJECTDIR}/driver/source/lld_spis.o.d" -o ${OBJECTDIR}/driver/source/lld_spis.o driver/source/lld_spis.c    -Wextra
 	
-${OBJECTDIR}/source/driver/lld_spis.o: source/driver/lld_spis.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} ${OBJECTDIR}/source/driver 
-	@${RM} ${OBJECTDIR}/source/driver/lld_spis.o.d 
-	@${RM} ${OBJECTDIR}/source/driver/lld_spis.o 
-	@${FIXDEPS} "${OBJECTDIR}/source/driver/lld_spis.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -ffunction-sections -fdata-sections -mno-float -D_PLIB_DISABLE_LEGACY -I"esolid-base/inc" -I"esolid-base/port/pic32-none-gcc/common" -I"esolid-base/port/pic32-none-gcc/mips-m4k" -I"esolid-base/port/pic32-none-gcc/pic32mx150f128d" -I"esolid-mem/inc" -I"esolid-vtimer/inc" -I"esolid-eds/inc" -I"include" -I"include/test" -Wall -pedantic -MMD -MF "${OBJECTDIR}/source/driver/lld_spis.o.d" -o ${OBJECTDIR}/source/driver/lld_spis.o source/driver/lld_spis.c    -Wextra
+${OBJECTDIR}/driver/source/lld_spi2.o: driver/source/lld_spi2.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} ${OBJECTDIR}/driver/source 
+	@${RM} ${OBJECTDIR}/driver/source/lld_spi2.o.d 
+	@${RM} ${OBJECTDIR}/driver/source/lld_spi2.o 
+	@${FIXDEPS} "${OBJECTDIR}/driver/source/lld_spi2.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -ffunction-sections -fdata-sections -mips16 -mno-float -D_PLIB_DISABLE_LEGACY -I"driver/include" -I"application/include" -I"esolid-base/inc" -I"esolid-base/port/pic32-none-gcc/common" -I"esolid-base/port/pic32-none-gcc/mips-m4k" -I"esolid-base/port/pic32-none-gcc/pic32mx150f128d" -I"esolid-eds/inc" -I"esolid-mem/inc" -I"esolid-vtimer/inc" -Wall -pedantic -MMD -MF "${OBJECTDIR}/driver/source/lld_spi2.o.d" -o ${OBJECTDIR}/driver/source/lld_spi2.o driver/source/lld_spi2.c    -Wextra
 	
-${OBJECTDIR}/source/driver/lld_uart1.o: source/driver/lld_uart1.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} ${OBJECTDIR}/source/driver 
-	@${RM} ${OBJECTDIR}/source/driver/lld_uart1.o.d 
-	@${RM} ${OBJECTDIR}/source/driver/lld_uart1.o 
-	@${FIXDEPS} "${OBJECTDIR}/source/driver/lld_uart1.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -ffunction-sections -fdata-sections -mno-float -D_PLIB_DISABLE_LEGACY -I"esolid-base/inc" -I"esolid-base/port/pic32-none-gcc/common" -I"esolid-base/port/pic32-none-gcc/mips-m4k" -I"esolid-base/port/pic32-none-gcc/pic32mx150f128d" -I"esolid-mem/inc" -I"esolid-vtimer/inc" -I"esolid-eds/inc" -I"include" -I"include/test" -Wall -pedantic -MMD -MF "${OBJECTDIR}/source/driver/lld_uart1.o.d" -o ${OBJECTDIR}/source/driver/lld_uart1.o source/driver/lld_uart1.c    -Wextra
+${OBJECTDIR}/driver/source/clock.o: driver/source/clock.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} ${OBJECTDIR}/driver/source 
+	@${RM} ${OBJECTDIR}/driver/source/clock.o.d 
+	@${RM} ${OBJECTDIR}/driver/source/clock.o 
+	@${FIXDEPS} "${OBJECTDIR}/driver/source/clock.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -ffunction-sections -fdata-sections -mips16 -mno-float -D_PLIB_DISABLE_LEGACY -I"driver/include" -I"application/include" -I"esolid-base/inc" -I"esolid-base/port/pic32-none-gcc/common" -I"esolid-base/port/pic32-none-gcc/mips-m4k" -I"esolid-base/port/pic32-none-gcc/pic32mx150f128d" -I"esolid-eds/inc" -I"esolid-mem/inc" -I"esolid-vtimer/inc" -Wall -pedantic -MMD -MF "${OBJECTDIR}/driver/source/clock.o.d" -o ${OBJECTDIR}/driver/source/clock.o driver/source/clock.c    -Wextra
 	
-${OBJECTDIR}/source/driver/gpio.o: source/driver/gpio.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} ${OBJECTDIR}/source/driver 
-	@${RM} ${OBJECTDIR}/source/driver/gpio.o.d 
-	@${RM} ${OBJECTDIR}/source/driver/gpio.o 
-	@${FIXDEPS} "${OBJECTDIR}/source/driver/gpio.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -ffunction-sections -fdata-sections -mno-float -D_PLIB_DISABLE_LEGACY -I"esolid-base/inc" -I"esolid-base/port/pic32-none-gcc/common" -I"esolid-base/port/pic32-none-gcc/mips-m4k" -I"esolid-base/port/pic32-none-gcc/pic32mx150f128d" -I"esolid-mem/inc" -I"esolid-vtimer/inc" -I"esolid-eds/inc" -I"include" -I"include/test" -Wall -pedantic -MMD -MF "${OBJECTDIR}/source/driver/gpio.o.d" -o ${OBJECTDIR}/source/driver/gpio.o source/driver/gpio.c    -Wextra
+${OBJECTDIR}/driver/source/gpio.o: driver/source/gpio.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} ${OBJECTDIR}/driver/source 
+	@${RM} ${OBJECTDIR}/driver/source/gpio.o.d 
+	@${RM} ${OBJECTDIR}/driver/source/gpio.o 
+	@${FIXDEPS} "${OBJECTDIR}/driver/source/gpio.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -ffunction-sections -fdata-sections -mips16 -mno-float -D_PLIB_DISABLE_LEGACY -I"driver/include" -I"application/include" -I"esolid-base/inc" -I"esolid-base/port/pic32-none-gcc/common" -I"esolid-base/port/pic32-none-gcc/mips-m4k" -I"esolid-base/port/pic32-none-gcc/pic32mx150f128d" -I"esolid-eds/inc" -I"esolid-mem/inc" -I"esolid-vtimer/inc" -Wall -pedantic -MMD -MF "${OBJECTDIR}/driver/source/gpio.o.d" -o ${OBJECTDIR}/driver/source/gpio.o driver/source/gpio.c    -Wextra
 	
-${OBJECTDIR}/source/driver/clock.o: source/driver/clock.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} ${OBJECTDIR}/source/driver 
-	@${RM} ${OBJECTDIR}/source/driver/clock.o.d 
-	@${RM} ${OBJECTDIR}/source/driver/clock.o 
-	@${FIXDEPS} "${OBJECTDIR}/source/driver/clock.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -ffunction-sections -fdata-sections -mno-float -D_PLIB_DISABLE_LEGACY -I"esolid-base/inc" -I"esolid-base/port/pic32-none-gcc/common" -I"esolid-base/port/pic32-none-gcc/mips-m4k" -I"esolid-base/port/pic32-none-gcc/pic32mx150f128d" -I"esolid-mem/inc" -I"esolid-vtimer/inc" -I"esolid-eds/inc" -I"include" -I"include/test" -Wall -pedantic -MMD -MF "${OBJECTDIR}/source/driver/clock.o.d" -o ${OBJECTDIR}/source/driver/clock.o source/driver/clock.c    -Wextra
+${OBJECTDIR}/driver/source/s25fl.o: driver/source/s25fl.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} ${OBJECTDIR}/driver/source 
+	@${RM} ${OBJECTDIR}/driver/source/s25fl.o.d 
+	@${RM} ${OBJECTDIR}/driver/source/s25fl.o 
+	@${FIXDEPS} "${OBJECTDIR}/driver/source/s25fl.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -ffunction-sections -fdata-sections -mips16 -mno-float -D_PLIB_DISABLE_LEGACY -I"driver/include" -I"application/include" -I"esolid-base/inc" -I"esolid-base/port/pic32-none-gcc/common" -I"esolid-base/port/pic32-none-gcc/mips-m4k" -I"esolid-base/port/pic32-none-gcc/pic32mx150f128d" -I"esolid-eds/inc" -I"esolid-mem/inc" -I"esolid-vtimer/inc" -Wall -pedantic -MMD -MF "${OBJECTDIR}/driver/source/s25fl.o.d" -o ${OBJECTDIR}/driver/source/s25fl.o driver/source/s25fl.c    -Wextra
 	
-${OBJECTDIR}/source/driver/intr.o: source/driver/intr.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} ${OBJECTDIR}/source/driver 
-	@${RM} ${OBJECTDIR}/source/driver/intr.o.d 
-	@${RM} ${OBJECTDIR}/source/driver/intr.o 
-	@${FIXDEPS} "${OBJECTDIR}/source/driver/intr.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -ffunction-sections -fdata-sections -mno-float -D_PLIB_DISABLE_LEGACY -I"esolid-base/inc" -I"esolid-base/port/pic32-none-gcc/common" -I"esolid-base/port/pic32-none-gcc/mips-m4k" -I"esolid-base/port/pic32-none-gcc/pic32mx150f128d" -I"esolid-mem/inc" -I"esolid-vtimer/inc" -I"esolid-eds/inc" -I"include" -I"include/test" -Wall -pedantic -MMD -MF "${OBJECTDIR}/source/driver/intr.o.d" -o ${OBJECTDIR}/source/driver/intr.o source/driver/intr.c    -Wextra
+${OBJECTDIR}/driver/source/lld_spi1.o: driver/source/lld_spi1.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} ${OBJECTDIR}/driver/source 
+	@${RM} ${OBJECTDIR}/driver/source/lld_spi1.o.d 
+	@${RM} ${OBJECTDIR}/driver/source/lld_spi1.o 
+	@${FIXDEPS} "${OBJECTDIR}/driver/source/lld_spi1.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -ffunction-sections -fdata-sections -mips16 -mno-float -D_PLIB_DISABLE_LEGACY -I"driver/include" -I"application/include" -I"esolid-base/inc" -I"esolid-base/port/pic32-none-gcc/common" -I"esolid-base/port/pic32-none-gcc/mips-m4k" -I"esolid-base/port/pic32-none-gcc/pic32mx150f128d" -I"esolid-eds/inc" -I"esolid-mem/inc" -I"esolid-vtimer/inc" -Wall -pedantic -MMD -MF "${OBJECTDIR}/driver/source/lld_spi1.o.d" -o ${OBJECTDIR}/driver/source/lld_spi1.o driver/source/lld_spi1.c    -Wextra
 	
-${OBJECTDIR}/source/driver/codec.o: source/driver/codec.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} ${OBJECTDIR}/source/driver 
-	@${RM} ${OBJECTDIR}/source/driver/codec.o.d 
-	@${RM} ${OBJECTDIR}/source/driver/codec.o 
-	@${FIXDEPS} "${OBJECTDIR}/source/driver/codec.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -ffunction-sections -fdata-sections -mno-float -D_PLIB_DISABLE_LEGACY -I"esolid-base/inc" -I"esolid-base/port/pic32-none-gcc/common" -I"esolid-base/port/pic32-none-gcc/mips-m4k" -I"esolid-base/port/pic32-none-gcc/pic32mx150f128d" -I"esolid-mem/inc" -I"esolid-vtimer/inc" -I"esolid-eds/inc" -I"include" -I"include/test" -Wall -pedantic -MMD -MF "${OBJECTDIR}/source/driver/codec.o.d" -o ${OBJECTDIR}/source/driver/codec.o source/driver/codec.c    -Wextra
+${OBJECTDIR}/driver/source/rtc.o: driver/source/rtc.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} ${OBJECTDIR}/driver/source 
+	@${RM} ${OBJECTDIR}/driver/source/rtc.o.d 
+	@${RM} ${OBJECTDIR}/driver/source/rtc.o 
+	@${FIXDEPS} "${OBJECTDIR}/driver/source/rtc.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -ffunction-sections -fdata-sections -mips16 -mno-float -D_PLIB_DISABLE_LEGACY -I"driver/include" -I"application/include" -I"esolid-base/inc" -I"esolid-base/port/pic32-none-gcc/common" -I"esolid-base/port/pic32-none-gcc/mips-m4k" -I"esolid-base/port/pic32-none-gcc/pic32mx150f128d" -I"esolid-eds/inc" -I"esolid-mem/inc" -I"esolid-vtimer/inc" -Wall -pedantic -MMD -MF "${OBJECTDIR}/driver/source/rtc.o.d" -o ${OBJECTDIR}/driver/source/rtc.o driver/source/rtc.c    -Wextra
 	
-${OBJECTDIR}/esolid-base/port/pic32-none-gcc/mips-m4k/cpu.o: esolid-base/port/pic32-none-gcc/mips-m4k/cpu.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} ${OBJECTDIR}/esolid-base/port/pic32-none-gcc/mips-m4k 
-	@${RM} ${OBJECTDIR}/esolid-base/port/pic32-none-gcc/mips-m4k/cpu.o.d 
-	@${RM} ${OBJECTDIR}/esolid-base/port/pic32-none-gcc/mips-m4k/cpu.o 
-	@${FIXDEPS} "${OBJECTDIR}/esolid-base/port/pic32-none-gcc/mips-m4k/cpu.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -ffunction-sections -fdata-sections -mno-float -D_PLIB_DISABLE_LEGACY -I"esolid-base/inc" -I"esolid-base/port/pic32-none-gcc/common" -I"esolid-base/port/pic32-none-gcc/mips-m4k" -I"esolid-base/port/pic32-none-gcc/pic32mx150f128d" -I"esolid-mem/inc" -I"esolid-vtimer/inc" -I"esolid-eds/inc" -I"include" -I"include/test" -Wall -pedantic -MMD -MF "${OBJECTDIR}/esolid-base/port/pic32-none-gcc/mips-m4k/cpu.o.d" -o ${OBJECTDIR}/esolid-base/port/pic32-none-gcc/mips-m4k/cpu.o esolid-base/port/pic32-none-gcc/mips-m4k/cpu.c    -Wextra
+${OBJECTDIR}/driver/source/spi.o: driver/source/spi.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} ${OBJECTDIR}/driver/source 
+	@${RM} ${OBJECTDIR}/driver/source/spi.o.d 
+	@${RM} ${OBJECTDIR}/driver/source/spi.o 
+	@${FIXDEPS} "${OBJECTDIR}/driver/source/spi.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -ffunction-sections -fdata-sections -mips16 -mno-float -D_PLIB_DISABLE_LEGACY -I"driver/include" -I"application/include" -I"esolid-base/inc" -I"esolid-base/port/pic32-none-gcc/common" -I"esolid-base/port/pic32-none-gcc/mips-m4k" -I"esolid-base/port/pic32-none-gcc/pic32mx150f128d" -I"esolid-eds/inc" -I"esolid-mem/inc" -I"esolid-vtimer/inc" -Wall -pedantic -MMD -MF "${OBJECTDIR}/driver/source/spi.o.d" -o ${OBJECTDIR}/driver/source/spi.o driver/source/spi.c    -Wextra
 	
-${OBJECTDIR}/esolid-base/port/pic32-none-gcc/mips-m4k/intr.o: esolid-base/port/pic32-none-gcc/mips-m4k/intr.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} ${OBJECTDIR}/esolid-base/port/pic32-none-gcc/mips-m4k 
-	@${RM} ${OBJECTDIR}/esolid-base/port/pic32-none-gcc/mips-m4k/intr.o.d 
-	@${RM} ${OBJECTDIR}/esolid-base/port/pic32-none-gcc/mips-m4k/intr.o 
-	@${FIXDEPS} "${OBJECTDIR}/esolid-base/port/pic32-none-gcc/mips-m4k/intr.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -ffunction-sections -fdata-sections -mno-float -D_PLIB_DISABLE_LEGACY -I"esolid-base/inc" -I"esolid-base/port/pic32-none-gcc/common" -I"esolid-base/port/pic32-none-gcc/mips-m4k" -I"esolid-base/port/pic32-none-gcc/pic32mx150f128d" -I"esolid-mem/inc" -I"esolid-vtimer/inc" -I"esolid-eds/inc" -I"include" -I"include/test" -Wall -pedantic -MMD -MF "${OBJECTDIR}/esolid-base/port/pic32-none-gcc/mips-m4k/intr.o.d" -o ${OBJECTDIR}/esolid-base/port/pic32-none-gcc/mips-m4k/intr.o esolid-base/port/pic32-none-gcc/mips-m4k/intr.c    -Wextra
+${OBJECTDIR}/driver/source/intr.o: driver/source/intr.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} ${OBJECTDIR}/driver/source 
+	@${RM} ${OBJECTDIR}/driver/source/intr.o.d 
+	@${RM} ${OBJECTDIR}/driver/source/intr.o 
+	@${FIXDEPS} "${OBJECTDIR}/driver/source/intr.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -ffunction-sections -fdata-sections -mips16 -mno-float -D_PLIB_DISABLE_LEGACY -I"driver/include" -I"application/include" -I"esolid-base/inc" -I"esolid-base/port/pic32-none-gcc/common" -I"esolid-base/port/pic32-none-gcc/mips-m4k" -I"esolid-base/port/pic32-none-gcc/pic32mx150f128d" -I"esolid-eds/inc" -I"esolid-mem/inc" -I"esolid-vtimer/inc" -Wall -pedantic -MMD -MF "${OBJECTDIR}/driver/source/intr.o.d" -o ${OBJECTDIR}/driver/source/intr.o driver/source/intr.c    -Wextra
 	
-${OBJECTDIR}/esolid-base/port/pic32-none-gcc/mips-m4k/systimer.o: esolid-base/port/pic32-none-gcc/mips-m4k/systimer.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} ${OBJECTDIR}/esolid-base/port/pic32-none-gcc/mips-m4k 
-	@${RM} ${OBJECTDIR}/esolid-base/port/pic32-none-gcc/mips-m4k/systimer.o.d 
-	@${RM} ${OBJECTDIR}/esolid-base/port/pic32-none-gcc/mips-m4k/systimer.o 
-	@${FIXDEPS} "${OBJECTDIR}/esolid-base/port/pic32-none-gcc/mips-m4k/systimer.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -ffunction-sections -fdata-sections -mno-float -D_PLIB_DISABLE_LEGACY -I"esolid-base/inc" -I"esolid-base/port/pic32-none-gcc/common" -I"esolid-base/port/pic32-none-gcc/mips-m4k" -I"esolid-base/port/pic32-none-gcc/pic32mx150f128d" -I"esolid-mem/inc" -I"esolid-vtimer/inc" -I"esolid-eds/inc" -I"include" -I"include/test" -Wall -pedantic -MMD -MF "${OBJECTDIR}/esolid-base/port/pic32-none-gcc/mips-m4k/systimer.o.d" -o ${OBJECTDIR}/esolid-base/port/pic32-none-gcc/mips-m4k/systimer.o esolid-base/port/pic32-none-gcc/mips-m4k/systimer.c    -Wextra
+${OBJECTDIR}/driver/source/systick.o: driver/source/systick.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} ${OBJECTDIR}/driver/source 
+	@${RM} ${OBJECTDIR}/driver/source/systick.o.d 
+	@${RM} ${OBJECTDIR}/driver/source/systick.o 
+	@${FIXDEPS} "${OBJECTDIR}/driver/source/systick.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -ffunction-sections -fdata-sections -mips16 -mno-float -D_PLIB_DISABLE_LEGACY -I"driver/include" -I"application/include" -I"esolid-base/inc" -I"esolid-base/port/pic32-none-gcc/common" -I"esolid-base/port/pic32-none-gcc/mips-m4k" -I"esolid-base/port/pic32-none-gcc/pic32mx150f128d" -I"esolid-eds/inc" -I"esolid-mem/inc" -I"esolid-vtimer/inc" -Wall -pedantic -MMD -MF "${OBJECTDIR}/driver/source/systick.o.d" -o ${OBJECTDIR}/driver/source/systick.o driver/source/systick.c    -Wextra
 	
 ${OBJECTDIR}/esolid-base/src/debug.o: esolid-base/src/debug.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} ${OBJECTDIR}/esolid-base/src 
 	@${RM} ${OBJECTDIR}/esolid-base/src/debug.o.d 
 	@${RM} ${OBJECTDIR}/esolid-base/src/debug.o 
-	@${FIXDEPS} "${OBJECTDIR}/esolid-base/src/debug.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -ffunction-sections -fdata-sections -mno-float -D_PLIB_DISABLE_LEGACY -I"esolid-base/inc" -I"esolid-base/port/pic32-none-gcc/common" -I"esolid-base/port/pic32-none-gcc/mips-m4k" -I"esolid-base/port/pic32-none-gcc/pic32mx150f128d" -I"esolid-mem/inc" -I"esolid-vtimer/inc" -I"esolid-eds/inc" -I"include" -I"include/test" -Wall -pedantic -MMD -MF "${OBJECTDIR}/esolid-base/src/debug.o.d" -o ${OBJECTDIR}/esolid-base/src/debug.o esolid-base/src/debug.c    -Wextra
+	@${FIXDEPS} "${OBJECTDIR}/esolid-base/src/debug.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -ffunction-sections -fdata-sections -mips16 -mno-float -D_PLIB_DISABLE_LEGACY -I"driver/include" -I"application/include" -I"esolid-base/inc" -I"esolid-base/port/pic32-none-gcc/common" -I"esolid-base/port/pic32-none-gcc/mips-m4k" -I"esolid-base/port/pic32-none-gcc/pic32mx150f128d" -I"esolid-eds/inc" -I"esolid-mem/inc" -I"esolid-vtimer/inc" -Wall -pedantic -MMD -MF "${OBJECTDIR}/esolid-base/src/debug.o.d" -o ${OBJECTDIR}/esolid-base/src/debug.o esolid-base/src/debug.c    -Wextra
 	
 ${OBJECTDIR}/esolid-base/src/base.o: esolid-base/src/base.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} ${OBJECTDIR}/esolid-base/src 
 	@${RM} ${OBJECTDIR}/esolid-base/src/base.o.d 
 	@${RM} ${OBJECTDIR}/esolid-base/src/base.o 
-	@${FIXDEPS} "${OBJECTDIR}/esolid-base/src/base.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -ffunction-sections -fdata-sections -mno-float -D_PLIB_DISABLE_LEGACY -I"esolid-base/inc" -I"esolid-base/port/pic32-none-gcc/common" -I"esolid-base/port/pic32-none-gcc/mips-m4k" -I"esolid-base/port/pic32-none-gcc/pic32mx150f128d" -I"esolid-mem/inc" -I"esolid-vtimer/inc" -I"esolid-eds/inc" -I"include" -I"include/test" -Wall -pedantic -MMD -MF "${OBJECTDIR}/esolid-base/src/base.o.d" -o ${OBJECTDIR}/esolid-base/src/base.o esolid-base/src/base.c    -Wextra
+	@${FIXDEPS} "${OBJECTDIR}/esolid-base/src/base.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -ffunction-sections -fdata-sections -mips16 -mno-float -D_PLIB_DISABLE_LEGACY -I"driver/include" -I"application/include" -I"esolid-base/inc" -I"esolid-base/port/pic32-none-gcc/common" -I"esolid-base/port/pic32-none-gcc/mips-m4k" -I"esolid-base/port/pic32-none-gcc/pic32mx150f128d" -I"esolid-eds/inc" -I"esolid-mem/inc" -I"esolid-vtimer/inc" -Wall -pedantic -MMD -MF "${OBJECTDIR}/esolid-base/src/base.o.d" -o ${OBJECTDIR}/esolid-base/src/base.o esolid-base/src/base.c    -Wextra
 	
 ${OBJECTDIR}/esolid-base/src/error.o: esolid-base/src/error.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} ${OBJECTDIR}/esolid-base/src 
 	@${RM} ${OBJECTDIR}/esolid-base/src/error.o.d 
 	@${RM} ${OBJECTDIR}/esolid-base/src/error.o 
-	@${FIXDEPS} "${OBJECTDIR}/esolid-base/src/error.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -ffunction-sections -fdata-sections -mno-float -D_PLIB_DISABLE_LEGACY -I"esolid-base/inc" -I"esolid-base/port/pic32-none-gcc/common" -I"esolid-base/port/pic32-none-gcc/mips-m4k" -I"esolid-base/port/pic32-none-gcc/pic32mx150f128d" -I"esolid-mem/inc" -I"esolid-vtimer/inc" -I"esolid-eds/inc" -I"include" -I"include/test" -Wall -pedantic -MMD -MF "${OBJECTDIR}/esolid-base/src/error.o.d" -o ${OBJECTDIR}/esolid-base/src/error.o esolid-base/src/error.c    -Wextra
+	@${FIXDEPS} "${OBJECTDIR}/esolid-base/src/error.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -ffunction-sections -fdata-sections -mips16 -mno-float -D_PLIB_DISABLE_LEGACY -I"driver/include" -I"application/include" -I"esolid-base/inc" -I"esolid-base/port/pic32-none-gcc/common" -I"esolid-base/port/pic32-none-gcc/mips-m4k" -I"esolid-base/port/pic32-none-gcc/pic32mx150f128d" -I"esolid-eds/inc" -I"esolid-mem/inc" -I"esolid-vtimer/inc" -Wall -pedantic -MMD -MF "${OBJECTDIR}/esolid-base/src/error.o.d" -o ${OBJECTDIR}/esolid-base/src/error.o esolid-base/src/error.c    -Wextra
 	
 ${OBJECTDIR}/esolid-base/src/prio_queue.o: esolid-base/src/prio_queue.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} ${OBJECTDIR}/esolid-base/src 
 	@${RM} ${OBJECTDIR}/esolid-base/src/prio_queue.o.d 
 	@${RM} ${OBJECTDIR}/esolid-base/src/prio_queue.o 
-	@${FIXDEPS} "${OBJECTDIR}/esolid-base/src/prio_queue.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -ffunction-sections -fdata-sections -mno-float -D_PLIB_DISABLE_LEGACY -I"esolid-base/inc" -I"esolid-base/port/pic32-none-gcc/common" -I"esolid-base/port/pic32-none-gcc/mips-m4k" -I"esolid-base/port/pic32-none-gcc/pic32mx150f128d" -I"esolid-mem/inc" -I"esolid-vtimer/inc" -I"esolid-eds/inc" -I"include" -I"include/test" -Wall -pedantic -MMD -MF "${OBJECTDIR}/esolid-base/src/prio_queue.o.d" -o ${OBJECTDIR}/esolid-base/src/prio_queue.o esolid-base/src/prio_queue.c    -Wextra
+	@${FIXDEPS} "${OBJECTDIR}/esolid-base/src/prio_queue.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -ffunction-sections -fdata-sections -mips16 -mno-float -D_PLIB_DISABLE_LEGACY -I"driver/include" -I"application/include" -I"esolid-base/inc" -I"esolid-base/port/pic32-none-gcc/common" -I"esolid-base/port/pic32-none-gcc/mips-m4k" -I"esolid-base/port/pic32-none-gcc/pic32mx150f128d" -I"esolid-eds/inc" -I"esolid-mem/inc" -I"esolid-vtimer/inc" -Wall -pedantic -MMD -MF "${OBJECTDIR}/esolid-base/src/prio_queue.o.d" -o ${OBJECTDIR}/esolid-base/src/prio_queue.o esolid-base/src/prio_queue.c    -Wextra
+	
+${OBJECTDIR}/esolid-base/port/pic32-none-gcc/mips-m4k/cpu.o: esolid-base/port/pic32-none-gcc/mips-m4k/cpu.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} ${OBJECTDIR}/esolid-base/port/pic32-none-gcc/mips-m4k 
+	@${RM} ${OBJECTDIR}/esolid-base/port/pic32-none-gcc/mips-m4k/cpu.o.d 
+	@${RM} ${OBJECTDIR}/esolid-base/port/pic32-none-gcc/mips-m4k/cpu.o 
+	@${FIXDEPS} "${OBJECTDIR}/esolid-base/port/pic32-none-gcc/mips-m4k/cpu.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -ffunction-sections -fdata-sections -mips16 -mno-float -D_PLIB_DISABLE_LEGACY -I"driver/include" -I"application/include" -I"esolid-base/inc" -I"esolid-base/port/pic32-none-gcc/common" -I"esolid-base/port/pic32-none-gcc/mips-m4k" -I"esolid-base/port/pic32-none-gcc/pic32mx150f128d" -I"esolid-eds/inc" -I"esolid-mem/inc" -I"esolid-vtimer/inc" -Wall -pedantic -MMD -MF "${OBJECTDIR}/esolid-base/port/pic32-none-gcc/mips-m4k/cpu.o.d" -o ${OBJECTDIR}/esolid-base/port/pic32-none-gcc/mips-m4k/cpu.o esolid-base/port/pic32-none-gcc/mips-m4k/cpu.c    -Wextra
+	
+${OBJECTDIR}/esolid-base/port/pic32-none-gcc/mips-m4k/intr.o: esolid-base/port/pic32-none-gcc/mips-m4k/intr.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} ${OBJECTDIR}/esolid-base/port/pic32-none-gcc/mips-m4k 
+	@${RM} ${OBJECTDIR}/esolid-base/port/pic32-none-gcc/mips-m4k/intr.o.d 
+	@${RM} ${OBJECTDIR}/esolid-base/port/pic32-none-gcc/mips-m4k/intr.o 
+	@${FIXDEPS} "${OBJECTDIR}/esolid-base/port/pic32-none-gcc/mips-m4k/intr.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -ffunction-sections -fdata-sections -mips16 -mno-float -D_PLIB_DISABLE_LEGACY -I"driver/include" -I"application/include" -I"esolid-base/inc" -I"esolid-base/port/pic32-none-gcc/common" -I"esolid-base/port/pic32-none-gcc/mips-m4k" -I"esolid-base/port/pic32-none-gcc/pic32mx150f128d" -I"esolid-eds/inc" -I"esolid-mem/inc" -I"esolid-vtimer/inc" -Wall -pedantic -MMD -MF "${OBJECTDIR}/esolid-base/port/pic32-none-gcc/mips-m4k/intr.o.d" -o ${OBJECTDIR}/esolid-base/port/pic32-none-gcc/mips-m4k/intr.o esolid-base/port/pic32-none-gcc/mips-m4k/intr.c    -Wextra
+	
+${OBJECTDIR}/esolid-base/port/pic32-none-gcc/mips-m4k/systimer.o: esolid-base/port/pic32-none-gcc/mips-m4k/systimer.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} ${OBJECTDIR}/esolid-base/port/pic32-none-gcc/mips-m4k 
+	@${RM} ${OBJECTDIR}/esolid-base/port/pic32-none-gcc/mips-m4k/systimer.o.d 
+	@${RM} ${OBJECTDIR}/esolid-base/port/pic32-none-gcc/mips-m4k/systimer.o 
+	@${FIXDEPS} "${OBJECTDIR}/esolid-base/port/pic32-none-gcc/mips-m4k/systimer.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -ffunction-sections -fdata-sections -mips16 -mno-float -D_PLIB_DISABLE_LEGACY -I"driver/include" -I"application/include" -I"esolid-base/inc" -I"esolid-base/port/pic32-none-gcc/common" -I"esolid-base/port/pic32-none-gcc/mips-m4k" -I"esolid-base/port/pic32-none-gcc/pic32mx150f128d" -I"esolid-eds/inc" -I"esolid-mem/inc" -I"esolid-vtimer/inc" -Wall -pedantic -MMD -MF "${OBJECTDIR}/esolid-base/port/pic32-none-gcc/mips-m4k/systimer.o.d" -o ${OBJECTDIR}/esolid-base/port/pic32-none-gcc/mips-m4k/systimer.o esolid-base/port/pic32-none-gcc/mips-m4k/systimer.c    -Wextra
 	
 ${OBJECTDIR}/esolid-eds/src/smp.o: esolid-eds/src/smp.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} ${OBJECTDIR}/esolid-eds/src 
 	@${RM} ${OBJECTDIR}/esolid-eds/src/smp.o.d 
 	@${RM} ${OBJECTDIR}/esolid-eds/src/smp.o 
-	@${FIXDEPS} "${OBJECTDIR}/esolid-eds/src/smp.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -ffunction-sections -fdata-sections -mno-float -D_PLIB_DISABLE_LEGACY -I"esolid-base/inc" -I"esolid-base/port/pic32-none-gcc/common" -I"esolid-base/port/pic32-none-gcc/mips-m4k" -I"esolid-base/port/pic32-none-gcc/pic32mx150f128d" -I"esolid-mem/inc" -I"esolid-vtimer/inc" -I"esolid-eds/inc" -I"include" -I"include/test" -Wall -pedantic -MMD -MF "${OBJECTDIR}/esolid-eds/src/smp.o.d" -o ${OBJECTDIR}/esolid-eds/src/smp.o esolid-eds/src/smp.c    -Wextra
+	@${FIXDEPS} "${OBJECTDIR}/esolid-eds/src/smp.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -ffunction-sections -fdata-sections -mips16 -mno-float -D_PLIB_DISABLE_LEGACY -I"driver/include" -I"application/include" -I"esolid-base/inc" -I"esolid-base/port/pic32-none-gcc/common" -I"esolid-base/port/pic32-none-gcc/mips-m4k" -I"esolid-base/port/pic32-none-gcc/pic32mx150f128d" -I"esolid-eds/inc" -I"esolid-mem/inc" -I"esolid-vtimer/inc" -Wall -pedantic -MMD -MF "${OBJECTDIR}/esolid-eds/src/smp.o.d" -o ${OBJECTDIR}/esolid-eds/src/smp.o esolid-eds/src/smp.c    -Wextra
 	
 ${OBJECTDIR}/esolid-eds/src/event.o: esolid-eds/src/event.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} ${OBJECTDIR}/esolid-eds/src 
 	@${RM} ${OBJECTDIR}/esolid-eds/src/event.o.d 
 	@${RM} ${OBJECTDIR}/esolid-eds/src/event.o 
-	@${FIXDEPS} "${OBJECTDIR}/esolid-eds/src/event.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -ffunction-sections -fdata-sections -mno-float -D_PLIB_DISABLE_LEGACY -I"esolid-base/inc" -I"esolid-base/port/pic32-none-gcc/common" -I"esolid-base/port/pic32-none-gcc/mips-m4k" -I"esolid-base/port/pic32-none-gcc/pic32mx150f128d" -I"esolid-mem/inc" -I"esolid-vtimer/inc" -I"esolid-eds/inc" -I"include" -I"include/test" -Wall -pedantic -MMD -MF "${OBJECTDIR}/esolid-eds/src/event.o.d" -o ${OBJECTDIR}/esolid-eds/src/event.o esolid-eds/src/event.c    -Wextra
+	@${FIXDEPS} "${OBJECTDIR}/esolid-eds/src/event.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -ffunction-sections -fdata-sections -mips16 -mno-float -D_PLIB_DISABLE_LEGACY -I"driver/include" -I"application/include" -I"esolid-base/inc" -I"esolid-base/port/pic32-none-gcc/common" -I"esolid-base/port/pic32-none-gcc/mips-m4k" -I"esolid-base/port/pic32-none-gcc/pic32mx150f128d" -I"esolid-eds/inc" -I"esolid-mem/inc" -I"esolid-vtimer/inc" -Wall -pedantic -MMD -MF "${OBJECTDIR}/esolid-eds/src/event.o.d" -o ${OBJECTDIR}/esolid-eds/src/event.o esolid-eds/src/event.c    -Wextra
 	
 ${OBJECTDIR}/esolid-eds/src/epa.o: esolid-eds/src/epa.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} ${OBJECTDIR}/esolid-eds/src 
 	@${RM} ${OBJECTDIR}/esolid-eds/src/epa.o.d 
 	@${RM} ${OBJECTDIR}/esolid-eds/src/epa.o 
-	@${FIXDEPS} "${OBJECTDIR}/esolid-eds/src/epa.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -ffunction-sections -fdata-sections -mno-float -D_PLIB_DISABLE_LEGACY -I"esolid-base/inc" -I"esolid-base/port/pic32-none-gcc/common" -I"esolid-base/port/pic32-none-gcc/mips-m4k" -I"esolid-base/port/pic32-none-gcc/pic32mx150f128d" -I"esolid-mem/inc" -I"esolid-vtimer/inc" -I"esolid-eds/inc" -I"include" -I"include/test" -Wall -pedantic -MMD -MF "${OBJECTDIR}/esolid-eds/src/epa.o.d" -o ${OBJECTDIR}/esolid-eds/src/epa.o esolid-eds/src/epa.c    -Wextra
+	@${FIXDEPS} "${OBJECTDIR}/esolid-eds/src/epa.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -ffunction-sections -fdata-sections -mips16 -mno-float -D_PLIB_DISABLE_LEGACY -I"driver/include" -I"application/include" -I"esolid-base/inc" -I"esolid-base/port/pic32-none-gcc/common" -I"esolid-base/port/pic32-none-gcc/mips-m4k" -I"esolid-base/port/pic32-none-gcc/pic32mx150f128d" -I"esolid-eds/inc" -I"esolid-mem/inc" -I"esolid-vtimer/inc" -Wall -pedantic -MMD -MF "${OBJECTDIR}/esolid-eds/src/epa.o.d" -o ${OBJECTDIR}/esolid-eds/src/epa.o esolid-eds/src/epa.c    -Wextra
 	
 ${OBJECTDIR}/esolid-mem/src/mem_class.o: esolid-mem/src/mem_class.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} ${OBJECTDIR}/esolid-mem/src 
 	@${RM} ${OBJECTDIR}/esolid-mem/src/mem_class.o.d 
 	@${RM} ${OBJECTDIR}/esolid-mem/src/mem_class.o 
-	@${FIXDEPS} "${OBJECTDIR}/esolid-mem/src/mem_class.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -ffunction-sections -fdata-sections -mno-float -D_PLIB_DISABLE_LEGACY -I"esolid-base/inc" -I"esolid-base/port/pic32-none-gcc/common" -I"esolid-base/port/pic32-none-gcc/mips-m4k" -I"esolid-base/port/pic32-none-gcc/pic32mx150f128d" -I"esolid-mem/inc" -I"esolid-vtimer/inc" -I"esolid-eds/inc" -I"include" -I"include/test" -Wall -pedantic -MMD -MF "${OBJECTDIR}/esolid-mem/src/mem_class.o.d" -o ${OBJECTDIR}/esolid-mem/src/mem_class.o esolid-mem/src/mem_class.c    -Wextra
+	@${FIXDEPS} "${OBJECTDIR}/esolid-mem/src/mem_class.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -ffunction-sections -fdata-sections -mips16 -mno-float -D_PLIB_DISABLE_LEGACY -I"driver/include" -I"application/include" -I"esolid-base/inc" -I"esolid-base/port/pic32-none-gcc/common" -I"esolid-base/port/pic32-none-gcc/mips-m4k" -I"esolid-base/port/pic32-none-gcc/pic32mx150f128d" -I"esolid-eds/inc" -I"esolid-mem/inc" -I"esolid-vtimer/inc" -Wall -pedantic -MMD -MF "${OBJECTDIR}/esolid-mem/src/mem_class.o.d" -o ${OBJECTDIR}/esolid-mem/src/mem_class.o esolid-mem/src/mem_class.c    -Wextra
 	
 ${OBJECTDIR}/esolid-mem/src/heap.o: esolid-mem/src/heap.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} ${OBJECTDIR}/esolid-mem/src 
 	@${RM} ${OBJECTDIR}/esolid-mem/src/heap.o.d 
 	@${RM} ${OBJECTDIR}/esolid-mem/src/heap.o 
-	@${FIXDEPS} "${OBJECTDIR}/esolid-mem/src/heap.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -ffunction-sections -fdata-sections -mno-float -D_PLIB_DISABLE_LEGACY -I"esolid-base/inc" -I"esolid-base/port/pic32-none-gcc/common" -I"esolid-base/port/pic32-none-gcc/mips-m4k" -I"esolid-base/port/pic32-none-gcc/pic32mx150f128d" -I"esolid-mem/inc" -I"esolid-vtimer/inc" -I"esolid-eds/inc" -I"include" -I"include/test" -Wall -pedantic -MMD -MF "${OBJECTDIR}/esolid-mem/src/heap.o.d" -o ${OBJECTDIR}/esolid-mem/src/heap.o esolid-mem/src/heap.c    -Wextra
+	@${FIXDEPS} "${OBJECTDIR}/esolid-mem/src/heap.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -ffunction-sections -fdata-sections -mips16 -mno-float -D_PLIB_DISABLE_LEGACY -I"driver/include" -I"application/include" -I"esolid-base/inc" -I"esolid-base/port/pic32-none-gcc/common" -I"esolid-base/port/pic32-none-gcc/mips-m4k" -I"esolid-base/port/pic32-none-gcc/pic32mx150f128d" -I"esolid-eds/inc" -I"esolid-mem/inc" -I"esolid-vtimer/inc" -Wall -pedantic -MMD -MF "${OBJECTDIR}/esolid-mem/src/heap.o.d" -o ${OBJECTDIR}/esolid-mem/src/heap.o esolid-mem/src/heap.c    -Wextra
 	
 ${OBJECTDIR}/esolid-mem/src/static.o: esolid-mem/src/static.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} ${OBJECTDIR}/esolid-mem/src 
 	@${RM} ${OBJECTDIR}/esolid-mem/src/static.o.d 
 	@${RM} ${OBJECTDIR}/esolid-mem/src/static.o 
-	@${FIXDEPS} "${OBJECTDIR}/esolid-mem/src/static.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -ffunction-sections -fdata-sections -mno-float -D_PLIB_DISABLE_LEGACY -I"esolid-base/inc" -I"esolid-base/port/pic32-none-gcc/common" -I"esolid-base/port/pic32-none-gcc/mips-m4k" -I"esolid-base/port/pic32-none-gcc/pic32mx150f128d" -I"esolid-mem/inc" -I"esolid-vtimer/inc" -I"esolid-eds/inc" -I"include" -I"include/test" -Wall -pedantic -MMD -MF "${OBJECTDIR}/esolid-mem/src/static.o.d" -o ${OBJECTDIR}/esolid-mem/src/static.o esolid-mem/src/static.c    -Wextra
+	@${FIXDEPS} "${OBJECTDIR}/esolid-mem/src/static.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -ffunction-sections -fdata-sections -mips16 -mno-float -D_PLIB_DISABLE_LEGACY -I"driver/include" -I"application/include" -I"esolid-base/inc" -I"esolid-base/port/pic32-none-gcc/common" -I"esolid-base/port/pic32-none-gcc/mips-m4k" -I"esolid-base/port/pic32-none-gcc/pic32mx150f128d" -I"esolid-eds/inc" -I"esolid-mem/inc" -I"esolid-vtimer/inc" -Wall -pedantic -MMD -MF "${OBJECTDIR}/esolid-mem/src/static.o.d" -o ${OBJECTDIR}/esolid-mem/src/static.o esolid-mem/src/static.c    -Wextra
 	
 ${OBJECTDIR}/esolid-mem/src/pool.o: esolid-mem/src/pool.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} ${OBJECTDIR}/esolid-mem/src 
 	@${RM} ${OBJECTDIR}/esolid-mem/src/pool.o.d 
 	@${RM} ${OBJECTDIR}/esolid-mem/src/pool.o 
-	@${FIXDEPS} "${OBJECTDIR}/esolid-mem/src/pool.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -ffunction-sections -fdata-sections -mno-float -D_PLIB_DISABLE_LEGACY -I"esolid-base/inc" -I"esolid-base/port/pic32-none-gcc/common" -I"esolid-base/port/pic32-none-gcc/mips-m4k" -I"esolid-base/port/pic32-none-gcc/pic32mx150f128d" -I"esolid-mem/inc" -I"esolid-vtimer/inc" -I"esolid-eds/inc" -I"include" -I"include/test" -Wall -pedantic -MMD -MF "${OBJECTDIR}/esolid-mem/src/pool.o.d" -o ${OBJECTDIR}/esolid-mem/src/pool.o esolid-mem/src/pool.c    -Wextra
+	@${FIXDEPS} "${OBJECTDIR}/esolid-mem/src/pool.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -ffunction-sections -fdata-sections -mips16 -mno-float -D_PLIB_DISABLE_LEGACY -I"driver/include" -I"application/include" -I"esolid-base/inc" -I"esolid-base/port/pic32-none-gcc/common" -I"esolid-base/port/pic32-none-gcc/mips-m4k" -I"esolid-base/port/pic32-none-gcc/pic32mx150f128d" -I"esolid-eds/inc" -I"esolid-mem/inc" -I"esolid-vtimer/inc" -Wall -pedantic -MMD -MF "${OBJECTDIR}/esolid-mem/src/pool.o.d" -o ${OBJECTDIR}/esolid-mem/src/pool.o esolid-mem/src/pool.c    -Wextra
 	
 ${OBJECTDIR}/esolid-vtimer/src/vtimer.o: esolid-vtimer/src/vtimer.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} ${OBJECTDIR}/esolid-vtimer/src 
 	@${RM} ${OBJECTDIR}/esolid-vtimer/src/vtimer.o.d 
 	@${RM} ${OBJECTDIR}/esolid-vtimer/src/vtimer.o 
-	@${FIXDEPS} "${OBJECTDIR}/esolid-vtimer/src/vtimer.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -ffunction-sections -fdata-sections -mno-float -D_PLIB_DISABLE_LEGACY -I"esolid-base/inc" -I"esolid-base/port/pic32-none-gcc/common" -I"esolid-base/port/pic32-none-gcc/mips-m4k" -I"esolid-base/port/pic32-none-gcc/pic32mx150f128d" -I"esolid-mem/inc" -I"esolid-vtimer/inc" -I"esolid-eds/inc" -I"include" -I"include/test" -Wall -pedantic -MMD -MF "${OBJECTDIR}/esolid-vtimer/src/vtimer.o.d" -o ${OBJECTDIR}/esolid-vtimer/src/vtimer.o esolid-vtimer/src/vtimer.c    -Wextra
+	@${FIXDEPS} "${OBJECTDIR}/esolid-vtimer/src/vtimer.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -ffunction-sections -fdata-sections -mips16 -mno-float -D_PLIB_DISABLE_LEGACY -I"driver/include" -I"application/include" -I"esolid-base/inc" -I"esolid-base/port/pic32-none-gcc/common" -I"esolid-base/port/pic32-none-gcc/mips-m4k" -I"esolid-base/port/pic32-none-gcc/pic32mx150f128d" -I"esolid-eds/inc" -I"esolid-mem/inc" -I"esolid-vtimer/inc" -Wall -pedantic -MMD -MF "${OBJECTDIR}/esolid-vtimer/src/vtimer.o.d" -o ${OBJECTDIR}/esolid-vtimer/src/vtimer.o esolid-vtimer/src/vtimer.c    -Wextra
 	
-${OBJECTDIR}/source/test/test_spi.o: source/test/test_spi.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} ${OBJECTDIR}/source/test 
-	@${RM} ${OBJECTDIR}/source/test/test_spi.o.d 
-	@${RM} ${OBJECTDIR}/source/test/test_spi.o 
-	@${FIXDEPS} "${OBJECTDIR}/source/test/test_spi.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -ffunction-sections -fdata-sections -mno-float -D_PLIB_DISABLE_LEGACY -I"esolid-base/inc" -I"esolid-base/port/pic32-none-gcc/common" -I"esolid-base/port/pic32-none-gcc/mips-m4k" -I"esolid-base/port/pic32-none-gcc/pic32mx150f128d" -I"esolid-mem/inc" -I"esolid-vtimer/inc" -I"esolid-eds/inc" -I"include" -I"include/test" -Wall -pedantic -MMD -MF "${OBJECTDIR}/source/test/test_spi.o.d" -o ${OBJECTDIR}/source/test/test_spi.o source/test/test_spi.c    -Wextra
+${OBJECTDIR}/application/source/epa_btman.o: application/source/epa_btman.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} ${OBJECTDIR}/application/source 
+	@${RM} ${OBJECTDIR}/application/source/epa_btman.o.d 
+	@${RM} ${OBJECTDIR}/application/source/epa_btman.o 
+	@${FIXDEPS} "${OBJECTDIR}/application/source/epa_btman.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -ffunction-sections -fdata-sections -mips16 -mno-float -D_PLIB_DISABLE_LEGACY -I"driver/include" -I"application/include" -I"esolid-base/inc" -I"esolid-base/port/pic32-none-gcc/common" -I"esolid-base/port/pic32-none-gcc/mips-m4k" -I"esolid-base/port/pic32-none-gcc/pic32mx150f128d" -I"esolid-eds/inc" -I"esolid-mem/inc" -I"esolid-vtimer/inc" -Wall -pedantic -MMD -MF "${OBJECTDIR}/application/source/epa_btman.o.d" -o ${OBJECTDIR}/application/source/epa_btman.o application/source/epa_btman.c    -Wextra
 	
-${OBJECTDIR}/source/test/test_uart.o: source/test/test_uart.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} ${OBJECTDIR}/source/test 
-	@${RM} ${OBJECTDIR}/source/test/test_uart.o.d 
-	@${RM} ${OBJECTDIR}/source/test/test_uart.o 
-	@${FIXDEPS} "${OBJECTDIR}/source/test/test_uart.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -ffunction-sections -fdata-sections -mno-float -D_PLIB_DISABLE_LEGACY -I"esolid-base/inc" -I"esolid-base/port/pic32-none-gcc/common" -I"esolid-base/port/pic32-none-gcc/mips-m4k" -I"esolid-base/port/pic32-none-gcc/pic32mx150f128d" -I"esolid-mem/inc" -I"esolid-vtimer/inc" -I"esolid-eds/inc" -I"include" -I"include/test" -Wall -pedantic -MMD -MF "${OBJECTDIR}/source/test/test_uart.o.d" -o ${OBJECTDIR}/source/test/test_uart.o source/test/test_uart.c    -Wextra
+${OBJECTDIR}/application/source/bsp.o: application/source/bsp.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} ${OBJECTDIR}/application/source 
+	@${RM} ${OBJECTDIR}/application/source/bsp.o.d 
+	@${RM} ${OBJECTDIR}/application/source/bsp.o 
+	@${FIXDEPS} "${OBJECTDIR}/application/source/bsp.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -ffunction-sections -fdata-sections -mips16 -mno-float -D_PLIB_DISABLE_LEGACY -I"driver/include" -I"application/include" -I"esolid-base/inc" -I"esolid-base/port/pic32-none-gcc/common" -I"esolid-base/port/pic32-none-gcc/mips-m4k" -I"esolid-base/port/pic32-none-gcc/pic32mx150f128d" -I"esolid-eds/inc" -I"esolid-mem/inc" -I"esolid-vtimer/inc" -Wall -pedantic -MMD -MF "${OBJECTDIR}/application/source/bsp.o.d" -o ${OBJECTDIR}/application/source/bsp.o application/source/bsp.c    -Wextra
 	
-${OBJECTDIR}/source/main.o: source/main.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} ${OBJECTDIR}/source 
-	@${RM} ${OBJECTDIR}/source/main.o.d 
-	@${RM} ${OBJECTDIR}/source/main.o 
-	@${FIXDEPS} "${OBJECTDIR}/source/main.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -ffunction-sections -fdata-sections -mno-float -D_PLIB_DISABLE_LEGACY -I"esolid-base/inc" -I"esolid-base/port/pic32-none-gcc/common" -I"esolid-base/port/pic32-none-gcc/mips-m4k" -I"esolid-base/port/pic32-none-gcc/pic32mx150f128d" -I"esolid-mem/inc" -I"esolid-vtimer/inc" -I"esolid-eds/inc" -I"include" -I"include/test" -Wall -pedantic -MMD -MF "${OBJECTDIR}/source/main.o.d" -o ${OBJECTDIR}/source/main.o source/main.c    -Wextra
+${OBJECTDIR}/application/source/epa_codec.o: application/source/epa_codec.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} ${OBJECTDIR}/application/source 
+	@${RM} ${OBJECTDIR}/application/source/epa_codec.o.d 
+	@${RM} ${OBJECTDIR}/application/source/epa_codec.o 
+	@${FIXDEPS} "${OBJECTDIR}/application/source/epa_codec.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -ffunction-sections -fdata-sections -mips16 -mno-float -D_PLIB_DISABLE_LEGACY -I"driver/include" -I"application/include" -I"esolid-base/inc" -I"esolid-base/port/pic32-none-gcc/common" -I"esolid-base/port/pic32-none-gcc/mips-m4k" -I"esolid-base/port/pic32-none-gcc/pic32mx150f128d" -I"esolid-eds/inc" -I"esolid-mem/inc" -I"esolid-vtimer/inc" -Wall -pedantic -MMD -MF "${OBJECTDIR}/application/source/epa_codec.o.d" -o ${OBJECTDIR}/application/source/epa_codec.o application/source/epa_codec.c    -Wextra
 	
-${OBJECTDIR}/source/bsp.o: source/bsp.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} ${OBJECTDIR}/source 
-	@${RM} ${OBJECTDIR}/source/bsp.o.d 
-	@${RM} ${OBJECTDIR}/source/bsp.o 
-	@${FIXDEPS} "${OBJECTDIR}/source/bsp.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -ffunction-sections -fdata-sections -mno-float -D_PLIB_DISABLE_LEGACY -I"esolid-base/inc" -I"esolid-base/port/pic32-none-gcc/common" -I"esolid-base/port/pic32-none-gcc/mips-m4k" -I"esolid-base/port/pic32-none-gcc/pic32mx150f128d" -I"esolid-mem/inc" -I"esolid-vtimer/inc" -I"esolid-eds/inc" -I"include" -I"include/test" -Wall -pedantic -MMD -MF "${OBJECTDIR}/source/bsp.o.d" -o ${OBJECTDIR}/source/bsp.o source/bsp.c    -Wextra
+${OBJECTDIR}/application/source/main.o: application/source/main.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} ${OBJECTDIR}/application/source 
+	@${RM} ${OBJECTDIR}/application/source/main.o.d 
+	@${RM} ${OBJECTDIR}/application/source/main.o 
+	@${FIXDEPS} "${OBJECTDIR}/application/source/main.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -ffunction-sections -fdata-sections -mips16 -mno-float -D_PLIB_DISABLE_LEGACY -I"driver/include" -I"application/include" -I"esolid-base/inc" -I"esolid-base/port/pic32-none-gcc/common" -I"esolid-base/port/pic32-none-gcc/mips-m4k" -I"esolid-base/port/pic32-none-gcc/pic32mx150f128d" -I"esolid-eds/inc" -I"esolid-mem/inc" -I"esolid-vtimer/inc" -Wall -pedantic -MMD -MF "${OBJECTDIR}/application/source/main.o.d" -o ${OBJECTDIR}/application/source/main.o application/source/main.c    -Wextra
 	
-${OBJECTDIR}/source/support.o: source/support.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} ${OBJECTDIR}/source 
-	@${RM} ${OBJECTDIR}/source/support.o.d 
-	@${RM} ${OBJECTDIR}/source/support.o 
-	@${FIXDEPS} "${OBJECTDIR}/source/support.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -ffunction-sections -fdata-sections -mno-float -D_PLIB_DISABLE_LEGACY -I"esolid-base/inc" -I"esolid-base/port/pic32-none-gcc/common" -I"esolid-base/port/pic32-none-gcc/mips-m4k" -I"esolid-base/port/pic32-none-gcc/pic32mx150f128d" -I"esolid-mem/inc" -I"esolid-vtimer/inc" -I"esolid-eds/inc" -I"include" -I"include/test" -Wall -pedantic -MMD -MF "${OBJECTDIR}/source/support.o.d" -o ${OBJECTDIR}/source/support.o source/support.c    -Wextra
+${OBJECTDIR}/application/source/epa_btdrv.o: application/source/epa_btdrv.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} ${OBJECTDIR}/application/source 
+	@${RM} ${OBJECTDIR}/application/source/epa_btdrv.o.d 
+	@${RM} ${OBJECTDIR}/application/source/epa_btdrv.o 
+	@${FIXDEPS} "${OBJECTDIR}/application/source/epa_btdrv.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -ffunction-sections -fdata-sections -mips16 -mno-float -D_PLIB_DISABLE_LEGACY -I"driver/include" -I"application/include" -I"esolid-base/inc" -I"esolid-base/port/pic32-none-gcc/common" -I"esolid-base/port/pic32-none-gcc/mips-m4k" -I"esolid-base/port/pic32-none-gcc/pic32mx150f128d" -I"esolid-eds/inc" -I"esolid-mem/inc" -I"esolid-vtimer/inc" -Wall -pedantic -MMD -MF "${OBJECTDIR}/application/source/epa_btdrv.o.d" -o ${OBJECTDIR}/application/source/epa_btdrv.o application/source/epa_btdrv.c    -Wextra
 	
-${OBJECTDIR}/source/epa_btman.o: source/epa_btman.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} ${OBJECTDIR}/source 
-	@${RM} ${OBJECTDIR}/source/epa_btman.o.d 
-	@${RM} ${OBJECTDIR}/source/epa_btman.o 
-	@${FIXDEPS} "${OBJECTDIR}/source/epa_btman.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -ffunction-sections -fdata-sections -mno-float -D_PLIB_DISABLE_LEGACY -I"esolid-base/inc" -I"esolid-base/port/pic32-none-gcc/common" -I"esolid-base/port/pic32-none-gcc/mips-m4k" -I"esolid-base/port/pic32-none-gcc/pic32mx150f128d" -I"esolid-mem/inc" -I"esolid-vtimer/inc" -I"esolid-eds/inc" -I"include" -I"include/test" -Wall -pedantic -MMD -MF "${OBJECTDIR}/source/epa_btman.o.d" -o ${OBJECTDIR}/source/epa_btman.o source/epa_btman.c    -Wextra
+${OBJECTDIR}/application/source/support.o: application/source/support.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} ${OBJECTDIR}/application/source 
+	@${RM} ${OBJECTDIR}/application/source/support.o.d 
+	@${RM} ${OBJECTDIR}/application/source/support.o 
+	@${FIXDEPS} "${OBJECTDIR}/application/source/support.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -ffunction-sections -fdata-sections -mips16 -mno-float -D_PLIB_DISABLE_LEGACY -I"driver/include" -I"application/include" -I"esolid-base/inc" -I"esolid-base/port/pic32-none-gcc/common" -I"esolid-base/port/pic32-none-gcc/mips-m4k" -I"esolid-base/port/pic32-none-gcc/pic32mx150f128d" -I"esolid-eds/inc" -I"esolid-mem/inc" -I"esolid-vtimer/inc" -Wall -pedantic -MMD -MF "${OBJECTDIR}/application/source/support.o.d" -o ${OBJECTDIR}/application/source/support.o application/source/support.c    -Wextra
 	
-${OBJECTDIR}/source/epa_btdrv.o: source/epa_btdrv.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} ${OBJECTDIR}/source 
-	@${RM} ${OBJECTDIR}/source/epa_btdrv.o.d 
-	@${RM} ${OBJECTDIR}/source/epa_btdrv.o 
-	@${FIXDEPS} "${OBJECTDIR}/source/epa_btdrv.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -ffunction-sections -fdata-sections -mno-float -D_PLIB_DISABLE_LEGACY -I"esolid-base/inc" -I"esolid-base/port/pic32-none-gcc/common" -I"esolid-base/port/pic32-none-gcc/mips-m4k" -I"esolid-base/port/pic32-none-gcc/pic32mx150f128d" -I"esolid-mem/inc" -I"esolid-vtimer/inc" -I"esolid-eds/inc" -I"include" -I"include/test" -Wall -pedantic -MMD -MF "${OBJECTDIR}/source/epa_btdrv.o.d" -o ${OBJECTDIR}/source/epa_btdrv.o source/epa_btdrv.c    -Wextra
+${OBJECTDIR}/application/source/conv.o: application/source/conv.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} ${OBJECTDIR}/application/source 
+	@${RM} ${OBJECTDIR}/application/source/conv.o.d 
+	@${RM} ${OBJECTDIR}/application/source/conv.o 
+	@${FIXDEPS} "${OBJECTDIR}/application/source/conv.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -ffunction-sections -fdata-sections -mips16 -mno-float -D_PLIB_DISABLE_LEGACY -I"driver/include" -I"application/include" -I"esolid-base/inc" -I"esolid-base/port/pic32-none-gcc/common" -I"esolid-base/port/pic32-none-gcc/mips-m4k" -I"esolid-base/port/pic32-none-gcc/pic32mx150f128d" -I"esolid-eds/inc" -I"esolid-mem/inc" -I"esolid-vtimer/inc" -Wall -pedantic -MMD -MF "${OBJECTDIR}/application/source/conv.o.d" -o ${OBJECTDIR}/application/source/conv.o application/source/conv.c    -Wextra
 	
-${OBJECTDIR}/source/epa_codec.o: source/epa_codec.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} ${OBJECTDIR}/source 
-	@${RM} ${OBJECTDIR}/source/epa_codec.o.d 
-	@${RM} ${OBJECTDIR}/source/epa_codec.o 
-	@${FIXDEPS} "${OBJECTDIR}/source/epa_codec.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -ffunction-sections -fdata-sections -mno-float -D_PLIB_DISABLE_LEGACY -I"esolid-base/inc" -I"esolid-base/port/pic32-none-gcc/common" -I"esolid-base/port/pic32-none-gcc/mips-m4k" -I"esolid-base/port/pic32-none-gcc/pic32mx150f128d" -I"esolid-mem/inc" -I"esolid-vtimer/inc" -I"esolid-eds/inc" -I"include" -I"include/test" -Wall -pedantic -MMD -MF "${OBJECTDIR}/source/epa_codec.o.d" -o ${OBJECTDIR}/source/epa_codec.o source/epa_codec.c    -Wextra
+${OBJECTDIR}/driver/source/codec.o: driver/source/codec.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} ${OBJECTDIR}/driver/source 
+	@${RM} ${OBJECTDIR}/driver/source/codec.o.d 
+	@${RM} ${OBJECTDIR}/driver/source/codec.o 
+	@${FIXDEPS} "${OBJECTDIR}/driver/source/codec.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -ffunction-sections -fdata-sections -mips16 -mno-float -D_PLIB_DISABLE_LEGACY -I"driver/include" -I"application/include" -I"esolid-base/inc" -I"esolid-base/port/pic32-none-gcc/common" -I"esolid-base/port/pic32-none-gcc/mips-m4k" -I"esolid-base/port/pic32-none-gcc/pic32mx150f128d" -I"esolid-eds/inc" -I"esolid-mem/inc" -I"esolid-vtimer/inc" -Wall -pedantic -MMD -MF "${OBJECTDIR}/driver/source/codec.o.d" -o ${OBJECTDIR}/driver/source/codec.o driver/source/codec.c    -Wextra
 	
-${OBJECTDIR}/source/conv.o: source/conv.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} ${OBJECTDIR}/source 
-	@${RM} ${OBJECTDIR}/source/conv.o.d 
-	@${RM} ${OBJECTDIR}/source/conv.o 
-	@${FIXDEPS} "${OBJECTDIR}/source/conv.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -ffunction-sections -fdata-sections -mno-float -D_PLIB_DISABLE_LEGACY -I"esolid-base/inc" -I"esolid-base/port/pic32-none-gcc/common" -I"esolid-base/port/pic32-none-gcc/mips-m4k" -I"esolid-base/port/pic32-none-gcc/pic32mx150f128d" -I"esolid-mem/inc" -I"esolid-vtimer/inc" -I"esolid-eds/inc" -I"include" -I"include/test" -Wall -pedantic -MMD -MF "${OBJECTDIR}/source/conv.o.d" -o ${OBJECTDIR}/source/conv.o source/conv.c    -Wextra
+${OBJECTDIR}/driver/source/lld_uart1.o: driver/source/lld_uart1.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} ${OBJECTDIR}/driver/source 
+	@${RM} ${OBJECTDIR}/driver/source/lld_uart1.o.d 
+	@${RM} ${OBJECTDIR}/driver/source/lld_uart1.o 
+	@${FIXDEPS} "${OBJECTDIR}/driver/source/lld_uart1.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -ffunction-sections -fdata-sections -mips16 -mno-float -D_PLIB_DISABLE_LEGACY -I"driver/include" -I"application/include" -I"esolid-base/inc" -I"esolid-base/port/pic32-none-gcc/common" -I"esolid-base/port/pic32-none-gcc/mips-m4k" -I"esolid-base/port/pic32-none-gcc/pic32mx150f128d" -I"esolid-eds/inc" -I"esolid-mem/inc" -I"esolid-vtimer/inc" -Wall -pedantic -MMD -MF "${OBJECTDIR}/driver/source/lld_uart1.o.d" -o ${OBJECTDIR}/driver/source/lld_uart1.o driver/source/lld_uart1.c    -Wextra
+	
+${OBJECTDIR}/driver/source/uart.o: driver/source/uart.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} ${OBJECTDIR}/driver/source 
+	@${RM} ${OBJECTDIR}/driver/source/uart.o.d 
+	@${RM} ${OBJECTDIR}/driver/source/uart.o 
+	@${FIXDEPS} "${OBJECTDIR}/driver/source/uart.o.d" $(SILENT) -rsi ${MP_CC_DIR}../  -c ${MP_CC}  $(MP_EXTRA_CC_PRE)  -g -x c -c -mprocessor=$(MP_PROCESSOR_OPTION) -ffunction-sections -fdata-sections -mips16 -mno-float -D_PLIB_DISABLE_LEGACY -I"driver/include" -I"application/include" -I"esolid-base/inc" -I"esolid-base/port/pic32-none-gcc/common" -I"esolid-base/port/pic32-none-gcc/mips-m4k" -I"esolid-base/port/pic32-none-gcc/pic32mx150f128d" -I"esolid-eds/inc" -I"esolid-mem/inc" -I"esolid-vtimer/inc" -Wall -pedantic -MMD -MF "${OBJECTDIR}/driver/source/uart.o.d" -o ${OBJECTDIR}/driver/source/uart.o driver/source/uart.c    -Wextra
 	
 endif
 
