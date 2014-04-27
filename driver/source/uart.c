@@ -204,7 +204,7 @@ void uartSetReader(
 
 void uartSetWriter(
     struct uartHandle * handle,
-    size_t           (* notify)(enum uartError, void *, size_t)) {
+    size_t           (* notify)(enum uartError, const void *, size_t)) {
 
     handle->writer = notify;
 }
@@ -229,8 +229,10 @@ enum uartError uartReadStart(
 void uartReadCancel(
     struct uartHandle * handle) {
 
-    handle->id->readCancel(handle);
-    handle->state &= ~UART_RX_ACTIVE;
+    if (handle->state &   UART_RX_ACTIVE) {
+        handle->state &= ~UART_RX_ACTIVE;
+        handle->id->readCancel(handle);
+    }
 }
 
 void uartReadStop(
@@ -242,7 +244,7 @@ void uartReadStop(
 
 enum uartError uartWriteStart(
     struct uartHandle * handle,
-    void *              buffer,
+    const void *        buffer,
     size_t              nElements) {
 
     if ((handle->state & UART_TX_ACTIVE) != 0u) {
@@ -260,8 +262,10 @@ enum uartError uartWriteStart(
 void uartWriteStop(
     struct uartHandle * handle) {
 
-    handle->id->writeStop(handle);
-    handle->state &= ~UART_TX_ACTIVE;
+    if (handle->state &   UART_TX_ACTIVE) {
+        handle->state &= ~UART_TX_ACTIVE;
+        handle->id->writeStop(handle);
+    }
 }
 
 /*================================*//** @cond *//*==  CONFIGURATION ERRORS  ==*/

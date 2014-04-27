@@ -18,6 +18,7 @@
 #include "arch/systimer.h"
 
 #include "driver/lld_uart1.h"
+#include "driver/lld_uart2.h"
 
 /*===============================================================  MACRO's  ==*/
 
@@ -77,8 +78,8 @@ struct uartHandle {
     size_t           (* reader)(enum uartError, void *, size_t);
     void *              readBuffer;
     size_t              readSize;
-    size_t           (* writer)(enum uartError, void *, size_t);
-    void *              writeBuffer;
+    size_t           (* writer)(enum uartError, const void *, size_t);
+    const void *        writeBuffer;
     size_t              writeSize;
     esAtomic            state;
 };
@@ -128,7 +129,7 @@ void uartSetReader(
 
 void uartSetWriter(
     struct uartHandle * handle,
-    size_t           (* notify)(enum uartError, void *, size_t));
+    size_t           (* notify)(enum uartError, const void *, size_t));
 
 enum uartError uartReadStart(
     struct uartHandle * handle,
@@ -143,7 +144,7 @@ void uartReadStop(
 
 enum uartError uartWriteStart(
     struct uartHandle * handle,
-    void *              buffer,
+    const void *        buffer,
     size_t              nElements);
 
 void uartWriteStop(
