@@ -140,7 +140,7 @@ static void lldUartOpen(
 
     GlobalHandle        = handle;
     U1MODE              = 0;
-    U1STAT              = 0;
+    U1STA               = 0;
     IEC1CLR             = IEC1_U1TX | IEC1_U1RX | IEC1_U1E;
     IPC8bits.U1IP       = config->isrPriority;
     IPC8bits.U1IS       = 0;
@@ -182,7 +182,7 @@ static void lldUartOpen(
         mode           |= U1MODE_STSEL_2_STOP_BITS;
     }
     /*--  Remap RX & TX port pins  -------------------------------------------*/
-    *uartPinAddress[config->remap.tx] = 0x01u;
+    *uartPinAddress[config->remap.tx]  = 0x01u;
     U1RXRbits.U1RXR     = uartPinValue[config->remap.rx];
     U1MODE              = mode;
 }
