@@ -20,7 +20,7 @@
     entry(UART1_TX_B15,             0,              &RPB15R)                    \
     entry(UART1_RX_B13,             0x03,           NULL)                       \
     entry(UART1_CTS_A1,             0x00,           NULL)                       \
-    entry(UART1_RTS_A3,             0x01,           NULL)                       
+    entry(UART1_RTS_A3,             0,              &RPA3R)
 #elif (((__PIC32_FEATURE_SET__ >= 300) && (__PIC32_FEATURE_SET__ <= 499)))
 #elif (((__PIC32_FEATURE_SET__ >= 500) && (__PIC32_FEATURE_SET__ <= 799)))
 #endif
