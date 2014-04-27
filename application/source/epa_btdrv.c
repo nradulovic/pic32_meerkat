@@ -651,7 +651,7 @@ static void initBtDrv(struct wspace * space) {
     BT_PWR_HIGH();
 
     /*--  Initialize UART  ---------------------------------------------------*/
-    btUartConfig.id          = &Uart1;
+    btUartConfig.id          = CONFIG_BT_UART;
     btUartConfig.flags       = UART_TX_ENABLE   | UART_RX_ENABLE   |
                                UART_DATA_BITS_8 | UART_STOP_BITS_1 |
                                UART_PARITY_NONE;

@@ -19,6 +19,7 @@ extern "C" {
 #define CONFIG_BT_GPIO_DEF_PIN          0
 #define CONFIG_BT_GPIO_PWR_PORT         &GpioC
 #define CONFIG_BT_GPIO_PWR_PIN          8
+#define CONFIG_BT_UART                  &Uart1
 #define CONFIG_BT_UART_TX_PIN           UART1_TX_B15
 #define CONFIG_BT_UART_RX_PIN           UART1_RX_B13
 #define CONFIG_BT_UART_RTS_PIN          UART1_RTS_A3
@@ -42,6 +43,12 @@ extern "C" {
 #define CONFIG_CODEC_RESET_PIN          11
 #define CONFIG_CODEC_POWER_PORT         &GpioB
 #define CONFIG_CODEC_POWER_PIN          12
+
+#define CONFIG_RADIO_UART               &Uart2
+#define CONFIG_RADIO_UART_TX_PIN        UART2_TX_C4
+#define CONFIG_RADIO_UART_RX_PIN        UART2_RX_A9
+#define CONFIG_RADIO_UART_RTS_PIN       UART2_RTS_C5
+#define CONFIG_RADIO_UART_CTS_PIN       UART2_CTS_A4
 
 #define CONFIG_AUDIO_SW_CB1_PORT
 #endif

@@ -39,9 +39,9 @@ struct wspace {
 
 /*=============================================  LOCAL FUNCTION PROTOTYPES  ==*/
 
-static esAction stateInit           (struct wspace *, esEvent *);
-static esAction stateReset          (struct wspace *, esEvent *);
-static esAction stateIdle           (struct wspace *, esEvent *);
+static esAction stateInit           (struct wspace *, const esEvent *);
+static esAction stateReset          (struct wspace *, const esEvent *);
+static esAction stateIdle           (struct wspace *, const esEvent *);
 
 /*--  Support functions  -----------------------------------------------------*/
 
@@ -73,7 +73,7 @@ struct esEpa *          Codec;
 
 /*============================================  LOCAL FUNCTION DEFINITIONS  ==*/
 
-static esAction stateInit(struct wspace * wspace, esEvent * event) {
+static esAction stateInit(struct wspace * wspace, const esEvent * event) {
 
     (void)wspace;
 
@@ -94,7 +94,7 @@ static esAction stateInit(struct wspace * wspace, esEvent * event) {
     }
 }
 
-static esAction stateReset(struct wspace * wspace, esEvent * event) {
+static esAction stateReset(struct wspace * wspace, const esEvent * event) {
 
     (void)wspace;
 
@@ -126,7 +126,7 @@ static esAction stateReset(struct wspace * wspace, esEvent * event) {
     }
 }
 
-static esAction stateIdle(struct wspace * wspace, esEvent * event) {
+static esAction stateIdle(struct wspace * wspace, const esEvent * event) {
     (void)wspace;
 
     switch (event->id) {
