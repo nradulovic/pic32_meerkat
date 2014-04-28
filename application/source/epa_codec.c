@@ -282,6 +282,7 @@ static void startCodec(
         CODEC_REG_AUDIO_CTRL_4,
         0);
 
+    coefInvertOneChannel(wspace);
     /*==  Set up input circuitry  ============================================*/
     codecRegModify(
         &wspace->codec,
@@ -317,6 +318,12 @@ static void startCodec(
         CODEC_POWER_CTRL_DAODRC_HIGH_POWER);
     codecRegModify(
         &wspace->codec,
+        CODEC_REG_POWER_CTRL,
+        CODEC_POWER_CTRL_EFFCTL_Msk,
+        CODEC_POWER_CTRL_EFFCTL_ON);
+    coefInvertOneChannel(wspace);
+    codecRegModify(
+        &wspace->codec,
         CODEC_REG_DAC_GAIN,
         CODEC_DAC_GAIN_DALMU_Msk | CODEC_DAC_GAIN_DALVL_Msk |
         CODEC_DAC_GAIN_DARMU_Msk | CODEC_DAC_GAIN_DARVL_Msk,
@@ -345,45 +352,48 @@ static void startCodec(
 static void coefInvertOneChannel(
     struct wspace *     wspace) {
 
-    int16_t leftCoef[] = {
-        32767,      0,          0,          32767,      0,          0,
-        0,          0,          0,          0
-    };
-    int16_t rightCoef[] = {
-        -32767,     0,          0,          32767,      0,          0,
-        0,          0,          0,          0
-    };
-    codecWriteArray(
-        &wspace->codec,
-        CODEC_REG_LEFT_COEF,
-        (uint16_t *)leftCoef,                                                   /* Array write functions are expecting unsigned data        */
-        ES_ARRAY_DIMENSION(leftCoef));
-    codecWriteArray(
-        &wspace->codec,
-        CODEC_REG_RIGHT_COEF,
-        (uint16_t *)rightCoef,
-        ES_ARRAY_DIMENSION(rightCoef));                                         /* Array write functions are expecting unsigned data        */
+    codecWriteReg(&wspace->codec, CODEC_REG_LEFT_COEF_N0, 32767);
+    codecWriteReg(&wspace->codec, CODEC_REG_LEFT_COEF_N1, 0);
+    codecWriteReg(&wspace->codec, CODEC_REG_LEFT_COEF_N2, 0);
+    codecWriteReg(&wspace->codec, CODEC_REG_LEFT_COEF_N3, 32767);
+    codecWriteReg(&wspace->codec, CODEC_REG_LEFT_COEF_N4, 0);
+    codecWriteReg(&wspace->codec, CODEC_REG_LEFT_COEF_N5, 0);
+    codecWriteReg(&wspace->codec, CODEC_REG_LEFT_COEF_D1, 0);
+    codecWriteReg(&wspace->codec, CODEC_REG_LEFT_COEF_D2, 0);
+    codecWriteReg(&wspace->codec, CODEC_REG_LEFT_COEF_D4, 0);
+    codecWriteReg(&wspace->codec, CODEC_REG_LEFT_COEF_D5, 0);
+
+    codecWriteReg(&wspace->codec, CODEC_REG_RIGHT_COEF_N0, -32767);
+    codecWriteReg(&wspace->codec, CODEC_REG_RIGHT_COEF_N1, 0);
+    codecWriteReg(&wspace->codec, CODEC_REG_RIGHT_COEF_N2, 0);
+    codecWriteReg(&wspace->codec, CODEC_REG_RIGHT_COEF_N3, 32767);
+    codecWriteReg(&wspace->codec, CODEC_REG_RIGHT_COEF_N4, 0);
+    codecWriteReg(&wspace->codec, CODEC_REG_RIGHT_COEF_N5, 0);
+    codecWriteReg(&wspace->codec, CODEC_REG_RIGHT_COEF_D1, 0);
+    codecWriteReg(&wspace->codec, CODEC_REG_RIGHT_COEF_D2, 0);
+    codecWriteReg(&wspace->codec, CODEC_REG_RIGHT_COEF_D4, 0);
+    codecWriteReg(&wspace->codec, CODEC_REG_RIGHT_COEF_D5, 0);
 }
 
 static void coefClearAll(
     struct wspace *     wspace) {
 
     int16_t leftCoef[] = {
-        0,          0,          0,          0,          0,          0,
+        32767,      0,          0,          0,          0,          0,
         0,          0,          0,          0
     };
     int16_t rightCoef[] = {
-        0,          0,          0,          0,          0,          0,
+        32767,      0,          0,          0,          0,          0,
         0,          0,          0,          0
     };
     codecWriteArray(
         &wspace->codec,
-        CODEC_REG_LEFT_COEF,
+        CODEC_REG_LEFT_COEF_N0,
         (uint16_t *)leftCoef,                                                   /* Array write functions are expecting unsigned data        */
         ES_ARRAY_DIMENSION(leftCoef));
     codecWriteArray(
         &wspace->codec,
-        CODEC_REG_RIGHT_COEF,
+        CODEC_REG_RIGHT_COEF_N0,
         (uint16_t *)rightCoef,
         ES_ARRAY_DIMENSION(rightCoef));                                         /* Array write functions are expecting unsigned data        */
 }

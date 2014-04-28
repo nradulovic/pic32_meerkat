@@ -137,10 +137,12 @@ void codecWriteArray(
     uint16_t *          array,
     size_t              size) {
 
-    spiSSActivate(&handle->spi);
-    spiExchange(&handle->spi, &reg, 1u);
-    spiExchange(&handle->spi, array, size);
-    spiSSDeactivate(&handle->spi);
+    while (size != 0) {
+        codecWriteReg(handle, reg, *array);
+        reg++;
+        array++;
+        size--;
+    }
 }
 
 void codecClockEnable(
