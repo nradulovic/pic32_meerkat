@@ -16,6 +16,8 @@
         <itemPath>application/include/epa_codec.h</itemPath>
         <itemPath>application/include/main.h</itemPath>
         <itemPath>application/include/epa_radio.h</itemPath>
+        <itemPath>application/include/support.h</itemPath>
+        <itemPath>application/include/app_timer.h</itemPath>
       </logicalFolder>
       <logicalFolder name="source" displayName="source" projectFiles="true">
         <itemPath>application/source/epa_btman.c</itemPath>
@@ -26,6 +28,7 @@
         <itemPath>application/source/support.c</itemPath>
         <itemPath>application/source/conv.c</itemPath>
         <itemPath>application/source/epa_radio.c</itemPath>
+        <itemPath>application/source/app_timer.c</itemPath>
       </logicalFolder>
     </logicalFolder>
     <logicalFolder name="driver" displayName="driver" projectFiles="true">
@@ -359,6 +362,7 @@
         <property key="UART1" value="true"/>
         <property key="UART2" value="true"/>
         <property key="debugoptions.useswbreakpoints" value="false"/>
+        <property key="firmware.download.all" value="false"/>
         <property key="hwtoolclock.frcindebug" value="false"/>
         <property key="memories.aux" value="false"/>
         <property key="memories.bootflash" value="false"/>
