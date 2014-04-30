@@ -444,10 +444,7 @@ static esAction stateCmdIdle (struct wspace * space, esEvent * event) {
                     request->argSize);
                 space->reqSize += request->argSize;
             }
-            memcpy(
-                &space->reqBuffer[space->reqSize],
-                "\r\n",
-                2u);
+            memcpy(&space->reqBuffer[space->reqSize], "\r\n", 2u);
             space->reqSize += 2u;
 
             return (ES_STATE_TRANSITION(stateCmdSend));

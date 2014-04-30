@@ -101,7 +101,7 @@
 #define CODEC_PLL_1_QVAL_PAR(val)           (((val) & 0xfu) << 11)
 #define CODEC_PLL_1_PLLSEL_ON               (0x1u << 15)
 
-#define CODEC_AUDIO_CTRL4_SHCKT_DIS_OFF         (0x1u << 8)
+#define CODEC_AUDIO_CTRL4_SHCKT_DIS_OFF     (0x1u << 8)
 
 #define CODEC_PLL_2_DVAL_PAR(val)           (((val) & 0x3fffu) << 2)
 
@@ -196,7 +196,7 @@ void codecRegModify(
 void codecWriteArray(
     struct codecHandle * handle,
     enum codecReg       reg,
-    uint16_t *          array,
+    const uint16_t *    array,
     size_t              size);
 
 void codecClockEnable(

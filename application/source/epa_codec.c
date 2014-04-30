@@ -8,14 +8,17 @@
 
 /*=========================================================  INCLUDE FILES  ==*/
 
+
 #include "arch/intr.h"
 #include "base/bitop.h"
-#include "vtimer/vtimer.h"
 #include "events.h"
 #include "driver/codec.h"
 #include "bsp.h"
+#include "app_timer.h"
 
 /*=========================================================  LOCAL MACRO's  ==*/
+
+#define CONFIG_CODEC_POLL               1000
 
 #define CODEC_TABLE(entry)                                                      \
     entry(stateInit,                TOP)                                        \
@@ -34,7 +37,7 @@ enum codecLocalId {
 
 struct wspace {
     struct codecHandle codec;
-    struct esVTimer    timeout;
+    struct appTimer    timeout;
 };
 
 /*=============================================  LOCAL FUNCTION PROTOTYPES  ==*/
@@ -49,7 +52,6 @@ static void initCodec(struct wspace *);
 static void startCodec(struct wspace *);
 static void coefInvertOneChannel(struct wspace *);
 static void coefClearAll(struct wspace *);
-static void codecTimeout(void *);
 
 /*=======================================================  LOCAL VARIABLES  ==*/
 
@@ -79,7 +81,7 @@ static esAction stateInit(struct wspace * wspace, const esEvent * event) {
 
     switch (event->id) {
         case ES_INIT : {
-            esVTimerInit(&wspace->timeout);
+            appTimerInit(&wspace->timeout);
             
             initCodec(wspace);
             codecPowerDown();
@@ -102,11 +104,10 @@ static esAction stateReset(struct wspace * wspace, const esEvent * event) {
         case ES_ENTRY : {
             codecPowerUp();
             codecResetEnable();
-            esVTimerStart(
+            appTimerStart(
                 &wspace->timeout,
                 ES_VTMR_TIME_TO_TICK_MS(100),
-                codecTimeout,
-                NULL);
+                EVT_TIMEOUT_);
 
             return (ES_STATE_HANDLED());
         }
@@ -140,20 +141,18 @@ static esAction stateIdle(struct wspace * wspace, const esEvent * event) {
                 &notify));
             ES_ENSURE(esEpaSendEvent(notify))
 #endif
-            esVTimerStart(
+            appTimerStart(
                 &wspace->timeout,
-                ES_VTMR_TIME_TO_TICK_MS(10000u),
-                codecTimeout,
-                NULL);
+                ES_VTMR_TIME_TO_TICK_MS(CONFIG_CODEC_POLL),
+                EVT_TIMEOUT_);
 
             return (ES_STATE_HANDLED());
         }
         case EVT_TIMEOUT_ : {
-            esVTimerStart(
+            appTimerStart(
                 &wspace->timeout,
-                ES_VTMR_TIME_TO_TICK_MS(10000u),
-                codecTimeout,
-                NULL);
+                ES_VTMR_TIME_TO_TICK_MS(CONFIG_CODEC_POLL),
+                EVT_TIMEOUT_);
             
 #if (CONFIG_DEBUG == 1)
             {
@@ -258,8 +257,8 @@ static void startCodec(
     codecWriteReg(
         &wspace->codec,
         CODEC_REG_ADC_GAIN,
-        CODEC_ADC_GAIN_ADMUT_MUTED | CODEC_ADC_GAIN_ADPGA_0     |
-        CODEC_ADC_GAIN_AGCTG_55    | CODEC_ADC_GAIN_AGCTC_8_100 |
+        CODEC_ADC_GAIN_ADMUT_NOT_MUTED | CODEC_ADC_GAIN_ADPGA_0     |
+        CODEC_ADC_GAIN_AGCTG_55        | CODEC_ADC_GAIN_AGCTC_8_100 |
         CODEC_ADC_GAIN_AGCEN_OFF);
 
     /*--  DAC settings  ------------------------------------------------------*/
@@ -300,7 +299,19 @@ static void startCodec(
         CODEC_ADC_GAIN_ADMUT_Msk,
         CODEC_ADC_GAIN_ADMUT_NOT_MUTED);
 
+    /*==  Set up bridge mode (testing)  ======================================*/
+    coefInvertOneChannel(wspace);
+
     /*==  Set up output circuitry  ===========================================*/
+    codecRegModify(
+        &wspace->codec,
+        CODEC_REG_DAC_GAIN,
+        CODEC_DAC_GAIN_DALMU_Msk | CODEC_DAC_GAIN_DALVL_Msk |
+        CODEC_DAC_GAIN_DARMU_Msk | CODEC_DAC_GAIN_DARVL_Msk,
+        CODEC_DAC_GAIN_DALMU_NOT_MUTED | CODEC_DAC_GAIN_DALVL_0 |
+        CODEC_DAC_GAIN_DARMU_NOT_MUTED | CODEC_DAC_GAIN_DARVL_0);
+
+    /*==  Set up power  ======================================================*/
     codecRegModify(
         &wspace->codec,
         CODEC_REG_POWER_CTRL,
@@ -321,14 +332,6 @@ static void startCodec(
         CODEC_REG_POWER_CTRL,
         CODEC_POWER_CTRL_EFFCTL_Msk,
         CODEC_POWER_CTRL_EFFCTL_ON);
-    coefInvertOneChannel(wspace);
-    codecRegModify(
-        &wspace->codec,
-        CODEC_REG_DAC_GAIN,
-        CODEC_DAC_GAIN_DALMU_Msk | CODEC_DAC_GAIN_DALVL_Msk |
-        CODEC_DAC_GAIN_DARMU_Msk | CODEC_DAC_GAIN_DARVL_Msk,
-        CODEC_DAC_GAIN_DALMU_NOT_MUTED | CODEC_DAC_GAIN_DALVL_0 |
-        CODEC_DAC_GAIN_DARMU_NOT_MUTED | CODEC_DAC_GAIN_DARVL_0);
 
 #if (CONFIG_DEBUG == 1)
     {
@@ -396,16 +399,6 @@ static void coefClearAll(
         CODEC_REG_RIGHT_COEF_N0,
         (uint16_t *)rightCoef,
         ES_ARRAY_DIMENSION(rightCoef));                                         /* Array write functions are expecting unsigned data        */
-}
-
-void codecTimeout(
-    void* arg) {
-
-    esEvent *           timeout;
-
-    (void)arg;
-    esEventCreate(sizeof(esEvent), EVT_TIMEOUT_, &timeout);
-    esEpaSendEvent(Codec, timeout);
 }
 
 /*===================================  GLOBAL PRIVATE FUNCTION DEFINITIONS  ==*/

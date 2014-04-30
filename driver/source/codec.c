@@ -98,7 +98,7 @@ void codecWriteReg(
     buff[0] = (uint16_t)reg & ~COMMAND_RW;
     buff[1] = value;
     spiSSActivate(&handle->spi);
-    spiExchange(&handle->spi, buff, ES_ARRAY_DIMENSION(buff));
+    spiWrite(&handle->spi, buff, ES_ARRAY_DIMENSION(buff));
     spiSSDeactivate(&handle->spi);
 }
 
@@ -134,15 +134,16 @@ void codecRegModify(
 void codecWriteArray(
     struct codecHandle * handle,
     enum codecReg       reg,
-    uint16_t *          array,
+    const uint16_t *    array,
     size_t              size) {
 
-    while (size != 0) {
-        codecWriteReg(handle, reg, *array);
-        reg++;
-        array++;
-        size--;
-    }
+    uint16_t            command;
+
+    command = (uint16_t)reg & ~COMMAND_RW;
+    spiSSActivate(&handle->spi);
+    spiWrite(&handle->spi, &command, 1);
+    spiWrite(&handle->spi, array, size);
+    spiSSDeactivate(&handle->spi);
 }
 
 void codecClockEnable(

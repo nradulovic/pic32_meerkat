@@ -8,6 +8,7 @@
 
 #include <string.h>
 
+#include "app_timer.h"
 #include "base/debug.h"
 
 static char file[100];
@@ -24,3 +25,4 @@ void userAssert(
     strcpy(function,   dbgReport->fnName);
     strcpy(expression, dbgReport->expr);
 }
+
