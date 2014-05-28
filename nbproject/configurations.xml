@@ -18,6 +18,7 @@
         <itemPath>application/include/epa_radio.h</itemPath>
         <itemPath>application/include/support.h</itemPath>
         <itemPath>application/include/app_timer.h</itemPath>
+        <itemPath>application/include/epa_notification.h</itemPath>
       </logicalFolder>
       <logicalFolder name="source" displayName="source" projectFiles="true">
         <itemPath>application/source/epa_btman.c</itemPath>
@@ -29,6 +30,7 @@
         <itemPath>application/source/conv.c</itemPath>
         <itemPath>application/source/epa_radio.c</itemPath>
         <itemPath>application/source/app_timer.c</itemPath>
+        <itemPath>application/source/epa_notification.c</itemPath>
       </logicalFolder>
     </logicalFolder>
     <logicalFolder name="driver" displayName="driver" projectFiles="true">
