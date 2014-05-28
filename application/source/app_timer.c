@@ -38,6 +38,7 @@ void appTimerStart(
     esSysTimerTick      tick,
     uint16_t            eventId) {
 
+    esVTimerCancel(&timer->timer);
     timer->eventId = eventId;
     esVTimerStart(&timer->timer, tick, timeout, timer);
 }

@@ -26,15 +26,17 @@
 
 #define CONFIG_RADIO_UART_TIMEOUT       20
 
-#define RADIO_CMD_ECHO_ENABLE           "ATE1\r\n"
-#define RADIO_RESPONSE_ECHO_ENABLE      RADIO_CMD_ECHO_ENABLE "\r\nOK\r\n"
+#define RADIO_CMD_ECHO_DISABLE          "ATE0\r\n"
+#define RADIO_RESPONSE_ECHO_DISABLE_E   "ATE0\r\r\nOK\r\n"
+#define RADIO_RESPONSE_ECHO_DISABLE     "\r\nOK\r\n"
 
 #define RADIO_CMD_CONFIRM               "AT\r\n"
-#define RADIO_RESPONSE_CONFIRM          RADIO_CMD_CONFIRM "\r\nOK\r\n"
+#define RADIO_RESPONSE_CONFIRM          "\r\nOK\r\n"
 
 #define RADIO_CMD_GET_STATE             "AT+CSQ?\r\n"
-#define RADIO_RESPONSE_NETW             RADIO_CMD_GET_STATE "\r\n+CMS:"
-#define RADIO_RESPONSE_NO_NETW          RADIO_CMD_GET_STATE "\r\n+CME ERROR: 30\r\n"
+#define RADIO_RESPONSE_NETW             "\r\n+CMS:"
+#define RADIO_RESPONSE_NO_NETW          "\r\n+CME ERROR: 30\r\n"
+#define RADIO_RESPONSE_NOT_DATA         "\r\n+CME ERROR: 36\r\n"
 
 #define EVENT_NOTIFY_NO_NETW            (0x1u << 0)
 #define EVENT_NOTIFY_NETW_GOOD          (0x1u << 1)
@@ -44,6 +46,7 @@
 #define RADIO_TABLE(entry)                                                      \
     entry(stateInit,                TOP)                                        \
     entry(stateEnableEcho,          TOP)                                        \
+    entry(stateEnableEchoAt,        TOP)                                        \
     entry(stateNoNetw,              TOP)                                        \
     entry(stateNetwLo,              TOP)                                        \
     entry(stateNetwHi,              TOP)                                        \
@@ -65,6 +68,7 @@ enum localEvents {
     EVT_NETWHI_POLL_,
     EVT_IDLE_TIMEOUT_,
     EVT_UART_ECHO_TIMEOUT_,
+    EVT_UART_ECHO_AT_TIMEOUT_,
     EVT_UART_NETWLO_TIMEOUT_,
     EVT_UART_NETWHI_TIMEOUT_,
     EVT_UART_NODEV_TIMEOUT_,
@@ -82,13 +86,14 @@ struct wspace {
     struct appTimer     timer;
     uint32_t            timerTicks;
     uint32_t            eventNotify;
-    char                replyBuffer[40];
+    char                replyBuffer[60];
 };
 
 /*=============================================  LOCAL FUNCTION PROTOTYPES  ==*/
 
 static esAction stateInit           (struct wspace *, const esEvent *);
 static esAction stateEnableEcho     (struct wspace *, const esEvent *);
+static esAction stateEnableEchoAt   (struct wspace *, const esEvent *);
 static esAction stateNoNetw         (struct wspace *, const esEvent *);
 static esAction stateNetwLo         (struct wspace *, const esEvent *);
 static esAction stateNetwHi         (struct wspace *, const esEvent *);
@@ -132,6 +137,8 @@ static esAction stateInit(struct wspace * wspace, const esEvent * event) {
 
     switch (event->id) {
         case ES_INIT : {
+            netwLowLimit  = -90;
+            netwHighLimit = -87;
             initRadio(wspace);
 
             return (ES_STATE_TRANSITION(stateEnableEcho));
@@ -151,21 +158,13 @@ static esAction stateEnableEcho(struct wspace * wspace, const esEvent * event) {
                 ES_VTMR_TIME_TO_TICK_MS(CONFIG_RADIO_UART_TIMEOUT),
                 EVT_UART_ECHO_TIMEOUT_);
             memset(&wspace->replyBuffer, 0, sizeof(wspace->replyBuffer));
-            uartReadStart(
-                &wspace->uart,
-                &wspace->replyBuffer,
-                sizeof(wspace->replyBuffer));
-            uartWriteStart(
-                &wspace->uart,
-                RADIO_CMD_ECHO_ENABLE,
-                sizeof(RADIO_CMD_ECHO_ENABLE) - 1u);
+            uartReadStart(&wspace->uart, &wspace->replyBuffer, sizeof(wspace->replyBuffer));
+            uartWriteStart(&wspace->uart, RADIO_CMD_ECHO_DISABLE, sizeof(RADIO_CMD_ECHO_DISABLE) - 1);
 
             return (ES_STATE_HANDLED());
         }
         case EVT_UART_ECHO_TIMEOUT_: {
-            /* Cancel UART RX which will generate EVT_BT_UART_RESPONSE or
-             * EVT_BT_UART_ERROR
-             */
+            /* Cancel UART RX which will generate EVT_BT_UART_RESPONSE or EVT_BT_UART_ERROR       */
             uartReadCancel(&wspace->uart);
             uartWriteStop(&wspace->uart);
 
@@ -173,23 +172,77 @@ static esAction stateEnableEcho(struct wspace * wspace, const esEvent * event) {
         }
         case EVT_UART_ERROR_    :
         case EVT_UART_RESPONSE_ : {
+
             appTimerCancel(&wspace->timeout);
             uartReadStop(&wspace->uart);
             uartWriteStop(&wspace->uart);
 
-            if (strncmp(wspace->replyBuffer, RADIO_RESPONSE_ECHO_ENABLE, sizeof(RADIO_RESPONSE_ECHO_ENABLE) - 1)  == 0) {
+            if ((strncmp(wspace->replyBuffer, RADIO_RESPONSE_ECHO_DISABLE, sizeof(RADIO_RESPONSE_ECHO_DISABLE) - 1)  == 0) ||
+                (strncmp(wspace->replyBuffer, RADIO_RESPONSE_ECHO_DISABLE_E, sizeof(RADIO_RESPONSE_ECHO_DISABLE_E) - 1)  == 0)){
                 
                 return (ES_STATE_TRANSITION(stateNoDev));
             } else {
-                appTimerStart(
-                    &wspace->timer,
-                    ES_VTMR_TIME_TO_TICK_MS(CONFIG_RADIO_POLL_NODEV_PERIOD),
-                    EVT_ECHO_POLL_);
+                esEvent * notify;
+                const struct uartEvent_ * uart;
 
-                return (ES_STATE_HANDLED());
+                uart = (const struct uartEvent_ *)event;
+
+                if (uart->size == 0) {
+                    ES_ENSURE(esEventCreate(sizeof(esEvent), EVT_RADIO_NO_DEVICE, &notify));
+                    ES_ENSURE(esEpaSendEvent(Notification, notify));
+                    appTimerStart(
+                        &wspace->timer,
+                        ES_VTMR_TIME_TO_TICK_MS(CONFIG_RADIO_POLL_NODEV_PERIOD),
+                        EVT_ECHO_POLL_);
+
+                    return (ES_STATE_HANDLED());
+                } else {
+
+                    return (ES_STATE_TRANSITION(stateEnableEchoAt));
+                }
             }
         }
         case EVT_ECHO_POLL_ : {
+
+            return (ES_STATE_TRANSITION(stateEnableEcho));
+        }
+        default : {
+
+            return (ES_STATE_IGNORED());
+        }
+    }
+}
+
+static esAction stateEnableEchoAt(struct wspace * wspace, const esEvent * event) {
+
+    switch (event->id) {
+         case ES_ENTRY : {
+            appTimerStart(
+                &wspace->timeout,
+                ES_VTMR_TIME_TO_TICK_MS(CONFIG_RADIO_UART_TIMEOUT),
+                EVT_UART_ECHO_AT_TIMEOUT_);
+            memset(&wspace->replyBuffer, 0, sizeof(wspace->replyBuffer));
+            uartReadStart(&wspace->uart, &wspace->replyBuffer, sizeof(wspace->replyBuffer));
+            uartWriteStart(&wspace->uart, RADIO_CMD_CONFIRM, sizeof(RADIO_CMD_CONFIRM) - 1);
+
+            return (ES_STATE_HANDLED());
+        }
+        case EVT_UART_ECHO_AT_TIMEOUT_: {
+            /* Cancel UART RX which will generate EVT_BT_UART_RESPONSE or EVT_BT_UART_ERROR       */
+            uartReadCancel(&wspace->uart);
+            uartWriteStop(&wspace->uart);
+
+            return (ES_STATE_HANDLED());
+        }
+        case EVT_UART_ERROR_    :
+        case EVT_UART_RESPONSE_ : {
+            const struct uartEvent_ * uart;
+
+            uart = (const struct uartEvent_ *)event;
+
+            appTimerCancel(&wspace->timeout);
+            uartReadStop(&wspace->uart);
+            uartWriteStop(&wspace->uart);
 
             return (ES_STATE_TRANSITION(stateEnableEcho));
         }
@@ -208,21 +261,13 @@ static esAction stateNoDev(struct wspace * wspace, const esEvent * event) {
                 ES_VTMR_TIME_TO_TICK_MS(CONFIG_RADIO_UART_TIMEOUT),
                 EVT_UART_NODEV_TIMEOUT_);
             memset(&wspace->replyBuffer, 0, sizeof(wspace->replyBuffer));
-            uartReadStart(
-                &wspace->uart,
-                &wspace->replyBuffer,
-                sizeof(wspace->replyBuffer));
-            uartWriteStart(
-                &wspace->uart,
-                RADIO_CMD_CONFIRM,
-                sizeof(RADIO_CMD_CONFIRM) - 1u);
+            uartReadStart(&wspace->uart, &wspace->replyBuffer, sizeof(wspace->replyBuffer));
+            uartWriteStart(&wspace->uart, RADIO_CMD_CONFIRM, sizeof(RADIO_CMD_CONFIRM) - 1u);
 
             return (ES_STATE_HANDLED());
         }
         case EVT_UART_NODEV_TIMEOUT_: {
-            /* Cancel UART RX which will generate EVT_BT_UART_RESPONSE or
-             * EVT_BT_UART_ERROR
-             */
+            /* Cancel UART RX which will generate EVT_BT_UART_RESPONSE or EVT_BT_UART_ERROR       */
             uartReadCancel(&wspace->uart);
             uartWriteStop(&wspace->uart);
 
@@ -234,13 +279,18 @@ static esAction stateNoDev(struct wspace * wspace, const esEvent * event) {
             uartReadStop(&wspace->uart);
             uartWriteStop(&wspace->uart);
 
-            if (strncmp(wspace->replyBuffer, RADIO_CMD_CONFIRM, sizeof(RADIO_CMD_CONFIRM) - 1)  == 0) {
+            if (strncmp(wspace->replyBuffer, RADIO_RESPONSE_CONFIRM, sizeof(RADIO_RESPONSE_CONFIRM) - 1)  == 0) {
+                esEvent * event;
 
-                /*
-                 * Generate notification event here: DEVICE_DETECTED
-                 */
+                ES_ENSURE(esEventCreate(sizeof(esEvent), EVT_RADIO_DETECTED, &event));
+                ES_ENSURE(esEpaSendEvent(Notification, event));
+
                 return (ES_STATE_TRANSITION(stateNetwLo));
             } else {
+                esEvent * event;
+
+                ES_ENSURE(esEventCreate(sizeof(esEvent), EVT_RADIO_NO_DEVICE, &event));
+                ES_ENSURE(esEpaSendEvent(Notification, event));
                 appTimerStart(
                     &wspace->timer,
                     ES_VTMR_TIME_TO_TICK_MS(CONFIG_RADIO_POLL_NODEV_PERIOD),
@@ -268,21 +318,13 @@ static esAction stateNoNetw(struct wspace * wspace, const esEvent * event) {
                 ES_VTMR_TIME_TO_TICK_MS(CONFIG_RADIO_UART_TIMEOUT),
                 EVT_UART_NONETW_TIMEOUT_);
             memset(&wspace->replyBuffer, 0, sizeof(wspace->replyBuffer));
-            uartReadStart(
-                &wspace->uart,
-                &wspace->replyBuffer,
-                sizeof(wspace->replyBuffer));
-            uartWriteStart(
-                &wspace->uart,
-                RADIO_CMD_GET_STATE,
-                sizeof(RADIO_CMD_GET_STATE) - 1u);
+            uartReadStart(&wspace->uart, &wspace->replyBuffer, sizeof(wspace->replyBuffer));
+            uartWriteStart(&wspace->uart, RADIO_CMD_GET_STATE, sizeof(RADIO_CMD_GET_STATE) - 1u);
 
             return (ES_STATE_HANDLED());
         }
         case EVT_UART_NONETW_TIMEOUT_: {
-            /* Cancel UART RX which will generate EVT_BT_UART_RESPONSE or
-             * EVT_BT_UART_ERROR
-             */
+            /* Cancel UART RX which will generate EVT_BT_UART_RESPONSE or EVT_BT_UART_ERROR       */
             uartReadCancel(&wspace->uart);
             uartWriteStop(&wspace->uart);
 
@@ -298,6 +340,10 @@ static esAction stateNoNetw(struct wspace * wspace, const esEvent * event) {
 
                   return (ES_STATE_TRANSITION(stateNetwLo));
             } else {
+                esEvent * event;
+
+                ES_ENSURE(esEventCreate(sizeof(esEvent), EVT_RADIO_NO_NETW, &event));
+                ES_ENSURE(esEpaSendEvent(Notification, event));
                 appTimerStart(
                     &wspace->timer,
                     ES_VTMR_TIME_TO_TICK_MS(CONFIG_RADIO_POLL_NONETW_PERIOD),
@@ -326,14 +372,8 @@ static esAction stateNetwLo(struct wspace * wspace, const esEvent * event) {
                 ES_VTMR_TIME_TO_TICK_MS(CONFIG_RADIO_UART_TIMEOUT),
                 EVT_UART_NETWLO_TIMEOUT_);
             memset(&wspace->replyBuffer, 0, sizeof(wspace->replyBuffer));
-            uartReadStart(
-                &wspace->uart,
-                &wspace->replyBuffer,
-                sizeof(wspace->replyBuffer));
-            uartWriteStart(
-                &wspace->uart,
-                RADIO_CMD_GET_STATE,
-                sizeof(RADIO_CMD_GET_STATE) - 1u);
+            uartReadStart(&wspace->uart, &wspace->replyBuffer, sizeof(wspace->replyBuffer));
+            uartWriteStart(&wspace->uart, RADIO_CMD_GET_STATE, sizeof(RADIO_CMD_GET_STATE) - 1u);
 
             return (ES_STATE_HANDLED());
         }
@@ -358,11 +398,13 @@ static esAction stateNetwLo(struct wspace * wspace, const esEvent * event) {
                 strength = atoi(&wspace->replyBuffer[sizeof(RADIO_RESPONSE_NETW)]);
 
                 if (strength > netwHighLimit) {
-                    /*
-                     * Generate notification event here
-                     */
+
                     return (ES_STATE_TRANSITION(stateNetwHi));
                 } else {
+                    esEvent * event;
+
+                    ES_ENSURE(esEventCreate(sizeof(esEvent), EVT_RADIO_NET_LOW, &event));
+                    ES_ENSURE(esEpaSendEvent(Notification, event));
                     appTimerStart(
                         &wspace->timer,
                         ES_VTMR_TIME_TO_TICK_MS(CONFIG_RADIO_POLL_NOM_PERIOD),
@@ -441,6 +483,10 @@ static esAction stateNetwHi(struct wspace * wspace, const esEvent * event) {
                      */
                     return (ES_STATE_TRANSITION(stateNetwLo));
                 } else {
+                    esEvent * event;
+
+                    ES_ENSURE(esEventCreate(sizeof(esEvent), EVT_RADIO_NET_HIGH, &event));
+                    ES_ENSURE(esEpaSendEvent(Notification, event));
                     appTimerStart(
                         &wspace->timer,
                         ES_VTMR_TIME_TO_TICK_MS(CONFIG_RADIO_POLL_NOM_PERIOD),
@@ -481,7 +527,7 @@ static size_t radioUartReadHandler(
     size_t              size) {
 
     uint16_t            id;
-    esEvent *           reply;
+    struct uartEvent_ * reply;
     esError             error;
 
     (void)size;
@@ -492,10 +538,11 @@ static size_t radioUartReadHandler(
     } else {
         id = EVT_UART_ERROR_;
     }
-    ES_ENSURE(error = esEventCreate(sizeof(esEvent), id, &reply));
+    ES_ENSURE(error = esEventCreate(sizeof(*reply), id, (esEvent *)&reply));
 
     if (error == ES_ERROR_NONE) {
-        esEpaSendAheadEvent(Radio, reply);
+        reply->size = size;
+        esEpaSendAheadEvent(Radio, (esEvent *)reply);
     }
 
     return (0u);
