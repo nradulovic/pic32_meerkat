@@ -55,6 +55,18 @@ void initAudioSwitch(
 void audioSwitchSpeaker(
     void);
 
+void initNotifyLed(
+    void);
+
+void notifyLedRed(
+    void);
+
+void notifyLedGreen(
+    void);
+
+void notifyLedOff(
+    void);
+
 /*--------------------------------------------------------  C++ extern end  --*/
 #ifdef __cplusplus
 }

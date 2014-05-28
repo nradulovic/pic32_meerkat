@@ -49,6 +49,7 @@ void initBsp(
     initRadioChargerDriver();
     initBattChargerDriver();
     initAudioSwitch();
+    initNotifyLed();
 }
 
 /*--  Charge pump control  ---------------------------------------------------*/
@@ -134,11 +135,6 @@ bool isBatteryCharging(
 
 /*--  Analog audio switch control  -------------------------------------------*/
 
-#define CONFIG_AUDIO_MUX_CB1_PORT       &GpioB
-#define CONFIG_AUDIO_MUX_CB1_PIN        6
-#define CONFIG_AUDIO_MUX_CB2_PORT       &GpioB
-#define CONFIG_AUDIO_MUX_CB2_PIN        7
-
 void initAudioSwitch(
     void) {
 
@@ -152,6 +148,35 @@ void audioSwitchSpeaker(
     void) {
 
     *(CONFIG_AUDIO_MUX_CB1_PORT)->set = (0x1u << CONFIG_AUDIO_MUX_CB1_PIN);
+}
+
+/*--  Notification LED  ------------------------------------------------------*/
+
+void initNotifyLed(
+    void) {
+
+    *(CONFIG_NOTIFY_LED_A1_PORT)->tris &= ~(0x1u << CONFIG_NOTIFY_LED_A1_PIN);
+    *(CONFIG_NOTIFY_LED_A2_PORT)->tris &= ~(0x1u << CONFIG_NOTIFY_LED_A2_PIN);
+    *(CONFIG_NOTIFY_LED_A1_PORT)->clr   =  (0x1u << CONFIG_NOTIFY_LED_A1_PIN);
+    *(CONFIG_NOTIFY_LED_A2_PORT)->clr   =  (0x1u << CONFIG_NOTIFY_LED_A2_PIN);
+}
+
+void notifyLedRed(
+    void) {
+    *(CONFIG_NOTIFY_LED_A1_PORT)->set = (0x1u << CONFIG_NOTIFY_LED_A1_PIN);
+    *(CONFIG_NOTIFY_LED_A2_PORT)->clr = (0x1u << CONFIG_NOTIFY_LED_A2_PIN);
+}
+
+void notifyLedGreen(
+    void) {
+    *(CONFIG_NOTIFY_LED_A1_PORT)->clr = (0x1u << CONFIG_NOTIFY_LED_A1_PIN);
+    *(CONFIG_NOTIFY_LED_A2_PORT)->set = (0x1u << CONFIG_NOTIFY_LED_A2_PIN);
+}
+
+void notifyLedOff(
+    void) {
+    *(CONFIG_NOTIFY_LED_A1_PORT)->clr = (0x1u << CONFIG_NOTIFY_LED_A1_PIN);
+    *(CONFIG_NOTIFY_LED_A2_PORT)->clr = (0x1u << CONFIG_NOTIFY_LED_A2_PIN);
 }
 
 /*================================*//** @cond *//*==  CONFIGURATION ERRORS  ==*/

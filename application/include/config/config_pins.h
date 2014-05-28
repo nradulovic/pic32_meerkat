@@ -50,7 +50,15 @@ extern "C" {
 #define CONFIG_RADIO_UART_RTS_PIN       UART2_RTS_C5
 #define CONFIG_RADIO_UART_CTS_PIN       UART2_CTS_A4
 
-#define CONFIG_AUDIO_SW_CB1_PORT
+#define CONFIG_AUDIO_MUX_CB1_PORT       &GpioB
+#define CONFIG_AUDIO_MUX_CB1_PIN        6
+#define CONFIG_AUDIO_MUX_CB2_PORT       &GpioB
+#define CONFIG_AUDIO_MUX_CB2_PIN        7
+
+#define CONFIG_NOTIFY_LED_A1_PORT       &GpioB
+#define CONFIG_NOTIFY_LED_A1_PIN        5
+#define CONFIG_NOTIFY_LED_A2_PORT       &GpioA
+#define CONFIG_NOTIFY_LED_A2_PIN        4
 #endif
 
 #ifdef	__cplusplus
