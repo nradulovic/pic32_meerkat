@@ -34,7 +34,7 @@
 #define RADIO_RESPONSE_CONFIRM          "\r\nOK\r\n"
 
 #define RADIO_CMD_GET_STATE             "AT+CSQ?\r\n"
-#define RADIO_RESPONSE_NETW             "\r\n+CMS:"
+#define RADIO_RESPONSE_NETW             "\r\n+CSQ:"
 #define RADIO_RESPONSE_NO_NETW          "\r\n+CME ERROR: 30\r\n"
 #define RADIO_RESPONSE_NOT_DATA         "\r\n+CME ERROR: 36\r\n"
 
