@@ -59,6 +59,9 @@ extern "C" {
 #define CONFIG_NOTIFY_LED_A1_PIN        5
 #define CONFIG_NOTIFY_LED_A2_PORT       &GpioA
 #define CONFIG_NOTIFY_LED_A2_PIN        4
+
+#define CONFIG_PTT_PORT                 &GpioA
+#define CONFIG_PTT_PIN                  1
 #endif
 
 #ifdef	__cplusplus

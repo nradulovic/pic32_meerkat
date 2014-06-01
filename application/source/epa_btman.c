@@ -13,6 +13,7 @@
 #include "events.h"
 #include "vtimer/vtimer.h"
 #include "conv.h"
+#include "driver/gpio.h"
 
 /*=========================================================  LOCAL MACRO's  ==*/
 
@@ -45,12 +46,19 @@ enum localEvents {
     EVT_TIMEOUT_ = ES_EVENT_LOCAL_ID
 };
 
+enum pttNotify {
+    PTT_PRESSED,
+    PTT_RELEASED
+}; 
+
 /**@brief       Epa workspace
  */
 struct wspace {
     struct esVTimer     timeout;
     uint32_t            retry;
     uint32_t            connectedProfiles;
+    uint32_t            oldState;
+    enum pttNotify      notify;
 };
 
 /*=============================================  LOCAL FUNCTION PROTOTYPES  ==*/
@@ -106,6 +114,7 @@ static esAction stateInit(struct wspace * wspace, esEvent * event) {
     switch (event->id) {
         case ES_INIT : {
             esVTimerInit(&wspace->timeout);
+            *(CONFIG_PTT_PORT)->tris |= (0x1 << CONFIG_PTT_PIN);
 
             return (ES_STATE_TRANSITION(stateIdle));
         }
@@ -190,6 +199,7 @@ static esAction stateCmdApply(struct wspace * wspace, esEvent * event) {
                     EVT_CODEC_ENABLE_AUDIO,
                     &event));
                 ES_ENSURE(esEpaSendEvent(Codec, event));
+                wspace->oldState = *(CONFIG_PTT_PORT)->port & (0x1 << CONFIG_PTT_PIN);
 
                 return (ES_STATE_TRANSITION(stateHartBeat));
             } else {
@@ -469,8 +479,31 @@ static esAction stateHartBeat(struct wspace * wspace, esEvent * event) {
             return (ES_STATE_HANDLED());
         }
         case EVT_TIMEOUT_ : {
+            uint32_t        newState;
+            
+            newState = *(CONFIG_PTT_PORT)->port & (0x1 << CONFIG_PTT_PIN);
 
-            return (ES_STATE_TRANSITION(stateHartCmdBegin));
+            if ((wspace->oldState != 0) && (newState == 0)) {
+                wspace->oldState = newState;
+                wspace->notify   = PTT_PRESSED;
+
+                return (ES_STATE_TRANSITION(stateHartCmdBegin));
+            } else if ((wspace->oldState == 0) && (newState != 0)) {
+                wspace->oldState = newState;
+                wspace->notify   = PTT_RELEASED;
+
+                return (ES_STATE_TRANSITION(stateHartCmdBegin));
+            } else {
+                wspace->oldState = newState;
+                esVTimerCancel(&wspace->timeout);
+                esVTimerStart(
+                    &wspace->timeout,
+                    ES_VTMR_TIME_TO_TICK_MS(CONFIG_HART_BEAT_PERIOD),
+                    btTimeoutHandler,
+                    NULL);
+
+                return (ES_STATE_HANDLED());
+            }
         }
         default : {
 
@@ -544,7 +577,8 @@ static esAction stateHartQuery(struct wspace * wspace, esEvent * event) {
     }
 }
 
-#define CONFIG_ALIVE_MESSAGE            "I am alive!\r\n"
+#define CONFIG_PTT_PRESSED            "+PTT=P\r\n"
+#define CONFIG_PTT_RELEASED           "+PTT=R\r\n"
 
 static esAction stateHartCmdEnd(struct wspace * wspace, esEvent * event) {
 
@@ -588,8 +622,15 @@ static esAction stateHartSendData(struct wspace * space, esEvent * event) {
                 sizeof(struct BtSendEvent),
                 EVT_BT_SEND_DATA,
                 (esEvent **)&data));
-            data->arg = CONFIG_ALIVE_MESSAGE;
-            data->argSize = sizeof(CONFIG_ALIVE_MESSAGE);
+
+            if (space->notify == PTT_PRESSED) {
+                data->arg = CONFIG_PTT_PRESSED;
+                data->argSize = sizeof(CONFIG_PTT_PRESSED);
+            } else {
+                data->arg = CONFIG_PTT_RELEASED;
+                data->argSize = sizeof(CONFIG_PTT_RELEASED);
+            }
+            
             ES_ENSURE(esEpaSendEvent(BtDrv, (esEvent *)data));
 
             return (ES_STATE_TRANSITION(stateHartBeat));

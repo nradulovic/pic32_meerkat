@@ -34,11 +34,11 @@
 /**@brief       BT profiles
  * @details     See documentation about available options for BT profile
  */
-#define CONFIG_BT_PROFILE               "0c"
+#define CONFIG_BT_PROFILE               "0f"
 
 /**@brief       Defines polling period
  */
-#define CONFIG_HART_BEAT_PERIOD         5000u
+#define CONFIG_HART_BEAT_PERIOD         20u
 
 /*------------------------------------------------------  C++ extern begin  --*/
 #ifdef	__cplusplus
