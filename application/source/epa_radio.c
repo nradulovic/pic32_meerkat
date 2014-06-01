@@ -538,7 +538,7 @@ static size_t radioUartReadHandler(
     } else {
         id = EVT_UART_ERROR_;
     }
-    ES_ENSURE(error = esEventCreate(sizeof(*reply), id, (esEvent *)&reply));
+    ES_ENSURE(error = esEventCreate(sizeof(*reply), id, (esEvent **)&reply));
 
     if (error == ES_ERROR_NONE) {
         reply->size = size;
