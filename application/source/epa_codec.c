@@ -116,7 +116,7 @@ static esAction stateReset(struct wspace * wspace, const esEvent * event) {
             codecClockEnable();
             startCodec(wspace);
             cpumpEnable();
-            audioSwitchSpeaker();
+            audioSwitchCodec();
 
             return (ES_STATE_TRANSITION(stateIdle));
         }
