@@ -150,6 +150,13 @@ void audioSwitchSpeaker(
     *(CONFIG_AUDIO_MUX_CB1_PORT)->set = (0x1u << CONFIG_AUDIO_MUX_CB1_PIN);
 }
 
+void audioSwitchCodec(
+    void) {
+
+    *(CONFIG_AUDIO_MUX_CB1_PORT)->set   =  (0x1u << CONFIG_AUDIO_MUX_CB1_PIN);
+    *(CONFIG_AUDIO_MUX_CB2_PORT)->clr   =  (0x1u << CONFIG_AUDIO_MUX_CB2_PIN);
+}
+
 /*--  Notification LED  ------------------------------------------------------*/
 
 void initNotifyLed(

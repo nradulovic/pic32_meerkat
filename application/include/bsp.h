@@ -55,6 +55,9 @@ void initAudioSwitch(
 void audioSwitchSpeaker(
     void);
 
+void audioSwitchCodec(
+    void);
+
 void initNotifyLed(
     void);
 
