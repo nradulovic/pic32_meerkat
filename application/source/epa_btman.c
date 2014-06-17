@@ -28,8 +28,10 @@
     entry(stateSetConnectionMask,   TOP)                                        \
     entry(stateSetDiscoveryMask,    TOP)                                        \
     entry(stateSetDiscoverable,     TOP)                                        \
+    entry(stateMakeCall,            TOP)                                        \
     entry(stateSetAudio,            TOP)                                        \
     entry(stateSetVolume,           TOP)                                        \
+    entry(stateSetAvrcp,            TOP)                                        \
     entry(stateHartCmdBegin,        TOP)                                        \
     entry(stateHartQuery,           TOP)                                        \
     entry(stateHartCmdEnd,          TOP)                                        \
@@ -72,9 +74,11 @@ static esAction stateSetAuth        (struct wspace *, esEvent *);
 static esAction stateSetName        (struct wspace *, esEvent *);
 static esAction stateSetAudio       (struct wspace *, esEvent *);
 static esAction stateSetVolume      (struct wspace *, esEvent *);
+static esAction stateSetAvrcp       (struct wspace *, esEvent *);
 static esAction stateSetConnectionMask  (struct wspace *, esEvent *);
 static esAction stateSetDiscoveryMask   (struct wspace *, esEvent *);
 static esAction stateSetDiscoverable    (struct wspace *, esEvent *);
+static esAction stateMakeCall       (struct wspace *, esEvent *);
 static esAction stateHartBeat       (struct wspace *, esEvent *);
 static esAction stateHartCmdBegin   (struct wspace *, esEvent *);
 static esAction stateHartQuery      (struct wspace *, esEvent *);
@@ -354,6 +358,39 @@ static esAction stateSetVolume(struct wspace * wspace, esEvent * event) {
 
             if (((struct BtReplyEvent *)event)->status == BT_ERR_NONE) {
 
+                return (ES_STATE_TRANSITION(stateSetAvrcp));
+            } else {
+
+                return (ES_STATE_TRANSITION(stateCmdEnd));
+            }
+        }
+        default : {
+
+            return (ES_STATE_IGNORED());
+        }
+    }
+}
+
+static esAction stateSetAvrcp(struct wspace * wspace, esEvent * event) {
+
+    (void)wspace;
+
+    switch (event->id) {
+        case ES_ENTRY : {
+            esEvent *   req;
+
+            ES_ENSURE(esEventCreate(sizeof(struct BtReqEvent), EVT_BT_REQ, &req));
+            ((struct BtReqEvent *)req)->cmd = BT_SET_AVRCP;
+            ((struct BtReqEvent *)req)->arg = NULL;
+            ((struct BtReqEvent *)req)->argSize = 0;
+            ES_ENSURE(esEpaSendEvent(BtDrv, req));
+
+            return (ES_STATE_HANDLED());
+        }
+        case EVT_BT_REPLY : {
+
+            if (((struct BtReplyEvent *)event)->status == BT_ERR_NONE) {
+
                 return (ES_STATE_TRANSITION(stateSetConnectionMask));
             } else {
 
@@ -464,6 +501,41 @@ static esAction stateSetDiscoverable(struct wspace * wspace, esEvent * event) {
     }
 }
 
+static esAction stateMakeCall(struct wspace * space, esEvent * event) {
+    (void)space;
+
+    switch (event->id) {
+        case ES_ENTRY : {
+            esVTimerCancel(&space->timeout);
+            esVTimerStart(
+                &space->timeout,
+                ES_VTMR_TIME_TO_TICK_MS(10000),
+                btTimeoutHandler,
+                NULL);
+
+            return (ES_STATE_HANDLED());
+        }
+        case EVT_TIMEOUT_ : {
+            struct BtSendEvent * data;
+
+            ES_ENSURE(esEventCreate(
+                sizeof(struct BtSendEvent),
+                EVT_BT_SEND_DATA,
+                (esEvent **)&data));
+            data->arg = "A,789";
+            data->argSize = sizeof("A,789");
+
+            ES_ENSURE(esEpaSendEvent(BtDrv, (esEvent *)data));
+
+            return (ES_STATE_TRANSITION(stateHartBeat));
+        }
+        default : {
+
+            return (ES_STATE_IGNORED());
+        }
+    }
+}
+
 static esAction stateHartBeat(struct wspace * wspace, esEvent * event) {
     (void)wspace;
 
@@ -549,7 +621,7 @@ static esAction stateHartQuery(struct wspace * wspace, esEvent * event) {
             esEvent *   req;
 
             ES_ENSURE(esEventCreate(sizeof(struct BtReqEvent), EVT_BT_REQ, &req));
-            ((struct BtReqEvent *)req)->cmd = BT_QUERY;
+            ((struct BtReqEvent *)req)->cmd = BT_SET_AUDIO_I2S;
             ((struct BtReqEvent *)req)->arg = NULL;
             ((struct BtReqEvent *)req)->argSize = 0;
             ES_ENSURE(esEpaSendEvent(BtDrv, req));
