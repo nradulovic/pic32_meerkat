@@ -293,12 +293,19 @@ void __ISR(_UART2_VECTOR) lldUART2Handler(void) {
 
     /*--  RX interrupt  ------------------------------------------------------*/
     if ((IEC1 & IFS1 & INTR_U2RX) != 0u) {
-        IFS1CLR = IFS1_U2RX;
+        bool            isFirstReceived;
+
+        isFirstReceived = false;
+        IFS1CLR         = IFS1_U2RX;
 
         while ((U2STA & U2STA_URXDA) != 0u) {
 
             ((uint8_t *)Global2Handle->readBuffer)[Global2RxCounter] = U2RXREG;
             Global2RxCounter++;
+
+            if (Global2RxCounter == 1u) {
+                isFirstReceived = true;
+            }
         }
         
         if ((U2STA & (U2STA_OERR | U2STA_FERR | U2STA_PERR)) != 0u) {
@@ -321,23 +328,26 @@ void __ISR(_UART2_VECTOR) lldUART2Handler(void) {
                     Global2RxCounter);
             }
         } else if ((Global2RxCounter >= Global2Handle->readSize) || (Global2RxCancelled == true)) {
+            size_t  request;
+
+            request            = 0;
             Global2RxCancelled = false;
             
             if (Global2Handle->reader != NULL) {
-                size_t  request;
-                
                 request = Global2Handle->reader(
                     UART_ERROR_NONE,
                     Global2Handle->readBuffer,
                     Global2RxCounter);
                 Global2Handle->readSize += request;
                 uartUpdateRxTrigger(request);
+            }
 
-                if (request == 0u) {
-                    IEC1CLR = IEC1_U2RX;
-                }
-            } else {
+            if (request == 0u) {
                 IEC1CLR = IEC1_U2RX;
+            }
+        } else if (isFirstReceived) {
+            if (Global2Handle->reader != NULL) {
+                Global2Handle->reader(UART_ERROR_NONE, NULL, 0);
             }
         }
     }
