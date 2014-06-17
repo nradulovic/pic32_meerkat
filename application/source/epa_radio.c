@@ -535,6 +535,8 @@ static size_t radioUartReadHandler(
 
     if ((uartError == UART_ERROR_NONE) || (uartError == UART_ERROR_CANCEL)) {
         id = EVT_UART_RESPONSE_;
+    } else if ((buffer == NULL) && (size == 0)) {
+        id = EVT_UART_RESPONSE_;
     } else {
         id = EVT_UART_ERROR_;
     }
