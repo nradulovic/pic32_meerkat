@@ -102,6 +102,7 @@ static esAction stateNoDev          (struct wspace *, const esEvent *);
 /*--  Support functions  -----------------------------------------------------*/
 
 static size_t radioUartReadHandler(
+    struct uartHandle * handle,
     enum uartError      uartError,
     void *              buffer,
     size_t              size);
@@ -158,7 +159,8 @@ static esAction stateEnableEcho(struct wspace * wspace, const esEvent * event) {
                 ES_VTMR_TIME_TO_TICK_MS(CONFIG_RADIO_UART_TIMEOUT),
                 EVT_UART_ECHO_TIMEOUT_);
             memset(&wspace->replyBuffer, 0, sizeof(wspace->replyBuffer));
-            uartReadStart(&wspace->uart, &wspace->replyBuffer, sizeof(wspace->replyBuffer));
+            uartReadStart(&wspace->uart, &wspace->replyBuffer, sizeof(wspace->replyBuffer),
+                (uint32_t)-1);
             uartWriteStart(&wspace->uart, RADIO_CMD_ECHO_DISABLE, sizeof(RADIO_CMD_ECHO_DISABLE) - 1);
 
             return (ES_STATE_HANDLED());
@@ -222,7 +224,8 @@ static esAction stateEnableEchoAt(struct wspace * wspace, const esEvent * event)
                 ES_VTMR_TIME_TO_TICK_MS(CONFIG_RADIO_UART_TIMEOUT),
                 EVT_UART_ECHO_AT_TIMEOUT_);
             memset(&wspace->replyBuffer, 0, sizeof(wspace->replyBuffer));
-            uartReadStart(&wspace->uart, &wspace->replyBuffer, sizeof(wspace->replyBuffer));
+            uartReadStart(&wspace->uart, &wspace->replyBuffer, sizeof(wspace->replyBuffer),
+                (uint32_t)-1);
             uartWriteStart(&wspace->uart, RADIO_CMD_CONFIRM, sizeof(RADIO_CMD_CONFIRM) - 1);
 
             return (ES_STATE_HANDLED());
@@ -261,7 +264,8 @@ static esAction stateNoDev(struct wspace * wspace, const esEvent * event) {
                 ES_VTMR_TIME_TO_TICK_MS(CONFIG_RADIO_UART_TIMEOUT),
                 EVT_UART_NODEV_TIMEOUT_);
             memset(&wspace->replyBuffer, 0, sizeof(wspace->replyBuffer));
-            uartReadStart(&wspace->uart, &wspace->replyBuffer, sizeof(wspace->replyBuffer));
+            uartReadStart(&wspace->uart, &wspace->replyBuffer, sizeof(wspace->replyBuffer),
+                (uint32_t)-1);
             uartWriteStart(&wspace->uart, RADIO_CMD_CONFIRM, sizeof(RADIO_CMD_CONFIRM) - 1u);
 
             return (ES_STATE_HANDLED());
@@ -318,7 +322,8 @@ static esAction stateNoNetw(struct wspace * wspace, const esEvent * event) {
                 ES_VTMR_TIME_TO_TICK_MS(CONFIG_RADIO_UART_TIMEOUT),
                 EVT_UART_NONETW_TIMEOUT_);
             memset(&wspace->replyBuffer, 0, sizeof(wspace->replyBuffer));
-            uartReadStart(&wspace->uart, &wspace->replyBuffer, sizeof(wspace->replyBuffer));
+            uartReadStart(&wspace->uart, &wspace->replyBuffer, sizeof(wspace->replyBuffer),
+                (uint32_t)-1);
             uartWriteStart(&wspace->uart, RADIO_CMD_GET_STATE, sizeof(RADIO_CMD_GET_STATE) - 1u);
 
             return (ES_STATE_HANDLED());
@@ -372,7 +377,8 @@ static esAction stateNetwLo(struct wspace * wspace, const esEvent * event) {
                 ES_VTMR_TIME_TO_TICK_MS(CONFIG_RADIO_UART_TIMEOUT),
                 EVT_UART_NETWLO_TIMEOUT_);
             memset(&wspace->replyBuffer, 0, sizeof(wspace->replyBuffer));
-            uartReadStart(&wspace->uart, &wspace->replyBuffer, sizeof(wspace->replyBuffer));
+            uartReadStart(&wspace->uart, &wspace->replyBuffer, sizeof(wspace->replyBuffer),
+                (uint32_t)-1);
             uartWriteStart(&wspace->uart, RADIO_CMD_GET_STATE, sizeof(RADIO_CMD_GET_STATE) - 1u);
 
             return (ES_STATE_HANDLED());
@@ -449,7 +455,8 @@ static esAction stateNetwHi(struct wspace * wspace, const esEvent * event) {
             uartReadStart(
                 &wspace->uart,
                 &wspace->replyBuffer,
-                sizeof(wspace->replyBuffer));
+                sizeof(wspace->replyBuffer),
+                (uint32_t)-1);
             uartWriteStart(
                 &wspace->uart,
                 RADIO_CMD_GET_STATE,
@@ -522,6 +529,7 @@ static esAction stateNetwHi(struct wspace * wspace, const esEvent * event) {
 /*--  Support functions  -----------------------------------------------------*/
 
 static size_t radioUartReadHandler(
+    struct uartHandle * handle,
     enum uartError      uartError,
     void *              buffer,
     size_t              size) {
@@ -534,9 +542,12 @@ static size_t radioUartReadHandler(
     (void)buffer;
 
     if ((uartError == UART_ERROR_NONE) || (uartError == UART_ERROR_CANCEL)) {
-        id = EVT_UART_RESPONSE_;
-    } else if ((buffer == NULL) && (size == 0)) {
-        id = EVT_UART_RESPONSE_;
+
+        if ((buffer == NULL) && (size == 0)) {
+            id = EVT_UART_RESPONSE_;
+        } else {
+            id = EVT_UART_RESPONSE_;
+        }
     } else {
         id = EVT_UART_ERROR_;
     }
@@ -544,7 +555,7 @@ static size_t radioUartReadHandler(
 
     if (error == ES_ERROR_NONE) {
         reply->size = size;
-        esEpaSendAheadEvent(Radio, (esEvent *)reply);
+        esEpaSendAheadEvent(handle->epa, (esEvent *)reply);
     }
 
     return (0u);
@@ -565,6 +576,7 @@ static void initRadio(struct wspace * wspace) {
     radioUartConfig.remap.cts   = CONFIG_RADIO_UART_CTS_PIN;
     radioUartConfig.remap.rts   = CONFIG_RADIO_UART_RTS_PIN;
     uartOpen(&wspace->uart, &radioUartConfig);
+    uartSetClient(&wspace->uart, esEdsGetCurrent());
     uartSetReader(&wspace->uart, radioUartReadHandler);
 
     /*--  Initialize timeout timer  ------------------------------------------*/

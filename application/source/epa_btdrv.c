@@ -143,7 +143,7 @@ static esAction stateDefToggle3(struct wspace *, esEvent *);
 
 /*--  Support functions  -----------------------------------------------------*/
 
-static size_t btUartReadHandler(enum uartError, void *, size_t);
+static size_t btUartReadHandler(struct uartHandle *, enum uartError, void *, size_t);
 static void btTimeoutHandler(void *);
 static void initBtDrv(struct wspace *);
 
@@ -350,7 +350,8 @@ static esAction stateCmdBegin (struct wspace * space, esEvent * event) {
             uartReadStart(
                 &space->uart,
                 space->replyBuffer,
-                sizeof(BT_CMD_BEGIN) - 1u);
+                sizeof(BT_CMD_BEGIN) - 1u,
+                (uint32_t)-1);
             BT_CMD_LOW();
 
             return (ES_STATE_HANDLED());
@@ -468,7 +469,8 @@ static esAction stateCmdSend (struct wspace * space, esEvent * event) {
             uartReadStart(
                 &space->uart,
                 &space->replyBuffer,
-                sizeof(space->replyBuffer));
+                sizeof(space->replyBuffer),
+                (uint32_t)-1);
             uartWriteStart(&space->uart, space->reqBuffer, space->reqSize);
             
             return (ES_STATE_HANDLED());
@@ -553,7 +555,8 @@ static esAction stateCmdEnd(struct wspace * space , esEvent * event) {
             uartReadStart(
                 &space->uart,
                 space->replyBuffer,
-                sizeof(BT_CMD_BEGIN) - 1u);
+                sizeof(BT_CMD_BEGIN) - 1u,
+                (uint32_t)-1);
             BT_CMD_HIGH();
 
             return (ES_STATE_HANDLED());
@@ -591,6 +594,7 @@ static esAction stateCmdEnd(struct wspace * space , esEvent * event) {
 /*--  Support functions  -----------------------------------------------------*/
 
 static size_t btUartReadHandler(
+    struct uartHandle * handle,
     enum uartError      uartError,
     void *              buffer,
     size_t              size) {
@@ -613,7 +617,7 @@ static size_t btUartReadHandler(
 
     if (error == ES_ERROR_NONE) {
         reply->size = size;
-        esEpaSendAheadEvent(BtDrv, (esEvent *)reply);
+        esEpaSendAheadEvent(handle->epa, (esEvent *)reply);
     }
 
     return (0u);
@@ -659,6 +663,7 @@ static void initBtDrv(struct wspace * space) {
     btUartConfig.remap.cts   = CONFIG_BT_UART_CTS_PIN;
     btUartConfig.remap.rts   = CONFIG_BT_UART_RTS_PIN;
     uartOpen(&space->uart, &btUartConfig);
+    uartSetClient(&space->uart, esEdsGetCurrent());
     uartSetReader(&space->uart, btUartReadHandler);
 
     /*--  Initialize timeout timer  ------------------------------------------*/

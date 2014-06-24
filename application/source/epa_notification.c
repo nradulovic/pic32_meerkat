@@ -92,6 +92,7 @@ enum localEventId {
 };
 
 static esAction stateIdle(struct wspace * wspace, const esEvent * event) {
+    (void)wspace;
 
     switch (event->id) {
         case EVT_RADIO_NO_DEVICE : {
@@ -198,6 +199,8 @@ static esAction stateNoNetw(struct wspace * wspace, const esEvent * event) {
 }
 
 static esAction stateNetHi(struct wspace * wspace, const esEvent * event) {
+    (void)wspace;
+
     switch (event->id) {
         case ES_ENTRY : {
             notifyLedGreen();
@@ -224,6 +227,8 @@ static esAction stateNetHi(struct wspace * wspace, const esEvent * event) {
 }
 
 static esAction stateNetLo(struct wspace * wspace, const esEvent * event) {
+    (void)wspace;
+    
     switch (event->id) {
         case ES_ENTRY : {
             notifyLedRed();

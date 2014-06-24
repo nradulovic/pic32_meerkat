@@ -195,16 +195,23 @@ enum uartError uartWrite(
     return (error);
 }
 
+void uartSetClient(
+    struct uartHandle * handle,
+    struct esEpa *      epa) {
+
+    handle->epa = epa;
+}
+
 void uartSetReader(
     struct uartHandle * handle,
-    size_t           (* notify)(enum uartError, void *, size_t)) {
+    size_t           (* notify)(struct uartHandle *, enum uartError, void *, size_t)) {
 
     handle->reader = notify;
 }
 
 void uartSetWriter(
     struct uartHandle * handle,
-    size_t           (* notify)(enum uartError, const void *, size_t)) {
+    size_t           (* notify)(struct uartHandle *, enum uartError, const void *, size_t)) {
 
     handle->writer = notify;
 }
@@ -212,15 +219,17 @@ void uartSetWriter(
 enum uartError uartReadStart(
     struct uartHandle * handle,
     void *              buffer,
-    size_t              nElements) {
+    size_t              nElements,
+    uint32_t            timeout) {
 
     if ((handle->state & UART_RX_ACTIVE) != 0u) {
 
         return (UART_ERROR_BUSY);
     }
-    handle->state     |= UART_RX_ACTIVE;
-    handle->readBuffer = buffer;
-    handle->readSize   = nElements;
+    handle->state      |= UART_RX_ACTIVE;
+    handle->readBuffer  = buffer;
+    handle->readSize    = nElements;
+    handle->readTimeout = timeout;
     handle->id->readStart(handle);
 
     return (UART_ERROR_NONE);

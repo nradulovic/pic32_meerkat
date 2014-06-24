@@ -30,7 +30,7 @@ void appTimerInit(
     struct appTimer *   timer) {
 
     esVTimerInit(&timer->timer);
-    esEdsGetCurrent(&timer->epa);
+    timer->epa = esEdsGetCurrent();
 }
 
 void appTimerStart(

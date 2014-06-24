@@ -57,6 +57,7 @@ enum uartFlags {
     UART_PARITY_EVEN    = (0x1u << 9)
 };
 
+struct esEpa;
 struct uartId;
 
 struct uartConfig {
@@ -74,11 +75,13 @@ struct uartConfig {
 
 struct uartHandle {
     const struct uartId * id;
+    struct esEpa *      epa;
     uint32_t            flags;
-    size_t           (* reader)(enum uartError, void *, size_t);
+    size_t           (* reader)(struct uartHandle *, enum uartError, void *, size_t);
     void *              readBuffer;
     size_t              readSize;
-    size_t           (* writer)(enum uartError, const void *, size_t);
+    uint32_t            readTimeout;
+    size_t           (* writer)(struct uartHandle *, enum uartError, const void *, size_t);
     const void *        writeBuffer;
     size_t              writeSize;
     esAtomic            state;
@@ -123,18 +126,23 @@ enum uartError uartWrite(
     size_t              nElements,
     esSysTimerTick      timeout);
 
+void uartSetClient(
+    struct uartHandle * handle,
+    struct esEpa *      epa);
+
 void uartSetReader(
     struct uartHandle * handle,
-    size_t           (* notify)(enum uartError, void *, size_t));
+    size_t           (* notify)(struct uartHandle *, enum uartError, void *, size_t));
 
 void uartSetWriter(
     struct uartHandle * handle,
-    size_t           (* notify)(enum uartError, const void *, size_t));
+    size_t           (* notify)(struct uartHandle *, enum uartError, const void *, size_t));
 
 enum uartError uartReadStart(
     struct uartHandle * handle,
     void *              buffer,
-    size_t              nElements);
+    size_t              nElements,
+    uint32_t            timeout);
 
 void uartReadCancel(
     struct uartHandle * handle);

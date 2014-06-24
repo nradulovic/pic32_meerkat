@@ -51,7 +51,6 @@ static esAction stateIdle           (struct wspace *, const esEvent *);
 static void initCodec(struct wspace *);
 static void startCodec(struct wspace *);
 static void coefInvertOneChannel(struct wspace *);
-static void coefClearAll(struct wspace *);
 
 /*=======================================================  LOCAL VARIABLES  ==*/
 
@@ -376,29 +375,6 @@ static void coefInvertOneChannel(
     codecWriteReg(&wspace->codec, CODEC_REG_RIGHT_COEF_D2, 0);
     codecWriteReg(&wspace->codec, CODEC_REG_RIGHT_COEF_D4, 0);
     codecWriteReg(&wspace->codec, CODEC_REG_RIGHT_COEF_D5, 0);
-}
-
-static void coefClearAll(
-    struct wspace *     wspace) {
-
-    int16_t leftCoef[] = {
-        32767,      0,          0,          0,          0,          0,
-        0,          0,          0,          0
-    };
-    int16_t rightCoef[] = {
-        32767,      0,          0,          0,          0,          0,
-        0,          0,          0,          0
-    };
-    codecWriteArray(
-        &wspace->codec,
-        CODEC_REG_LEFT_COEF_N0,
-        (uint16_t *)leftCoef,                                                   /* Array write functions are expecting unsigned data        */
-        ES_ARRAY_DIMENSION(leftCoef));
-    codecWriteArray(
-        &wspace->codec,
-        CODEC_REG_RIGHT_COEF_N0,
-        (uint16_t *)rightCoef,
-        ES_ARRAY_DIMENSION(rightCoef));                                         /* Array write functions are expecting unsigned data        */
 }
 
 /*===================================  GLOBAL PRIVATE FUNCTION DEFINITIONS  ==*/

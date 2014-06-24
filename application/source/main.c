@@ -84,6 +84,8 @@ static void processEvents(
     ES_ENSURE(esEpaCreate(&CodecEpa,        &CodecSm,        &StaticMem, &Codec));
     ES_ENSURE(esEpaCreate(&RadioEpa,        &RadioSm,        &StaticMem, &Radio));
     ES_ENSURE(esEpaCreate(&NotificationEpa, &NotificationSm, &StaticMem, &Notification));
+    ES_ENSURE(esEpaCreate(&SerialEpa,       &SerialSm,       &StaticMem, &Serial1));
+    ES_ENSURE(esEpaCreate(&SerialEpa,       &SerialSm,       &StaticMem, &Serial2));
 
     /*--  Start EPA execution  -----------------------------------------------*/
     ES_ENSURE(esEdsStart());

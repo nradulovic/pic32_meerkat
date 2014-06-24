@@ -14,6 +14,7 @@
 #include "driver/uart.h"
 #include "driver/clock.h"
 #include "plat/critical.h"
+#include "vtimer/vtimer.h"
 
 /*=========================================================  LOCAL MACRO's  ==*/
 
@@ -87,6 +88,7 @@ static void lldUartWriteStop(
 
 /*=======================================================  LOCAL VARIABLES  ==*/
 
+static struct esVTimer  ReadAfterTimeout;
 static struct uartHandle * Global2Handle;
 static uint32_t         Global2TxCounter;
 static uint32_t         Global2RxCounter;
@@ -130,6 +132,11 @@ static void uartUpdateRxTrigger(
     }
 }
 
+static void readAfterCallback(void) {
+    Global2Handle->reader(Global2Handle, UART_ERROR_TIMEOUT, NULL, 0);
+    uartReadCancel(Global2Handle);
+}
+
 static void lldUartOpen(
     const struct uartConfig * config,
     struct uartHandle * handle) {
@@ -138,7 +145,7 @@ static void lldUartOpen(
     uint32_t            mode;
     uint32_t            sta;
 
-    Global2Handle        = handle;
+    Global2Handle       = handle;
     U2MODE              = 0;
     U2STA               = 0;
     IEC1CLR             = IEC1_U2TX | IEC1_U2RX | IEC1_U2E;
@@ -243,6 +250,11 @@ static void lldUartReadStart(
     Global2RxCounter   = 0u;
     Global2RxCancelled = false;
     uartUpdateRxTrigger(handle->readSize);
+
+    if (handle->readTimeout != (uint32_t)-1)
+    {
+        esVTimerCancel(&ReadAfterTimeout);
+    }
     U2STACLR = U2STA_OERR;                                                      /* Flush old reveived data                                  */
     IFS1CLR  = IFS1_U2RX;
     IEC1SET  = IEC1_U2RX;
@@ -293,18 +305,19 @@ void __ISR(_UART2_VECTOR) lldUART2Handler(void) {
 
     /*--  RX interrupt  ------------------------------------------------------*/
     if ((IEC1 & IFS1 & INTR_U2RX) != 0u) {
-        bool            isFirstReceived;
-
-        isFirstReceived = false;
         IFS1CLR         = IFS1_U2RX;
 
         while ((U2STA & U2STA_URXDA) != 0u) {
 
             ((uint8_t *)Global2Handle->readBuffer)[Global2RxCounter] = U2RXREG;
             Global2RxCounter++;
+        }
 
-            if (Global2RxCounter == 1u) {
-                isFirstReceived = true;
+        if (Global2Handle->readTimeout != (uint32_t)-1)
+        {
+            if (Global2Handle->reader != NULL) {
+                esVTimerCancelI(&ReadAfterTimeout);
+                esVTimerStartI(&ReadAfterTimeout, Global2Handle->readTimeout, (esVTimerFn)readAfterCallback, NULL);
             }
         }
         
@@ -323,19 +336,27 @@ void __ISR(_UART2_VECTOR) lldUART2Handler(void) {
             
             if (Global2Handle->reader != NULL) {
                 (void)Global2Handle->reader(
+                    Global2Handle,
                     error,
                     Global2Handle->readBuffer,
                     Global2RxCounter);
             }
         } else if ((Global2RxCounter >= Global2Handle->readSize) || (Global2RxCancelled == true)) {
-            size_t  request;
+            size_t          request;
+            enum uartError  error;
 
-            request            = 0;
-            Global2RxCancelled = false;
+            request = 0;
+            error   = UART_ERROR_NONE;
+
+            if (Global2RxCancelled) {
+                Global2RxCancelled = false;
+                error              = UART_ERROR_CANCEL;
+            }
             
             if (Global2Handle->reader != NULL) {
                 request = Global2Handle->reader(
-                    UART_ERROR_NONE,
+                    Global2Handle,
+                    error,
                     Global2Handle->readBuffer,
                     Global2RxCounter);
                 Global2Handle->readSize += request;
@@ -344,10 +365,6 @@ void __ISR(_UART2_VECTOR) lldUART2Handler(void) {
 
             if (request == 0u) {
                 IEC1CLR = IEC1_U2RX;
-            }
-        } else if (isFirstReceived) {
-            if (Global2Handle->reader != NULL) {
-                Global2Handle->reader(UART_ERROR_NONE, NULL, 0);
             }
         }
     }
@@ -368,6 +385,7 @@ void __ISR(_UART2_VECTOR) lldUART2Handler(void) {
                 size_t  request;
 
                 request = Global2Handle->writer(
+                    Global2Handle,
                     UART_ERROR_NONE,
                     Global2Handle->writeBuffer,
                     Global2Handle->writeSize);

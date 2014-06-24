@@ -14,6 +14,7 @@
 #include "driver/uart.h"
 #include "driver/clock.h"
 #include "plat/critical.h"
+#include "vtimer/vtimer.h"
 
 /*=========================================================  LOCAL MACRO's  ==*/
 
@@ -87,6 +88,7 @@ static void lldUartWriteStop(
 
 /*=======================================================  LOCAL VARIABLES  ==*/
 
+static struct esVTimer  ReadAfterTimeout;
 static struct uartHandle * GlobalHandle;
 static uint32_t         GlobalTxCounter;
 static uint32_t         GlobalRxCounter;
@@ -128,6 +130,11 @@ static void uartUpdateRxTrigger(
     } else if (size >= 4) {
         U1STASET = U1STA_RXISEL_1_2;
     }
+}
+
+static void readAfterCallback(void) {
+    GlobalHandle->reader(GlobalHandle, UART_ERROR_TIMEOUT, NULL, 0);
+    uartReadCancel(GlobalHandle);
 }
 
 static void lldUartOpen(
@@ -185,6 +192,7 @@ static void lldUartOpen(
     *uartPinAddress[config->remap.tx]  = 0x01u;
     U1RXRbits.U1RXR     = uartPinValue[config->remap.rx];
     U1MODE              = mode;
+    esVTimerInit(&ReadAfterTimeout);
 }
 
 static void lldUartClose(
@@ -243,6 +251,11 @@ static void lldUartReadStart(
     GlobalRxCounter   = 0u;
     GlobalRxCancelled = false;
     uartUpdateRxTrigger(handle->readSize);
+
+    if (handle->readTimeout != (uint32_t)-1)
+    {
+        esVTimerCancel(&ReadAfterTimeout);
+    }
     U1STACLR = U1STA_OERR;                                                      /* Flush old reveived data                                  */
     IFS1CLR  = IFS1_U1RX;
     IEC1SET  = IEC1_U1RX;
@@ -293,18 +306,19 @@ void __ISR(_UART1_VECTOR) lldUart1Handler(void) {
 
     /*--  RX interrupt  ------------------------------------------------------*/
     if ((IEC1 & IFS1 & INTR_U1RX) != 0u) {
-        bool            isFirstReceived;
-
-        isFirstReceived = false;
         IFS1CLR         = IFS1_U1RX;
 
         while ((U1STA & U1STA_URXDA) != 0u) {
 
             ((uint8_t *)GlobalHandle->readBuffer)[GlobalRxCounter] = U1RXREG;
             GlobalRxCounter++;
+        }
 
-            if (GlobalRxCounter == 1u) {
-                isFirstReceived = true;
+        if (GlobalHandle->readTimeout != (uint32_t)-1)
+        {
+            if (GlobalHandle->reader != NULL) {
+                esVTimerCancelI(&ReadAfterTimeout);
+                esVTimerStartI(&ReadAfterTimeout, GlobalHandle->readTimeout, (esVTimerFn)readAfterCallback, NULL);
             }
         }
         
@@ -323,19 +337,28 @@ void __ISR(_UART1_VECTOR) lldUart1Handler(void) {
             
             if (GlobalHandle->reader != NULL) {
                 (void)GlobalHandle->reader(
+                    GlobalHandle,
                     error,
                     GlobalHandle->readBuffer,
                     GlobalRxCounter);
             }
         } else if ((GlobalRxCounter >= GlobalHandle->readSize) || (GlobalRxCancelled == true)) {
-            size_t  request;
+            size_t          request;
+            enum uartError  error;
 
-            request           = 0;
-            GlobalRxCancelled = false;
+            request = 0;
+            error   = UART_ERROR_NONE;
+
+            if (GlobalRxCancelled) {
+                GlobalRxCancelled = false;
+                error             = UART_ERROR_CANCEL;
+            }
             
             if (GlobalHandle->reader != NULL) {
+
                 request = GlobalHandle->reader(
-                    UART_ERROR_NONE,
+                    GlobalHandle,
+                    error,
                     GlobalHandle->readBuffer,
                     GlobalRxCounter);
                 GlobalHandle->readSize += request;
@@ -344,10 +367,6 @@ void __ISR(_UART1_VECTOR) lldUart1Handler(void) {
 
             if (request == 0u) {
                 IEC1CLR = IEC1_U1RX;
-            }
-        } else if (isFirstReceived) {
-            if (GlobalHandle->reader != NULL) {
-                GlobalHandle->reader(UART_ERROR_NONE, NULL, 0);
             }
         }
     }
@@ -368,6 +387,7 @@ void __ISR(_UART1_VECTOR) lldUart1Handler(void) {
                 size_t  request;
 
                 request = GlobalHandle->writer(
+                    GlobalHandle, 
                     UART_ERROR_NONE,
                     GlobalHandle->writeBuffer,
                     GlobalHandle->writeSize);
