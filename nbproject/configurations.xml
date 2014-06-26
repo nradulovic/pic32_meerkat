@@ -20,6 +20,7 @@
         <itemPath>application/include/app_timer.h</itemPath>
         <itemPath>application/include/epa_notification.h</itemPath>
         <itemPath>application/include/epa_serial.h</itemPath>
+        <itemPath>application/include/epa_sync.h</itemPath>
       </logicalFolder>
       <logicalFolder name="source" displayName="source" projectFiles="true">
         <itemPath>application/source/epa_btman.c</itemPath>
@@ -33,6 +34,7 @@
         <itemPath>application/source/app_timer.c</itemPath>
         <itemPath>application/source/epa_notification.c</itemPath>
         <itemPath>application/source/epa_serial.c</itemPath>
+        <itemPath>application/source/epa_sync.c</itemPath>
       </logicalFolder>
     </logicalFolder>
     <logicalFolder name="driver" displayName="driver" projectFiles="true">

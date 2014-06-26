@@ -133,7 +133,8 @@ static void uartUpdateRxTrigger(
 }
 
 static void readAfterCallback(void) {
-    Global2Handle->reader(Global2Handle, UART_ERROR_TIMEOUT, NULL, 0);
+    Global2Handle->reader(Global2Handle, UART_ERROR_TIMEOUT, Global2Handle->readBuffer,
+        Global2RxCounter);
     uartReadCancel(Global2Handle);
 }
 
@@ -192,6 +193,7 @@ static void lldUartOpen(
     *uartPin2Address[config->remap.tx] = 0x02u;
     U2RXRbits.U2RXR     = uartPin2Value[config->remap.rx];
     U2MODE              = mode;
+    esVTimerInit(&ReadAfterTimeout);
 }
 
 static void lldUartClose(

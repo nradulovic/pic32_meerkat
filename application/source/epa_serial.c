@@ -64,8 +64,8 @@ const struct esSmDefine SerialSm = ES_SM_DEFINE(
     sizeof(struct wspace),
     stateInit);
 
-struct esEpa *          Serial1;
-struct esEpa *          Serial2;
+struct esEpa *          SerialBt;
+struct esEpa *          SerialRadio;
 
 /*============================================  LOCAL FUNCTION DEFINITIONS  ==*/
 
@@ -138,7 +138,7 @@ static esAction stateIdle(struct wspace * wspace, const esEvent * event) {
 }
 
 static size_t reader(struct uartHandle * handle, enum uartError uartError, void * data, size_t size) {
-    struct uartEvent_ * uartEvt;
+    esEvent *           uartEvt;
     uint16_t            id;
     esError             error;
 
@@ -149,11 +149,11 @@ static size_t reader(struct uartHandle * handle, enum uartError uartError, void 
     } else {
         id = EVT_UART_ERROR_;
     }
-    ES_ENSURE(error = esEventCreateI(sizeof(struct uartEvent_), id, (esEvent **)&uartEvt));
+    ES_ENSURE(error = esEventCreateI(sizeof(struct uartEvent_), id, &uartEvt));
 
     if (!error) {
-        uartEvt->size = size;
-        esEpaSendAheadEventI(handle->epa, (esEvent *)uartEvt);
+        ((struct uartEvent_ *)uartEvt)->size = size;
+        ES_ENSURE(esEpaSendAheadEventI(handle->epa, uartEvt));
     }
 
     return (0u);

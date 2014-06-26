@@ -172,7 +172,7 @@ void codecClockEnable(
             break;
         }
         default : {
-            ES_ASSERT_ALWAYS(ES_API_RANGE, "Invalid clock out divider");
+            ES_ASSERT_ALWAYS("Invalid clock out divider");
 
             return;
         }

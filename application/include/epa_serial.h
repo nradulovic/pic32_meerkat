@@ -60,8 +60,8 @@ struct evtSerialPacket {
 
 extern const struct esEpaDefine SerialEpa;
 extern const struct esSmDefine  SerialSm;
-extern struct esEpa *   Serial1;
-extern struct esEpa *   Serial2;
+extern struct esEpa *   SerialBt;
+extern struct esEpa *   SerialRadio;
 
 /*===================================================  FUNCTION PROTOTYPES  ==*/
 

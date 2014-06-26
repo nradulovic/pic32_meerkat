@@ -23,7 +23,7 @@
 #define CONFIG_BT_DRV_PRIORITY          30
 #define CONFIG_BT_DRV_QUEUE_SIZE        10
 #define CONFIG_BT_DRV_EVENT_BASE        1000
-#define CONFIG_BT_UART_SPEED            115200
+
 #define CONFIG_BT_UART_TIMEOUT_MS       400u
 
 #define BT_DRV_CMD_TABLE(entry)                                                 \
@@ -79,20 +79,20 @@ enum BtStatus {
     BT_ERR_COMM
 };
 
-struct BtSendEvent {
+struct evtBtSend {
     struct esEvent      header;
     char *              arg;
     size_t              argSize;
 };
 
-struct BtReqEvent {
+struct evtBtReq {
     struct esEvent      header;
     enum BtCommandId    cmd;
     char *              arg;
     size_t              argSize;
 };
 
-struct BtReplyEvent {
+struct evtBtReply {
     struct esEvent      header;
     enum BtStatus       status;
     char *              arg;

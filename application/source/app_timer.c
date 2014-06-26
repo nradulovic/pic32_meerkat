@@ -12,6 +12,8 @@
 #include "app_timer.h"
 #include "base/debug.h"
 
+static const ES_MODULE_INFO_CREATE("app_timer", "Application timer", "Nenad Radulovic");
+
 static void timeout(void * arg) {
 
     struct appTimer *   timer;

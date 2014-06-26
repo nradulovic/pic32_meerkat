@@ -15,6 +15,7 @@
 #include "epa_codec.h"
 #include "epa_radio.h"
 #include "epa_serial.h"
+#include "epa_sync.h"
 #include "epa_notification.h"
 
 /*===============================================================  MACRO's  ==*/

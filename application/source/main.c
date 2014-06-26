@@ -76,16 +76,17 @@ static void processEvents(
     ES_ENSURE(esEdsInit());
 
     /*--  Set application idle routine  --------------------------------------*/
-    ES_ENSURE(esEdsSetIdle(idle));
+    esEdsSetIdle(idle);
 
     /*-- Create all required EPAs  -------------------------------------------*/
     ES_ENSURE(esEpaCreate(&BtDrvEpa,        &BtDrvSm,        &StaticMem, &BtDrv));
     ES_ENSURE(esEpaCreate(&BtManEpa,        &BtManSm,        &StaticMem, &BtMan));
     ES_ENSURE(esEpaCreate(&CodecEpa,        &CodecSm,        &StaticMem, &Codec));
-    ES_ENSURE(esEpaCreate(&RadioEpa,        &RadioSm,        &StaticMem, &Radio));
+    //ES_ENSURE(esEpaCreate(&RadioEpa,        &RadioSm,        &StaticMem, &Radio));
     ES_ENSURE(esEpaCreate(&NotificationEpa, &NotificationSm, &StaticMem, &Notification));
-    ES_ENSURE(esEpaCreate(&SerialEpa,       &SerialSm,       &StaticMem, &Serial1));
-    ES_ENSURE(esEpaCreate(&SerialEpa,       &SerialSm,       &StaticMem, &Serial2));
+    ES_ENSURE(esEpaCreate(&SerialEpa,       &SerialSm,       &StaticMem, &SerialBt));
+    ES_ENSURE(esEpaCreate(&SerialEpa,       &SerialSm,       &StaticMem, &SerialRadio));
+    ES_ENSURE(esEpaCreate(&SyncEpa,         &SyncSm,         &StaticMem, &Sync));
 
     /*--  Start EPA execution  -----------------------------------------------*/
     ES_ENSURE(esEdsStart());
