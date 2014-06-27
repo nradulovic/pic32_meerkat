@@ -9,7 +9,6 @@
 
 #include "epa_serial.h"
 #include "driver/uart.h"
-#include "app_timer.h"
 
 /*=========================================================  LOCAL MACRO's  ==*/
 
@@ -105,15 +104,17 @@ static esAction stateIdle(struct wspace * wspace, const esEvent * event) {
         }
         case EVT_SERIAL_PACKET : {
 
-            while (uartWriteStart(&wspace->uart, ((const struct evtSerialPacket *)event)->data,
-                ((const struct evtSerialPacket *)event)->size) == UART_ERROR_BUSY);
+            if (event->producer == wspace->client) {
+                while (uartWriteStart(&wspace->uart, ((const struct evtSerialPacket *)event)->data,
+                    ((const struct evtSerialPacket *)event)->size) == UART_ERROR_BUSY);
+            }
 
             return (ES_STATE_HANDLED());
         }
         case EVT_UART_RX_RESPONSE_ : {
 
             if (wspace->client != NULL) {
-                struct esEvent *    packet;
+                esEvent *           packet;
                 esError             error;
 
                 error = esEventCreate(sizeof(struct evtSerialPacket), EVT_SERIAL_PACKET, &packet);

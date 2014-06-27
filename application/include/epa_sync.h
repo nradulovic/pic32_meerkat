@@ -18,6 +18,12 @@
 extern "C" {
 #endif
 
+enum syncEventId {
+    EVT_SYNC_TICK = CONFIG_SYNC_EVENT_BASE,
+    EVT_SYNC_REQUEST_TICK,
+    EVT_SYNC_DONE
+};
+
 extern const struct esEpaDefine SyncEpa;
 extern const struct esSmDefine  SyncSm;
 extern struct esEpa *   Sync;

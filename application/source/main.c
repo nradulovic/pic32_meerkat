@@ -82,7 +82,7 @@ static void processEvents(
     ES_ENSURE(esEpaCreate(&BtDrvEpa,        &BtDrvSm,        &StaticMem, &BtDrv));
     ES_ENSURE(esEpaCreate(&BtManEpa,        &BtManSm,        &StaticMem, &BtMan));
     ES_ENSURE(esEpaCreate(&CodecEpa,        &CodecSm,        &StaticMem, &Codec));
-    //ES_ENSURE(esEpaCreate(&RadioEpa,        &RadioSm,        &StaticMem, &Radio));
+    ES_ENSURE(esEpaCreate(&RadioEpa,        &RadioSm,        &StaticMem, &Radio));
     ES_ENSURE(esEpaCreate(&NotificationEpa, &NotificationSm, &StaticMem, &Notification));
     ES_ENSURE(esEpaCreate(&SerialEpa,       &SerialSm,       &StaticMem, &SerialBt));
     ES_ENSURE(esEpaCreate(&SerialEpa,       &SerialSm,       &StaticMem, &SerialRadio));
