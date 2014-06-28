@@ -11,7 +11,6 @@
 #include <string.h>
 
 #include "events.h"
-#include "vtimer/vtimer.h"
 #include "conv.h"
 #include "driver/gpio.h"
 #include "app_timer.h"
@@ -48,7 +47,8 @@ enum BtManStateId {
 };
 
 enum localEvents {
-    EVT_TIMEOUT_ = ES_EVENT_LOCAL_ID
+    EVT_LOCAL_TIMEOUT = ES_EVENT_LOCAL_ID,
+    EVT_LOCAL_CMD_END_TIMEOUT
 };
 
 enum pttNotify {
@@ -68,24 +68,24 @@ struct wspace {
 
 /*=============================================  LOCAL FUNCTION PROTOTYPES  ==*/
 
-static esAction stateInit               (struct wspace *, const esEvent *);
-static esAction stateIdle               (struct wspace *, const esEvent *);
-static esAction stateCmdBegin           (struct wspace *, const esEvent *);
-static esAction stateCmdApply           (struct wspace *, const esEvent *);
-static esAction stateCmdEnd             (struct wspace *, const esEvent *);
-static esAction stateSetAuth            (struct wspace *, const esEvent *);
-static esAction stateSetName            (struct wspace *, const esEvent *);
-static esAction stateSetAudio           (struct wspace *, const esEvent *);
-static esAction stateSetVolume          (struct wspace *, const esEvent *);
-static esAction stateSetAvrcp           (struct wspace *, const esEvent *);
-static esAction stateSetConnectionMask  (struct wspace *, const esEvent *);
-static esAction stateSetDiscoveryMask   (struct wspace *, const esEvent *);
-static esAction stateSetDiscoverable    (struct wspace *, const esEvent *);
-static esAction stateHartBeat           (struct wspace *, const esEvent *);
-static esAction stateHartCmdBegin       (struct wspace *, const esEvent *);
-static esAction stateHartQuery          (struct wspace *, const esEvent *);
-static esAction stateHartCmdEnd         (struct wspace *, const esEvent *);
-static esAction stateHartSendData       (struct wspace *, const esEvent *);
+static esAction stateInit               (void *, const esEvent *);
+static esAction stateIdle               (void *, const esEvent *);
+static esAction stateCmdBegin           (void *, const esEvent *);
+static esAction stateCmdApply           (void *, const esEvent *);
+static esAction stateCmdEnd             (void *, const esEvent *);
+static esAction stateSetAuth            (void *, const esEvent *);
+static esAction stateSetName            (void *, const esEvent *);
+static esAction stateSetAudio           (void *, const esEvent *);
+static esAction stateSetVolume          (void *, const esEvent *);
+static esAction stateSetAvrcp           (void *, const esEvent *);
+static esAction stateSetConnectionMask  (void *, const esEvent *);
+static esAction stateSetDiscoveryMask   (void *, const esEvent *);
+static esAction stateSetDiscoverable    (void *, const esEvent *);
+static esAction stateHartBeat           (void *, const esEvent *);
+static esAction stateHartCmdBegin       (void *, const esEvent *);
+static esAction stateHartQuery          (void *, const esEvent *);
+static esAction stateHartCmdEnd         (void *, const esEvent *);
+static esAction stateHartSendData       (void *, const esEvent *);
 
 /*=======================================================  LOCAL VARIABLES  ==*/
 
@@ -109,11 +109,13 @@ struct esEpa *   BtMan;
 
 /*============================================  LOCAL FUNCTION DEFINITIONS  ==*/
 
-static esAction stateInit(struct wspace * wspace, const esEvent * event) {
-
+static esAction stateInit(void * space, const esEvent * event) {
+    struct wspace * wspace = space;
+    
     switch (event->id) {
         case ES_INIT : {
             appTimerInit(&wspace->timeout);
+            wspace->retry = 0;
             *(CONFIG_PTT_PORT)->tris |= (0x1 << CONFIG_PTT_PIN);
 
             return (ES_STATE_TRANSITION(stateIdle));
@@ -125,9 +127,8 @@ static esAction stateInit(struct wspace * wspace, const esEvent * event) {
     }
 }
 
-static esAction stateIdle(struct wspace * wspace, const esEvent * event) {
-
-    (void)wspace;
+static esAction stateIdle(void * space, const esEvent * event) {
+    (void)space;
 
     switch (event->id) {
         case EVT_BT_NOTIFY_READY : {
@@ -141,9 +142,8 @@ static esAction stateIdle(struct wspace * wspace, const esEvent * event) {
     }
 }
 
-static esAction stateCmdBegin(struct wspace * wspace, const esEvent * event) {
-
-    (void)wspace;
+static esAction stateCmdBegin(void * space, const esEvent * event) {
+    struct wspace * wspace = space;
 
     switch (event->id) {
         case ES_ENTRY : {
@@ -163,8 +163,9 @@ static esAction stateCmdBegin(struct wspace * wspace, const esEvent * event) {
             return (ES_STATE_TRANSITION(stateSetAuth));
         }
         case EVT_BT_REPLY : {
+            wspace->retry = 1;
 
-            return (ES_STATE_TRANSITION(stateIdle));
+            return (ES_STATE_TRANSITION(stateCmdEnd));
         }
         default : {
 
@@ -173,9 +174,8 @@ static esAction stateCmdBegin(struct wspace * wspace, const esEvent * event) {
     }
 }
 
-static esAction stateCmdApply(struct wspace * wspace, const esEvent * event) {
-
-    (void)wspace;
+static esAction stateCmdApply(void * space, const esEvent * event) {
+    struct wspace * wspace = space;
 
     switch (event->id) {
         case ES_ENTRY : {
@@ -194,29 +194,11 @@ static esAction stateCmdApply(struct wspace * wspace, const esEvent * event) {
             return (ES_STATE_HANDLED());
         }
         case EVT_BT_REPLY : {
-            esEvent *           request;
-            esError             error;
 
-            if (((const struct evtBtReply *)event)->status == BT_ERR_NONE) {
-                ES_ENSURE(error = esEventCreate(sizeof(esEvent), EVT_BT_CMD_MODE_EXIT, &request));
-
-                if (error) {
-                    return (ES_STATE_TRANSITION(stateCmdEnd));
-                }
-                ES_ENSURE(esEpaSendEvent(BtDrv, request));
-                ES_ENSURE(error = esEventCreate(sizeof(esEvent), EVT_CODEC_ENABLE_AUDIO, &request));
-
-                if (error) {
-                    return (ES_STATE_TRANSITION(stateCmdEnd));
-                }
-                ES_ENSURE(esEpaSendEvent(Codec, request));
-                wspace->oldState = *(CONFIG_PTT_PORT)->port & (0x1 << CONFIG_PTT_PIN);
-
-                return (ES_STATE_TRANSITION(stateHartBeat));
-            } else {
-
-                return (ES_STATE_TRANSITION(stateCmdEnd));
+            if (((struct evtBtReply *)event)->status != BT_ERR_NONE) {
+                wspace->retry = 1;
             }
+            return (ES_STATE_TRANSITION(stateCmdEnd));
         }
         default : {
 
@@ -225,12 +207,16 @@ static esAction stateCmdApply(struct wspace * wspace, const esEvent * event) {
     }
 }
 
-static esAction stateCmdEnd(struct wspace * wspace, const esEvent * event) {
-
-    (void)wspace;
+static esAction stateCmdEnd(void * space, const esEvent * event) {
+    struct wspace * wspace = space;
 
     switch (event->id) {
-        case ES_INIT : {
+        case ES_ENTRY : {
+            appTimerStart(&wspace->timeout, ES_VTMR_TIME_TO_TICK_MS(3000), EVT_LOCAL_CMD_END_TIMEOUT);
+
+            return (ES_STATE_HANDLED());
+        }
+        case EVT_LOCAL_CMD_END_TIMEOUT : {
             esEvent *           request;
             esError             error;
 
@@ -240,6 +226,29 @@ static esAction stateCmdEnd(struct wspace * wspace, const esEvent * event) {
                 ES_ENSURE(esEpaSendEvent(BtDrv, request));
             }
 
+            return (ES_STATE_HANDLED());
+        }
+        case EVT_BT_REPLY : {
+            esEvent *           request;
+            esError             error;
+
+            if (((struct evtBtReply *)event)->status == BT_ERR_NONE) {
+                ES_ENSURE(error = esEventCreate(sizeof(esEvent), EVT_CODEC_ENABLE_AUDIO, &request));
+                
+                if (!error) {
+                    ES_ENSURE(esEpaSendEvent(Codec, request));
+                    ES_ENSURE(error = esEventCreate(sizeof(esEvent), EVT_SYNC_READY, &request));
+
+                    if (!error) {
+                        ES_ENSURE(esEpaSendEvent(Sync, request));
+                        wspace->oldState = *(CONFIG_PTT_PORT)->port & (0x1 << CONFIG_PTT_PIN);
+
+                        if (wspace->retry == 0) {
+                            return (ES_STATE_TRANSITION(stateHartBeat));
+                        }
+                    }
+                }
+            }
             return (ES_STATE_TRANSITION(stateIdle));
         }
         default : {
@@ -249,9 +258,8 @@ static esAction stateCmdEnd(struct wspace * wspace, const esEvent * event) {
     }
 }
 
-static esAction stateSetAuth(struct wspace * wspace, const esEvent * event) {
-
-    (void)wspace;
+static esAction stateSetAuth(void * space, const esEvent * event) {
+    struct wspace * wspace = space;
     
     switch (event->id) {
         case ES_ENTRY : {
@@ -275,6 +283,7 @@ static esAction stateSetAuth(struct wspace * wspace, const esEvent * event) {
 
                 return (ES_STATE_TRANSITION(stateSetName));
             } else {
+                wspace->retry = 1;
 
                 return (ES_STATE_TRANSITION(stateCmdEnd));
             }
@@ -286,9 +295,8 @@ static esAction stateSetAuth(struct wspace * wspace, const esEvent * event) {
     }
 }
 
-static esAction stateSetName(struct wspace * wspace, const esEvent * event) {
-
-    (void)wspace;
+static esAction stateSetName(void * space, const esEvent * event) {
+    struct wspace * wspace = space;
 
     switch (event->id) {
         case ES_ENTRY : {
@@ -312,6 +320,7 @@ static esAction stateSetName(struct wspace * wspace, const esEvent * event) {
 
                 return (ES_STATE_TRANSITION(stateSetAudio));
             } else {
+                wspace->retry = 1;
 
                 return (ES_STATE_TRANSITION(stateCmdEnd));
             }
@@ -323,9 +332,8 @@ static esAction stateSetName(struct wspace * wspace, const esEvent * event) {
     }
 }
 
-static esAction stateSetAudio(struct wspace * wspace, const esEvent * event) {
-
-    (void)wspace;
+static esAction stateSetAudio(void * space, const esEvent * event) {
+    struct wspace * wspace = space;
 
     switch (event->id) {
         case ES_ENTRY : {
@@ -349,6 +357,7 @@ static esAction stateSetAudio(struct wspace * wspace, const esEvent * event) {
 
                 return (ES_STATE_TRANSITION(stateSetVolume));
             } else {
+                wspace->retry = 1;
 
                 return (ES_STATE_TRANSITION(stateCmdEnd));
             }
@@ -360,9 +369,8 @@ static esAction stateSetAudio(struct wspace * wspace, const esEvent * event) {
     }
 }
 
-static esAction stateSetVolume(struct wspace * wspace, const esEvent * event) {
-
-    (void)wspace;
+static esAction stateSetVolume(void * space, const esEvent * event) {
+    struct wspace * wspace = space;
 
     switch (event->id) {
         case ES_ENTRY : {
@@ -384,8 +392,9 @@ static esAction stateSetVolume(struct wspace * wspace, const esEvent * event) {
 
             if (((const struct evtBtReply *)event)->status == BT_ERR_NONE) {
 
-                return (ES_STATE_TRANSITION(stateSetAvrcp));
+                return (ES_STATE_TRANSITION(stateSetConnectionMask));
             } else {
+                wspace->retry = 1;
 
                 return (ES_STATE_TRANSITION(stateCmdEnd));
             }
@@ -397,9 +406,8 @@ static esAction stateSetVolume(struct wspace * wspace, const esEvent * event) {
     }
 }
 
-static esAction stateSetAvrcp(struct wspace * wspace, const esEvent * event) {
-
-    (void)wspace;
+static esAction stateSetAvrcp(void * space, const esEvent * event) {
+    struct wspace * wspace = space;
 
     switch (event->id) {
         case ES_ENTRY : {
@@ -423,6 +431,7 @@ static esAction stateSetAvrcp(struct wspace * wspace, const esEvent * event) {
 
                 return (ES_STATE_TRANSITION(stateSetConnectionMask));
             } else {
+                wspace->retry = 1;
 
                 return (ES_STATE_TRANSITION(stateCmdEnd));
             }
@@ -434,9 +443,8 @@ static esAction stateSetAvrcp(struct wspace * wspace, const esEvent * event) {
     }
 }
 
-static esAction stateSetConnectionMask(struct wspace * wspace, const esEvent * event) {
-
-    (void)wspace;
+static esAction stateSetConnectionMask(void * space, const esEvent * event) {
+    struct wspace * wspace = space;
 
     switch (event->id) {
         case ES_ENTRY : {
@@ -460,6 +468,7 @@ static esAction stateSetConnectionMask(struct wspace * wspace, const esEvent * e
 
                 return (ES_STATE_TRANSITION(stateSetDiscoveryMask));
             } else {
+                wspace->retry = 1;
 
                 return (ES_STATE_TRANSITION(stateCmdEnd));
             }
@@ -471,8 +480,8 @@ static esAction stateSetConnectionMask(struct wspace * wspace, const esEvent * e
     }
 }
 
-static esAction stateSetDiscoveryMask(struct wspace * wspace, const esEvent * event) {
-    (void)wspace;
+static esAction stateSetDiscoveryMask(void * space, const esEvent * event) {
+    struct wspace * wspace = space;
 
     switch (event->id) {
         case ES_ENTRY : {
@@ -496,6 +505,7 @@ static esAction stateSetDiscoveryMask(struct wspace * wspace, const esEvent * ev
 
                 return (ES_STATE_TRANSITION(stateSetDiscoverable));
             } else {
+                wspace->retry = 1;
 
                 return (ES_STATE_TRANSITION(stateCmdEnd));
             }
@@ -507,8 +517,8 @@ static esAction stateSetDiscoveryMask(struct wspace * wspace, const esEvent * ev
     }
 }
 
-static esAction stateSetDiscoverable(struct wspace * wspace, const esEvent * event) {
-    (void)wspace;
+static esAction stateSetDiscoverable(void * space, const esEvent * event) {
+    struct wspace * wspace = space;
 
     switch (event->id) {
         case ES_ENTRY : {
@@ -532,6 +542,7 @@ static esAction stateSetDiscoverable(struct wspace * wspace, const esEvent * eve
 
                 return (ES_STATE_TRANSITION(stateCmdApply));
             } else {
+                wspace->retry = 1;
 
                 return (ES_STATE_TRANSITION(stateCmdEnd));
             }
@@ -543,7 +554,8 @@ static esAction stateSetDiscoverable(struct wspace * wspace, const esEvent * eve
     }
 }
 
-static esAction stateHartBeat(struct wspace * wspace, const esEvent * event) {
+static esAction stateHartBeat(void * space, const esEvent * event) {
+    struct wspace * wspace = space;
 
     switch (event->id) {
         case ES_ENTRY : {
@@ -556,11 +568,11 @@ static esAction stateHartBeat(struct wspace * wspace, const esEvent * event) {
                 ES_ENSURE(esEpaSendEvent(Sync, request));
             }
             appTimerStart(&wspace->timeout, ES_VTMR_TIME_TO_TICK_MS(CONFIG_HART_BEAT_PERIOD),
-                EVT_TIMEOUT_);
+                EVT_LOCAL_TIMEOUT);
 
             return (ES_STATE_HANDLED());
         }
-        case EVT_TIMEOUT_ : {
+        case EVT_LOCAL_TIMEOUT : {
             uint32_t        newState;
             
             newState = *(CONFIG_PTT_PORT)->port & (0x1 << CONFIG_PTT_PIN);
@@ -594,7 +606,7 @@ static esAction stateHartBeat(struct wspace * wspace, const esEvent * event) {
             } else {
                 wspace->oldState = newState;
                 appTimerStart(&wspace->timeout, ES_VTMR_TIME_TO_TICK_MS(CONFIG_HART_BEAT_PERIOD),
-                    EVT_TIMEOUT_);
+                    EVT_LOCAL_TIMEOUT);
             }
 
             return (ES_STATE_HANDLED());
@@ -611,8 +623,8 @@ static esAction stateHartBeat(struct wspace * wspace, const esEvent * event) {
     }
 }
 
-static esAction stateHartCmdBegin(struct wspace * wspace, const esEvent * event) {
-    (void)wspace;
+static esAction stateHartCmdBegin(void * space, const esEvent * event) {
+    (void)space;
 
     switch (event->id) {
         case ES_ENTRY : {
@@ -642,8 +654,9 @@ static esAction stateHartCmdBegin(struct wspace * wspace, const esEvent * event)
     }
 }
 
-static esAction stateHartQuery(struct wspace * wspace, const esEvent * event) {
-
+static esAction stateHartQuery(void * space, const esEvent * event) {
+    struct wspace * wspace = space;
+    
     switch (event->id) {
         case ES_ENTRY : {
             esEvent *           request;
@@ -682,7 +695,8 @@ static esAction stateHartQuery(struct wspace * wspace, const esEvent * event) {
 }
 
 
-static esAction stateHartCmdEnd(struct wspace * wspace, const esEvent * event) {
+static esAction stateHartCmdEnd(void * space, const esEvent * event) {
+    struct wspace * wspace = space;
 
     switch (event->id) {
         case ES_INIT : {
@@ -714,8 +728,8 @@ static esAction stateHartCmdEnd(struct wspace * wspace, const esEvent * event) {
     }
 }
 
-static esAction stateHartSendData(struct wspace * space, const esEvent * event) {
-    (void)space;
+static esAction stateHartSendData(void * space, const esEvent * event) {
+    struct wspace * wspace = space;
 
     switch (event->id) {
         case ES_INIT : {
@@ -725,7 +739,7 @@ static esAction stateHartSendData(struct wspace * space, const esEvent * event) 
             ES_ENSURE(error = esEventCreate(sizeof(struct evtBtSend), EVT_BT_SEND_DATA, &data));
 
             if (!error) {
-                if (space->notify == PTT_PRESSED) {
+                if (wspace->notify == PTT_PRESSED) {
                     ((struct evtBtSend *)data)->arg     =        CONFIG_PTT_PRESSED;
                     ((struct evtBtSend *)data)->argSize = sizeof(CONFIG_PTT_PRESSED);
                 } else {

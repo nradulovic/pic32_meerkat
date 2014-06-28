@@ -45,9 +45,9 @@ struct wspace {
 
 /*=============================================  LOCAL FUNCTION PROTOTYPES  ==*/
 
-static esAction stateInit          (struct wspace *, const esEvent *);
-static esAction stateDisableEcho   (struct wspace *, const esEvent *);
-static esAction statePoll          (struct wspace *, const esEvent *);
+static esAction stateInit          (void *, const esEvent *);
+static esAction stateDisableEcho   (void *, const esEvent *);
+static esAction statePoll          (void *, const esEvent *);
 
 /*=======================================================  LOCAL VARIABLES  ==*/
 
@@ -75,13 +75,22 @@ struct esEpa *          Radio;
 
 /*============================================  LOCAL FUNCTION DEFINITIONS  ==*/
 
-static esAction stateInit(struct wspace * wspace, const esEvent * event) {
+static esAction stateInit(void * space, const esEvent * event) {
+    struct wspace * wspace = space;
 
     switch (event->id) {
         case ES_INIT : {
+            esEvent *           request;
+            esError             error;
+
             netwLowLimit  = -90;
             netwHighLimit = -87;
             appTimerInit(&wspace->timeout);
+            ES_ENSURE(error = esEventCreate(sizeof(esEvent), EVT_SYNC_READY, &request));
+
+            if (!error) {
+                ES_ENSURE(esEpaSendEvent(Sync, request));
+            }
 
             return (ES_STATE_TRANSITION(stateDisableEcho));
         }
@@ -92,15 +101,30 @@ static esAction stateInit(struct wspace * wspace, const esEvent * event) {
     }
 }
 
-static esAction stateDisableEcho(struct wspace * wspace, const esEvent * event) {
+static esAction stateDisableEcho(void * space, const esEvent * event) {
+    struct wspace * wspace = space;
+    
     switch (event->id) {
+        case ES_EXIT : {
+            esEvent *           request;
+            esError             error;
+
+            ES_ENSURE(error = esEventCreate(sizeof(esEvent), EVT_SYNC_DONE, &request));
+
+            if (!error) {
+                ES_ENSURE(esEpaSendEvent(Sync, request));
+            }
+
+            return (ES_STATE_HANDLED());
+        }
         case EVT_SYNC_TICK : {
             esEvent *           request;
             esError             error;
 
             appTimerStart(&wspace->timeout, ES_VTMR_TIME_TO_TICK_MS(CONFIG_RADIO_WAIT_PERIOD),
                 EVT_LOCAL_DISABLE_ECHO_WAIT);
-            ES_ENSURE(error = esEventCreate(sizeof(esEvent), EVT_SERIAL_PACKET, &request));
+            ES_ENSURE(error = esEventCreate(sizeof(struct evtSerialPacket), EVT_SERIAL_PACKET,
+                &request));
 
             if (!error) {
                 ((struct evtSerialPacket *)request)->data = RADIO_CMD_ECHO_DISABLE;
@@ -120,7 +144,7 @@ static esAction stateDisableEcho(struct wspace * wspace, const esEvent * event) 
                 ES_ENSURE(esEpaSendEvent(Notification, notify));
             }
 
-            return (ES_STATE_HANDLED());
+            return (ES_STATE_TRANSITION(stateDisableEcho));
         }
         case EVT_SERIAL_PACKET : {
             const struct evtSerialPacket * packet;
@@ -134,7 +158,7 @@ static esAction stateDisableEcho(struct wspace * wspace, const esEvent * event) 
                 return (ES_STATE_TRANSITION(statePoll));
             } else {
 
-                return (ES_STATE_HANDLED());
+                return (ES_STATE_TRANSITION(stateDisableEcho));
             }
         }
         default : {
@@ -144,15 +168,30 @@ static esAction stateDisableEcho(struct wspace * wspace, const esEvent * event) 
     }
 }
 
-static esAction statePoll(struct wspace * wspace, const esEvent * event) {
+static esAction statePoll(void * space, const esEvent * event) {
+    struct wspace * wspace = space;
+
     switch (event->id) {
+        case ES_EXIT : {
+            esEvent *           request;
+            esError             error;
+
+            ES_ENSURE(error = esEventCreate(sizeof(esEvent), EVT_SYNC_DONE, &request));
+
+            if (!error) {
+                ES_ENSURE(esEpaSendEvent(Sync, request));
+            }
+
+            return (ES_STATE_HANDLED());
+        }
         case EVT_SYNC_TICK : {
             esEvent *           request;
             esError             error;
 
             appTimerStart(&wspace->timeout, ES_VTMR_TIME_TO_TICK_MS(CONFIG_RADIO_WAIT_PERIOD),
                 EVT_LOCAL_POLL_WAIT);
-            ES_ENSURE(error = esEventCreate(sizeof(esEvent), EVT_SERIAL_PACKET, &request));
+            ES_ENSURE(error = esEventCreate(sizeof(struct evtSerialPacket), EVT_SERIAL_PACKET,
+                &request));
 
             if (!error) {
                 ((struct evtSerialPacket *)request)->data = RADIO_CMD_GET_STATE;
@@ -172,7 +211,7 @@ static esAction statePoll(struct wspace * wspace, const esEvent * event) {
                 ES_ENSURE(esEpaSendEvent(Notification, notify));
             }
 
-            return (ES_STATE_HANDLED());
+            return (ES_STATE_TRANSITION(stateDisableEcho));
         }
         case EVT_SERIAL_PACKET : {
             const struct evtSerialPacket * packet;
@@ -208,7 +247,7 @@ static esAction statePoll(struct wspace * wspace, const esEvent * event) {
                 }
             }
             
-            return (ES_STATE_HANDLED());
+            return (ES_STATE_TRANSITION(statePoll));
         }
         default : {
 

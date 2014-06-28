@@ -18,7 +18,7 @@
 
 /*===============================================================  MACRO's  ==*/
 
-#define CONFIG_CODEC_PRIORITY           1
+#define CONFIG_CODEC_PRIORITY           2
 #define CONFIG_CODEC_QUEUE_SIZE         10
 #define CONFIG_CODEC_EVENT_BASE         1200
 

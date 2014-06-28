@@ -22,6 +22,10 @@
 
 /*===============================================================  MACRO's  ==*/
 
+#define UART_INACTIVE                   0
+#define UART_RX_ACTIVE                  (0x1u << 0)
+#define UART_TX_ACTIVE                  (0x1u << 1)
+
 #define CONFIG_UART_CLOSE_WAIT_TICKS    100
 
 /*------------------------------------------------------  C++ extern begin  --*/

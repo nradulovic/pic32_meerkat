@@ -107,7 +107,11 @@ enum btDrvStateId {
 };
 
 enum localEvents {
-    EVT_TIMEOUT_ = ES_EVENT_LOCAL_ID
+    EVT_LOCAL_TIMEOUT = ES_EVENT_LOCAL_ID,
+    EVT_LOCAL_INIT_TIMEOUT,
+    EVT_LOCAL_CMD_BEGIN_TIMEOUT,
+    EVT_LOCAL_CMD_SEND_TIMEOUT,
+    EVT_LOCAL_CMD_END_TIMEOUT
 };
 
 struct wspace {
@@ -119,16 +123,16 @@ struct wspace {
 
 /*=============================================  LOCAL FUNCTION PROTOTYPES  ==*/
 
-static esAction stateInit      (struct wspace *, const esEvent *);
-static esAction stateIdle      (struct wspace *, const esEvent *);
-static esAction stateCmdBegin  (struct wspace *, const esEvent *);
-static esAction stateCmdIdle   (struct wspace *, const esEvent *);
-static esAction stateCmdSend   (struct wspace *, const esEvent *);
-static esAction stateCmdEnd    (struct wspace *, const esEvent *);
-static esAction stateDefToggle0(struct wspace *, const esEvent *);
-static esAction stateDefToggle1(struct wspace *, const esEvent *);
-static esAction stateDefToggle2(struct wspace *, const esEvent *);
-static esAction stateDefToggle3(struct wspace *, const esEvent *);
+static esAction stateInit               (void *, const esEvent *);
+static esAction stateIdle               (void *, const esEvent *);
+static esAction stateCmdBegin           (void *, const esEvent *);
+static esAction stateCmdIdle            (void *, const esEvent *);
+static esAction stateCmdSend            (void *, const esEvent *);
+static esAction stateCmdEnd             (void *, const esEvent *);
+static esAction stateDefToggle0         (void *, const esEvent *);
+static esAction stateDefToggle1         (void *, const esEvent *);
+static esAction stateDefToggle2         (void *, const esEvent *);
+static esAction stateDefToggle3         (void *, const esEvent *);
 
 /*--  Support functions  -----------------------------------------------------*/
 
@@ -160,17 +164,18 @@ struct esEpa *   BtDrv;
 
 /*============================================  LOCAL FUNCTION DEFINITIONS  ==*/
 
-static esAction stateInit (struct wspace * space, const esEvent * event) {
+static esAction stateInit (void * space, const esEvent * event) {
+    struct wspace * wspace = space;
 
     switch (event->id) {
         case ES_INIT : {
             initBtDrv(space);
             BT_PWR_LOW();
-            appTimerStart(&space->timeout, ES_VTMR_TIME_TO_TICK_MS(1000u), EVT_TIMEOUT_);
+            appTimerStart(&wspace->timeout, ES_VTMR_TIME_TO_TICK_MS(1000u), EVT_LOCAL_TIMEOUT);
 
             return (ES_STATE_HANDLED());
         }
-        case EVT_TIMEOUT_ : {
+        case EVT_LOCAL_TIMEOUT : {
             BT_PWR_HIGH();
 
             return (ES_STATE_TRANSITION(stateDefToggle0));
@@ -182,14 +187,16 @@ static esAction stateInit (struct wspace * space, const esEvent * event) {
     }
 }
 
-static esAction stateDefToggle0 (struct wspace * space, const esEvent * event) {
+static esAction stateDefToggle0(void * space, const esEvent * event) {
+    struct wspace * wspace = space;
+
     switch(event->id) {
         case ES_ENTRY : {
-            appTimerStart(&space->timeout, ES_VTMR_TIME_TO_TICK_MS(1000u), EVT_TIMEOUT_);
+            appTimerStart(&wspace->timeout, ES_VTMR_TIME_TO_TICK_MS(1000u), EVT_LOCAL_TIMEOUT);
 
             return (ES_STATE_HANDLED());
         }
-        case EVT_TIMEOUT_ : {
+        case EVT_LOCAL_TIMEOUT : {
             BT_DEF_INIT_OUT();
             BT_DEF_LOW();
 
@@ -202,14 +209,16 @@ static esAction stateDefToggle0 (struct wspace * space, const esEvent * event) {
     }
 }
 
-static esAction stateDefToggle1 (struct wspace * space, const esEvent * event) {
+static esAction stateDefToggle1(void * space, const esEvent * event) {
+    struct wspace * wspace = space;
+
     switch(event->id) {
         case ES_ENTRY : {
-            appTimerStart(&space->timeout, ES_VTMR_TIME_TO_TICK_MS(1000u), EVT_TIMEOUT_);
+            appTimerStart(&wspace->timeout, ES_VTMR_TIME_TO_TICK_MS(1000u), EVT_LOCAL_TIMEOUT);
 
             return (ES_STATE_HANDLED());
         }
-        case EVT_TIMEOUT_ : {
+        case EVT_LOCAL_TIMEOUT : {
             BT_DEF_HIGH();
 
             return (ES_STATE_TRANSITION(stateDefToggle2));
@@ -221,14 +230,16 @@ static esAction stateDefToggle1 (struct wspace * space, const esEvent * event) {
     }
 }
 
-static esAction stateDefToggle2 (struct wspace * space, const esEvent * event) {
+static esAction stateDefToggle2(void * space, const esEvent * event) {
+    struct wspace * wspace = space;
+
     switch(event->id) {
         case ES_ENTRY : {
-            appTimerStart(&space->timeout, ES_VTMR_TIME_TO_TICK_MS(1000u), EVT_TIMEOUT_);
+            appTimerStart(&wspace->timeout, ES_VTMR_TIME_TO_TICK_MS(1000u), EVT_LOCAL_TIMEOUT);
 
             return (ES_STATE_HANDLED());
         }
-        case EVT_TIMEOUT_ : {
+        case EVT_LOCAL_TIMEOUT : {
             BT_DEF_LOW();
 
             return (ES_STATE_TRANSITION(stateDefToggle3));
@@ -240,22 +251,29 @@ static esAction stateDefToggle2 (struct wspace * space, const esEvent * event) {
     }
 }
 
-static esAction stateDefToggle3 (struct wspace * space, const esEvent * event) {
+static esAction stateDefToggle3(void * space, const esEvent * event) {
+    struct wspace * wspace = space;
+
     switch(event->id) {
         case ES_ENTRY : {
-            appTimerStart(&space->timeout, ES_VTMR_TIME_TO_TICK_MS(1000u), EVT_TIMEOUT_);
+            appTimerStart(&wspace->timeout, ES_VTMR_TIME_TO_TICK_MS(1000u), EVT_LOCAL_TIMEOUT);
 
             return (ES_STATE_HANDLED());
         }
-        case EVT_TIMEOUT_ : {
+        case EVT_LOCAL_TIMEOUT : {
+            appTimerStart(&wspace->timeout, ES_VTMR_TIME_TO_TICK_MS(1000u), EVT_LOCAL_INIT_TIMEOUT);
+            BT_DEF_HIGH();
+            BT_DEF_INIT_IN();
+
+            return (ES_STATE_HANDLED());
+        }
+        case EVT_LOCAL_INIT_TIMEOUT : {
             esEvent *           notify;
             /*
              * TODO: Should broadcast here it is ready
              */
             ES_ENSURE(esEventCreate(sizeof(esEvent), EVT_BT_NOTIFY_READY, &notify));
             ES_ENSURE(esEpaSendEvent(BtMan, notify));
-            BT_DEF_HIGH();
-            BT_DEF_INIT_IN();
 
             return (ES_STATE_TRANSITION(stateIdle));
         }
@@ -266,23 +284,22 @@ static esAction stateDefToggle3 (struct wspace * space, const esEvent * event) {
     }
 }
 
-static esAction stateIdle (struct wspace * space, const esEvent * event) {
-
-    (void)space;
+static esAction stateIdle(void * space, const esEvent * event) {
+    struct wspace * wspace = space;
 
     switch (event->id) {
         case EVT_BT_CMD_MODE_ENTER : {
-            space->client  = event->producer;
+            wspace->client  = event->producer;
 
             return (ES_STATE_TRANSITION(stateCmdBegin));
         }
         case EVT_BT_RESTART : {
-            appTimerStart(&space->timeout, ES_VTMR_TIME_TO_TICK_MS(1000u), EVT_TIMEOUT_);
+            appTimerStart(&wspace->timeout, ES_VTMR_TIME_TO_TICK_MS(1000u), EVT_LOCAL_TIMEOUT);
             BT_PWR_LOW();
 
             return (ES_STATE_HANDLED());
         }
-        case EVT_TIMEOUT_: {
+        case EVT_LOCAL_TIMEOUT: {
             BT_PWR_HIGH();
 
             return (ES_STATE_HANDLED());
@@ -309,11 +326,13 @@ static esAction stateIdle (struct wspace * space, const esEvent * event) {
     }
 }
 
-static esAction stateCmdBegin (struct wspace * space, const esEvent * event) {
+static esAction stateCmdBegin(void * space, const esEvent * event) {
+    struct wspace * wspace = space;
+
     switch (event->id) {
         case ES_ENTRY : {
-            appTimerStart(&space->timeout, ES_VTMR_TIME_TO_TICK_MS(CONFIG_BT_UART_TIMEOUT_MS),
-                EVT_TIMEOUT_);
+            appTimerStart(&wspace->timeout, ES_VTMR_TIME_TO_TICK_MS(CONFIG_BT_TIMEOUT_MS),
+                EVT_LOCAL_CMD_BEGIN_TIMEOUT);
             BT_CMD_LOW();
 
             return (ES_STATE_HANDLED());
@@ -322,7 +341,7 @@ static esAction stateCmdBegin (struct wspace * space, const esEvent * event) {
             esError             error;
             const struct evtSerialPacket * packet;
 
-            appTimerCancel(&space->timeout);
+            appTimerCancel(&wspace->timeout);
             packet = (const struct evtSerialPacket *)event;
             
             if ((packet->size >= sizeof(BT_CMD_BEGIN) - 1u) &&
@@ -332,7 +351,7 @@ static esAction stateCmdBegin (struct wspace * space, const esEvent * event) {
                 ES_ENSURE(error = esEventCreate(sizeof(esEvent), EVT_BT_NOTIFY_READY, &notify));
 
                 if (!error) {
-                    ES_ENSURE(esEpaSendEvent(space->client, notify));
+                    ES_ENSURE(esEpaSendEvent(wspace->client, notify));
 
                     return (ES_STATE_TRANSITION(stateCmdIdle));
                 } else {
@@ -348,13 +367,13 @@ static esAction stateCmdBegin (struct wspace * space, const esEvent * event) {
                     ((struct evtBtReply *)reply)->status  = BT_ERR_FAILURE;
                     ((struct evtBtReply *)reply)->arg     = NULL;
                     ((struct evtBtReply *)reply)->argSize = 0;
-                    ES_ENSURE(esEpaSendEvent(space->client, reply));
+                    ES_ENSURE(esEpaSendEvent(wspace->client, reply));
                 }
 
                 return (ES_STATE_TRANSITION(stateCmdEnd));
             }
         }
-        case EVT_TIMEOUT_ : {
+        case EVT_LOCAL_CMD_BEGIN_TIMEOUT : {
             esError             error;
             esEvent *           reply;
             
@@ -364,10 +383,25 @@ static esAction stateCmdBegin (struct wspace * space, const esEvent * event) {
                 ((struct evtBtReply *)reply)->status  = BT_ERR_COMM;
                 ((struct evtBtReply *)reply)->arg     = NULL;
                 ((struct evtBtReply *)reply)->argSize = 0;
-                ES_ENSURE(esEpaSendEvent(space->client, reply));
+                ES_ENSURE(esEpaSendEvent(wspace->client, reply));
             }
 
             return (ES_STATE_TRANSITION(stateCmdEnd));
+        }
+        case EVT_BT_CMD_MODE_ENTER : {
+            esError             error;
+            esEvent *           reply;
+
+            ES_ENSURE(error = esEventCreate(sizeof(struct evtBtReply), EVT_BT_REPLY, &reply));
+
+            if (!error) {
+                ((struct evtBtReply *)reply)->status  = BT_ERR_FAILURE;
+                ((struct evtBtReply *)reply)->arg     = NULL;
+                ((struct evtBtReply *)reply)->argSize = 0;
+                ES_ENSURE(esEpaSendEvent(wspace->client, reply));
+            }
+
+            return (ES_STATE_HANDLED());
         }
         default : {
 
@@ -376,7 +410,9 @@ static esAction stateCmdBegin (struct wspace * space, const esEvent * event) {
     }
 }
 
-static esAction stateCmdIdle (struct wspace * space, const esEvent * event) {
+static esAction stateCmdIdle (void * space, const esEvent * event) {
+    struct wspace * wspace = space;
+
     switch (event->id) {
         case EVT_BT_CMD_MODE_EXIT : {
 
@@ -385,20 +421,35 @@ static esAction stateCmdIdle (struct wspace * space, const esEvent * event) {
         case EVT_BT_REQ : {
             const struct evtBtReq * request;
             
-            space->reqSize = 0u;
+            wspace->reqSize = 0u;
             request = (const struct evtBtReq *)event;
-            memcpy(&space->reqBuffer[space->reqSize], BtCmdTable[request->cmd].cmd,
+            memcpy(&wspace->reqBuffer[wspace->reqSize], BtCmdTable[request->cmd].cmd,
                 BtCmdTable[request->cmd].size);
-            space->reqSize += BtCmdTable[request->cmd].size;
+            wspace->reqSize += BtCmdTable[request->cmd].size;
 
             if (request->arg != NULL) {
-                memcpy(&space->reqBuffer[space->reqSize], request->arg, request->argSize);
-                space->reqSize += request->argSize;
+                memcpy(&wspace->reqBuffer[wspace->reqSize], request->arg, request->argSize);
+                wspace->reqSize += request->argSize;
             }
-            memcpy(&space->reqBuffer[space->reqSize], "\r\n", 2u);
-            space->reqSize += 2u;
+            memcpy(&wspace->reqBuffer[wspace->reqSize], "\r\n", 2u);
+            wspace->reqSize += 2u;
 
             return (ES_STATE_TRANSITION(stateCmdSend));
+        }
+        case EVT_BT_CMD_MODE_ENTER : {
+            esError             error;
+            esEvent *           reply;
+
+            ES_ENSURE(error = esEventCreate(sizeof(struct evtBtReply), EVT_BT_REPLY, &reply));
+
+            if (!error) {
+                ((struct evtBtReply *)reply)->status  = BT_ERR_FAILURE;
+                ((struct evtBtReply *)reply)->arg     = NULL;
+                ((struct evtBtReply *)reply)->argSize = 0;
+                ES_ENSURE(esEpaSendEvent(wspace->client, reply));
+            }
+
+            return (ES_STATE_HANDLED());
         }
         default : {
 
@@ -407,21 +458,23 @@ static esAction stateCmdIdle (struct wspace * space, const esEvent * event) {
     }
 }
 
-static esAction stateCmdSend (struct wspace * space, const  esEvent * event) {
+static esAction stateCmdSend (void * space, const  esEvent * event) {
+    struct wspace * wspace = space;
+
     switch (event->id) {
         case ES_INIT : {
             esEvent *           packet;
             esError             error;
-            appTimerStart(&space->timeout, ES_VTMR_TIME_TO_TICK_MS(CONFIG_BT_UART_TIMEOUT_MS),
-                EVT_TIMEOUT_);
+            appTimerStart(&wspace->timeout, ES_VTMR_TIME_TO_TICK_MS(CONFIG_BT_TIMEOUT_MS),
+                EVT_LOCAL_CMD_SEND_TIMEOUT);
             ES_ENSURE(error = esEventCreate(sizeof(struct evtSerialPacket), EVT_SERIAL_PACKET,
                 &packet));
 
             if (error) {
                 return (ES_STATE_TRANSITION(stateCmdIdle));
             }
-            ((struct evtSerialPacket *)packet)->data = space->reqBuffer;
-            ((struct evtSerialPacket *)packet)->size = space->reqSize;
+            ((struct evtSerialPacket *)packet)->data = wspace->reqBuffer;
+            ((struct evtSerialPacket *)packet)->size = wspace->reqSize;
             ES_ENSURE(esEpaSendEvent(SerialBt, packet));
             
             return (ES_STATE_HANDLED());
@@ -431,7 +484,7 @@ static esAction stateCmdSend (struct wspace * space, const  esEvent * event) {
             esEvent *           reply;
             const struct evtSerialPacket * packet;
 
-            appTimerCancel(&space->timeout);
+            appTimerCancel(&wspace->timeout);
             packet = (const struct evtSerialPacket *)event;
             ES_ENSURE(error = esEventCreate(sizeof(struct evtBtReply [1]) + packet->size,
                 EVT_BT_REPLY, &reply));
@@ -447,26 +500,44 @@ static esAction stateCmdSend (struct wspace * space, const  esEvent * event) {
                 ((struct evtBtReply *)reply)->arg     = (char *)&((struct evtBtReply *)reply)[1];
                 ((struct evtBtReply *)reply)->argSize = packet->size;
                 memcpy(((struct evtBtReply *)reply)->arg, packet->data, packet->size);
-                ES_ENSURE(esEpaSendEvent(space->client, reply));
+                ES_ENSURE(esEpaSendEvent(wspace->client, reply));
             }
 
             return (ES_STATE_TRANSITION(stateCmdIdle));
         }
-        case EVT_TIMEOUT_ : {
+        case EVT_LOCAL_CMD_SEND_TIMEOUT : {
             esError             error;
             esEvent *           reply;
 
-            ES_ENSURE(error = esEventCreate(sizeof(struct evtBtReply), EVT_BT_REPLY,
-                (esEvent **)&reply));
+            ES_ENSURE(error = esEventCreate(sizeof(struct evtBtReply), EVT_BT_REPLY, &reply));
 
             if (!error) {
                 ((struct evtBtReply *)reply)->status  = BT_ERR_COMM;
                 ((struct evtBtReply *)reply)->arg     = NULL;
                 ((struct evtBtReply *)reply)->argSize = 0;
-                ES_ENSURE(esEpaSendEvent(space->client, (esEvent *)reply));
+                ES_ENSURE(esEpaSendEvent(wspace->client, reply));
             }
 
             return (ES_STATE_TRANSITION(stateCmdIdle));
+        }
+        case EVT_BT_CMD_MODE_EXIT : {
+
+            return (ES_STATE_TRANSITION(stateCmdEnd));
+        }
+        case EVT_BT_CMD_MODE_ENTER : {
+            esError             error;
+            esEvent *           reply;
+
+            ES_ENSURE(error = esEventCreate(sizeof(struct evtBtReply), EVT_BT_REPLY, &reply));
+
+            if (!error) {
+                ((struct evtBtReply *)reply)->status  = BT_ERR_FAILURE;
+                ((struct evtBtReply *)reply)->arg     = NULL;
+                ((struct evtBtReply *)reply)->argSize = 0;
+                ES_ENSURE(esEpaSendEvent(wspace->client, reply));
+            }
+
+            return (ES_STATE_HANDLED());
         }
         default : {
             return (ES_STATE_IGNORED());
@@ -474,33 +545,69 @@ static esAction stateCmdSend (struct wspace * space, const  esEvent * event) {
     }
 }
 
-static esAction stateCmdEnd(struct wspace * space , const esEvent * event) {
-
-    (void)space;
+static esAction stateCmdEnd(void * space, const esEvent * event) {
+    struct wspace * wspace = space;
     
     switch (event->id) {
         case ES_ENTRY : {
-            appTimerStart(&space->timeout, ES_VTMR_TIME_TO_TICK_MS(CONFIG_BT_UART_TIMEOUT_MS),
-                EVT_TIMEOUT_);
+            appTimerStart(&wspace->timeout, ES_VTMR_TIME_TO_TICK_MS(2000),
+                EVT_LOCAL_CMD_END_TIMEOUT);
             BT_CMD_HIGH();
 
             return (ES_STATE_HANDLED());
         }
         case EVT_SERIAL_PACKET : {
-            esError             error;
             const struct evtSerialPacket * packet;
+            esError         error;
+            esEvent *       reply;
 
-            appTimerCancel(&space->timeout);
+            appTimerCancel(&wspace->timeout);
             packet = (const struct evtSerialPacket *)event;
 
-            if (strncmp(packet->data, BT_CMD_END, sizeof(BT_CMD_END) - 1u) == 0) {
-                esEvent *       notify;
-                ES_ENSURE(error = esEventCreate(sizeof(esEvent), EVT_BT_NOTIFY_READY, &notify));
+            ES_ENSURE(error = esEventCreate(sizeof(struct evtBtReply), EVT_BT_REPLY, &reply));
 
-                if (!error) {
-                    ES_ENSURE(esEpaSendEvent(space->client, notify));
+            if (!error) {
+                if (strncmp(packet->data, BT_CMD_END, sizeof(BT_CMD_END) - 1u) == 0) {
+                    ((struct evtBtReply *)reply)->status  = BT_ERR_NONE;
+                } else {
+                    ((struct evtBtReply *)reply)->status  = BT_ERR_COMM;
                 }
+                ((struct evtBtReply *)reply)->arg     = NULL;
+                ((struct evtBtReply *)reply)->argSize = 0;
+                ES_ENSURE(esEpaSendEvent(wspace->client, reply));
             }
+            
+
+            return (ES_STATE_TRANSITION(stateIdle));
+        }
+        case EVT_LOCAL_CMD_END_TIMEOUT : {
+            esError             error;
+            esEvent *           reply;
+
+            ES_ENSURE(error = esEventCreate(sizeof(struct evtBtReply), EVT_BT_REPLY, &reply));
+
+            if (!error) {
+                ((struct evtBtReply *)reply)->status  = BT_ERR_COMM;
+                ((struct evtBtReply *)reply)->arg     = NULL;
+                ((struct evtBtReply *)reply)->argSize = 0;
+                ES_ENSURE(esEpaSendEvent(wspace->client, reply));
+            }
+
+            return (ES_STATE_TRANSITION(stateIdle));
+        }
+        case EVT_BT_CMD_MODE_ENTER : {
+            esError             error;
+            esEvent *           reply;
+
+            ES_ENSURE(error = esEventCreate(sizeof(struct evtBtReply), EVT_BT_REPLY, &reply));
+
+            if (!error) {
+                ((struct evtBtReply *)reply)->status  = BT_ERR_FAILURE;
+                ((struct evtBtReply *)reply)->arg     = NULL;
+                ((struct evtBtReply *)reply)->argSize = 0;
+                ES_ENSURE(esEpaSendEvent(wspace->client, reply));
+            }
+
             return (ES_STATE_TRANSITION(stateIdle));
         }
         default : {

@@ -42,9 +42,9 @@ struct wspace {
 
 /*=============================================  LOCAL FUNCTION PROTOTYPES  ==*/
 
-static esAction stateInit           (struct wspace *, const esEvent *);
-static esAction stateReset          (struct wspace *, const esEvent *);
-static esAction stateIdle           (struct wspace *, const esEvent *);
+static esAction stateInit           (void *, const esEvent *);
+static esAction stateReset          (void *, const esEvent *);
+static esAction stateIdle           (void *, const esEvent *);
 
 /*--  Support functions  -----------------------------------------------------*/
 
@@ -74,9 +74,8 @@ struct esEpa *          Codec;
 
 /*============================================  LOCAL FUNCTION DEFINITIONS  ==*/
 
-static esAction stateInit(struct wspace * wspace, const esEvent * event) {
-
-    (void)wspace;
+static esAction stateInit(void * space, const esEvent * event) {
+    struct wspace * wspace = space;
 
     switch (event->id) {
         case ES_INIT : {
@@ -95,18 +94,14 @@ static esAction stateInit(struct wspace * wspace, const esEvent * event) {
     }
 }
 
-static esAction stateReset(struct wspace * wspace, const esEvent * event) {
-
-    (void)wspace;
+static esAction stateReset(void * space, const esEvent * event) {
+    struct wspace * wspace = space;
 
     switch (event->id) {
         case ES_ENTRY : {
             codecPowerUp();
             codecResetEnable();
-            appTimerStart(
-                &wspace->timeout,
-                ES_VTMR_TIME_TO_TICK_MS(100),
-                EVT_TIMEOUT_);
+            appTimerStart(&wspace->timeout, ES_VTMR_TIME_TO_TICK_MS(100), EVT_TIMEOUT_);
 
             return (ES_STATE_HANDLED());
         }
@@ -126,8 +121,8 @@ static esAction stateReset(struct wspace * wspace, const esEvent * event) {
     }
 }
 
-static esAction stateIdle(struct wspace * wspace, const esEvent * event) {
-    (void)wspace;
+static esAction stateIdle(void * space, const esEvent * event) {
+    struct wspace * wspace = space;
 
     switch (event->id) {
         case ES_ENTRY : {
@@ -140,17 +135,13 @@ static esAction stateIdle(struct wspace * wspace, const esEvent * event) {
                 &notify));
             ES_ENSURE(esEpaSendEvent(notify))
 #endif
-            appTimerStart(
-                &wspace->timeout,
-                ES_VTMR_TIME_TO_TICK_MS(CONFIG_CODEC_POLL),
+            appTimerStart(&wspace->timeout, ES_VTMR_TIME_TO_TICK_MS(CONFIG_CODEC_POLL),
                 EVT_TIMEOUT_);
 
             return (ES_STATE_HANDLED());
         }
         case EVT_TIMEOUT_ : {
-            appTimerStart(
-                &wspace->timeout,
-                ES_VTMR_TIME_TO_TICK_MS(CONFIG_CODEC_POLL),
+            appTimerStart(&wspace->timeout, ES_VTMR_TIME_TO_TICK_MS(CONFIG_CODEC_POLL),
                 EVT_TIMEOUT_);
             
 #if (CONFIG_DEBUG == 1)

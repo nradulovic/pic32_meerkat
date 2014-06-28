@@ -20,11 +20,11 @@
 /*===============================================================  MACRO's  ==*/
 
 #define CONFIG_BT_DRV_NAME              "Bluetooth driver"
-#define CONFIG_BT_DRV_PRIORITY          30
+#define CONFIG_BT_DRV_PRIORITY          29
 #define CONFIG_BT_DRV_QUEUE_SIZE        10
 #define CONFIG_BT_DRV_EVENT_BASE        1000
 
-#define CONFIG_BT_UART_TIMEOUT_MS       400u
+#define CONFIG_BT_TIMEOUT_MS            600u
 
 #define BT_DRV_CMD_TABLE(entry)                                                 \
     entry(BT_SET_AUTH_NONE,             "SA,0",     0)                          \

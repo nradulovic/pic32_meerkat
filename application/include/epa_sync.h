@@ -10,7 +10,7 @@
 
 #include "eds/epa.h"
 
-#define CONFIG_SYNC_PRIORITY             27
+#define CONFIG_SYNC_PRIORITY             31
 #define CONFIG_SYNC_QUEUE_SIZE           10
 #define CONFIG_SYNC_EVENT_BASE           1700
 
@@ -20,6 +20,7 @@ extern "C" {
 
 enum syncEventId {
     EVT_SYNC_TICK = CONFIG_SYNC_EVENT_BASE,
+    EVT_SYNC_READY,
     EVT_SYNC_REQUEST_TICK,
     EVT_SYNC_DONE
 };

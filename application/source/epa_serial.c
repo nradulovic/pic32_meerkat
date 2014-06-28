@@ -9,6 +9,7 @@
 
 #include "epa_serial.h"
 #include "driver/uart.h"
+#include "vtimer/vtimer.h"
 
 /*=========================================================  LOCAL MACRO's  ==*/
 
@@ -24,6 +25,7 @@ enum serialStateId {
 
 enum localEvents {
     EVT_UART_RX_RESPONSE_ = ES_EVENT_LOCAL_ID,
+    EVT_UART_TIMEOUT_,
     EVT_UART_ERROR_
 };
 
@@ -40,8 +42,8 @@ struct wspace {
 
 /*=============================================  LOCAL FUNCTION PROTOTYPES  ==*/
 
-static esAction stateInit           (struct wspace *, const esEvent *);
-static esAction stateIdle           (struct wspace *, const esEvent *);
+static esAction stateInit           (void *, const esEvent *);
+static esAction stateIdle           (void *, const esEvent *);
 
 static size_t reader(struct uartHandle *, enum uartError, void *, size_t);
 
@@ -68,7 +70,9 @@ struct esEpa *          SerialRadio;
 
 /*============================================  LOCAL FUNCTION DEFINITIONS  ==*/
 
-static esAction stateInit(struct wspace * wspace, const esEvent * event) {
+static esAction stateInit(void * space, const esEvent * event) {
+    struct wspace * wspace = space;
+
     switch (event->id) {
         case ES_INIT : {
             wspace->client = NULL;
@@ -89,11 +93,13 @@ static esAction stateInit(struct wspace * wspace, const esEvent * event) {
     }
 }
 
-static esAction stateIdle(struct wspace * wspace, const esEvent * event) {
+static esAction stateIdle(void * space, const esEvent * event) {
+    struct wspace * wspace = space;
+    
     switch (event->id) {
         case ES_ENTRY : {
             uartReadStart(&wspace->uart, &wspace->replyBuffer, sizeof(wspace->replyBuffer),
-                ES_VTMR_TIME_TO_TICK_MS(20));
+                ES_VTMR_TIME_TO_TICK_MS(40));
 
             return (ES_STATE_HANDLED());
         }
@@ -117,17 +123,18 @@ static esAction stateIdle(struct wspace * wspace, const esEvent * event) {
                 esEvent *           packet;
                 esError             error;
 
-                error = esEventCreate(sizeof(struct evtSerialPacket), EVT_SERIAL_PACKET, &packet);
+                ES_ENSURE(error = esEventCreate(sizeof(struct evtSerialPacket), EVT_SERIAL_PACKET,
+                &packet));
 
                 if (!error) {
                     ((struct evtSerialPacket *)packet)->data = &wspace->replyBuffer;
                     ((struct evtSerialPacket *)packet)->size =
                         ((const struct uartEvent_ *)event)->size;
-                     esEpaSendEvent(wspace->client, packet);
+                     ES_ENSURE(esEpaSendEvent(wspace->client, packet));
                 }
             }
             uartReadStart(&wspace->uart, &wspace->replyBuffer, sizeof(wspace->replyBuffer),
-                ES_VTMR_TIME_TO_TICK_MS(20));
+                ES_VTMR_TIME_TO_TICK_MS(40));
 
             return (ES_STATE_HANDLED());
         }

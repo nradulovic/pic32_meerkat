@@ -362,7 +362,7 @@ void __ISR(_UART1_VECTOR) lldUart1Handler(void) {
                     GlobalHandle->readBuffer,
                     GlobalRxCounter);
                 GlobalHandle->readSize += request;
-                uartUpdateRxTrigger(request);
+                uartUpdateRxTrigger(0);
             }
 
             if (request == 0u) {
@@ -394,9 +394,11 @@ void __ISR(_UART1_VECTOR) lldUart1Handler(void) {
                 GlobalHandle->writeSize += request;
 
                 if (request == 0u) {
+                    GlobalHandle->state &= ~UART_TX_ACTIVE;
                     IEC1CLR = IEC1_U1TX;                                        /* Stop further transmission                                */
                 }
             } else {
+                GlobalHandle->state &= ~UART_TX_ACTIVE;
                 IEC1CLR = IEC1_U1TX;                                            /* Stop further transmission                                */
             }
         }

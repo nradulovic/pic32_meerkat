@@ -13,9 +13,7 @@
 
 /*=========================================================  LOCAL MACRO's  ==*/
 
-#define UART_INACTIVE                   0
-#define UART_RX_ACTIVE                  (0x1u << 0)
-#define UART_TX_ACTIVE                  (0x1u << 1)
+
 
 #define UART_TIMER_COUNTING             0u
 #define UART_TIMER_FIRED                1u

@@ -41,12 +41,12 @@ struct wspace {
 
 /*=============================================  LOCAL FUNCTION PROTOTYPES  ==*/
 
-static esAction stateInit           (struct wspace *, const esEvent *);
-static esAction stateIdle           (struct wspace *, const esEvent *);
-static esAction stateNoDev          (struct wspace *, const esEvent *);
-static esAction stateNoNetw         (struct wspace *, const esEvent *);
-static esAction stateNetHi          (struct wspace *, const esEvent *);
-static esAction stateNetLo          (struct wspace *, const esEvent *);
+static esAction stateInit           (void *, const esEvent *);
+static esAction stateIdle           (void *, const esEvent *);
+static esAction stateNoDev          (void *, const esEvent *);
+static esAction stateNoNetw         (void *, const esEvent *);
+static esAction stateNetHi          (void *, const esEvent *);
+static esAction stateNetLo          (void *, const esEvent *);
 
 /*=======================================================  LOCAL VARIABLES  ==*/
 
@@ -71,7 +71,8 @@ struct esEpa *          Notification;
 
 /*============================================  LOCAL FUNCTION DEFINITIONS  ==*/
 
-static esAction stateInit(struct wspace * wspace, const esEvent * event) {
+static esAction stateInit(void * space, const esEvent * event) {
+    struct wspace * wspace = space;
 
     switch (event->id) {
         case ES_INIT : {
@@ -91,8 +92,8 @@ enum localEventId {
     STATE_NO_NETW_
 };
 
-static esAction stateIdle(struct wspace * wspace, const esEvent * event) {
-    (void)wspace;
+static esAction stateIdle(void * space, const esEvent * event) {
+    (void)space;
 
     switch (event->id) {
         case EVT_RADIO_NO_DEVICE : {
@@ -118,7 +119,8 @@ static esAction stateIdle(struct wspace * wspace, const esEvent * event) {
     }
 }
 
-static esAction stateNoDev(struct wspace * wspace, const esEvent * event) {
+static esAction stateNoDev(void * space, const esEvent * event) {
+    struct wspace * wspace = space;
 
     switch (event->id) {
         case ES_ENTRY : {
@@ -158,7 +160,8 @@ static esAction stateNoDev(struct wspace * wspace, const esEvent * event) {
     }
 }
 
-static esAction stateNoNetw(struct wspace * wspace, const esEvent * event) {
+static esAction stateNoNetw(void * space, const esEvent * event) {
+    struct wspace * wspace = space;
 
     switch (event->id) {
         case ES_ENTRY : {
@@ -198,8 +201,8 @@ static esAction stateNoNetw(struct wspace * wspace, const esEvent * event) {
     }
 }
 
-static esAction stateNetHi(struct wspace * wspace, const esEvent * event) {
-    (void)wspace;
+static esAction stateNetHi(void * space, const esEvent * event) {
+    (void)space;
 
     switch (event->id) {
         case ES_ENTRY : {
@@ -226,8 +229,8 @@ static esAction stateNetHi(struct wspace * wspace, const esEvent * event) {
     }
 }
 
-static esAction stateNetLo(struct wspace * wspace, const esEvent * event) {
-    (void)wspace;
+static esAction stateNetLo(void * space, const esEvent * event) {
+    (void)space;
     
     switch (event->id) {
         case ES_ENTRY : {

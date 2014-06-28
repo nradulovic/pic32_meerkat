@@ -19,7 +19,7 @@
 
 /*===============================================================  MACRO's  ==*/
 
-#define CONFIG_BT_MAN_PRIORITY          29
+#define CONFIG_BT_MAN_PRIORITY          28
 #define CONFIG_BT_MAN_QUEUE_SIZE        10
 #define CONFIG_BT_MAN_EVENT_BASE        1100
 
@@ -38,7 +38,7 @@
 
 /**@brief       Defines polling period
  */
-#define CONFIG_HART_BEAT_PERIOD         20u
+#define CONFIG_HART_BEAT_PERIOD         100u
 
 /*------------------------------------------------------  C++ extern begin  --*/
 #ifdef	__cplusplus

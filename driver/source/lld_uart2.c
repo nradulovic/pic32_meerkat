@@ -251,7 +251,7 @@ static void lldUartReadStart(
 
     Global2RxCounter   = 0u;
     Global2RxCancelled = false;
-    uartUpdateRxTrigger(handle->readSize);
+    uartUpdateRxTrigger(0);
 
     if (handle->readTimeout != (uint32_t)-1)
     {
@@ -362,7 +362,7 @@ void __ISR(_UART2_VECTOR) lldUART2Handler(void) {
                     Global2Handle->readBuffer,
                     Global2RxCounter);
                 Global2Handle->readSize += request;
-                uartUpdateRxTrigger(request);
+                uartUpdateRxTrigger(0);
             }
 
             if (request == 0u) {
@@ -394,9 +394,11 @@ void __ISR(_UART2_VECTOR) lldUART2Handler(void) {
                 Global2Handle->writeSize += request;
 
                 if (request == 0u) {
+                    Global2Handle->state &= ~UART_TX_ACTIVE;
                     IEC1CLR = IEC1_U2TX;                                        /* Stop further transmission                                */
                 }
             } else {
+                Global2Handle->state &= ~UART_TX_ACTIVE;
                 IEC1CLR = IEC1_U2TX;                                            /* Stop further transmission                                */
             }
         }
