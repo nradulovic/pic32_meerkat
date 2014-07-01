@@ -98,6 +98,7 @@ static esAction stateIdle(void * space, const esEvent * event) {
     
     switch (event->id) {
         case ES_ENTRY : {
+            memset(&wspace->replyBuffer, 0, sizeof(wspace->replyBuffer));
             uartReadStart(&wspace->uart, &wspace->replyBuffer, sizeof(wspace->replyBuffer),
                 ES_VTMR_TIME_TO_TICK_MS(40));
 
@@ -123,16 +124,20 @@ static esAction stateIdle(void * space, const esEvent * event) {
                 esEvent *           packet;
                 esError             error;
 
-                ES_ENSURE(error = esEventCreate(sizeof(struct evtSerialPacket), EVT_SERIAL_PACKET,
-                &packet));
+                ES_ENSURE(error = esEventCreate(sizeof(struct evtSerialPacket) + 
+                    ((const struct uartEvent_ *)event)->size, EVT_SERIAL_PACKET, &packet));
 
                 if (!error) {
-                    ((struct evtSerialPacket *)packet)->data = &wspace->replyBuffer;
-                    ((struct evtSerialPacket *)packet)->size =
-                        ((const struct uartEvent_ *)event)->size;
-                     ES_ENSURE(esEpaSendEvent(wspace->client, packet));
+                    struct evtSerialPacket * packet_;
+
+                    packet_       = (struct evtSerialPacket *)packet;
+                    packet_->data = &packet_[1];
+                    packet_->size = ((const struct uartEvent_ *)event)->size;
+                    memcpy(packet_->data, &wspace->replyBuffer, packet_->size);
+                    ES_ENSURE(esEpaSendEvent(wspace->client, packet));
                 }
             }
+            memset(&wspace->replyBuffer, 0, sizeof(wspace->replyBuffer));
             uartReadStart(&wspace->uart, &wspace->replyBuffer, sizeof(wspace->replyBuffer),
                 ES_VTMR_TIME_TO_TICK_MS(40));
 
@@ -152,7 +157,7 @@ static size_t reader(struct uartHandle * handle, enum uartError uartError, void 
 
     (void)data;
     
-    if ((uartError == UART_ERROR_NONE) || (uartError == UART_ERROR_TIMEOUT)) {
+    if ((uartError == UART_ERROR_NONE) || (uartError == UART_ERROR_CANCEL)) {
         id = EVT_UART_RX_RESPONSE_;
     } else {
         id = EVT_UART_ERROR_;

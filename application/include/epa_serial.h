@@ -52,7 +52,7 @@ struct evtSerialClient {
 
 struct evtSerialPacket {
     struct esEvent      event;
-    const void *        data;
+    void *              data;
     size_t              size;
 };
 

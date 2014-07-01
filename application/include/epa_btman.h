@@ -34,7 +34,7 @@
 /**@brief       BT profiles
  * @details     See documentation about available options for BT profile
  */
-#define CONFIG_BT_PROFILE               "0f"
+#define CONFIG_BT_PROFILE               "0F"
 
 /**@brief       Defines polling period
  */

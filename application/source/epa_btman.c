@@ -178,6 +178,7 @@ static esAction stateCmdApply(void * space, const esEvent * event) {
     struct wspace * wspace = space;
 
     switch (event->id) {
+#if 1
         case ES_ENTRY : {
             esEvent *           request;
             esError             error;
@@ -193,6 +194,11 @@ static esAction stateCmdApply(void * space, const esEvent * event) {
 
             return (ES_STATE_HANDLED());
         }
+#else
+        case ES_INIT : {
+            return (ES_STATE_TRANSITION(stateCmdEnd));
+        }
+#endif
         case EVT_BT_REPLY : {
 
             if (((struct evtBtReply *)event)->status != BT_ERR_NONE) {
@@ -212,11 +218,13 @@ static esAction stateCmdEnd(void * space, const esEvent * event) {
 
     switch (event->id) {
         case ES_ENTRY : {
+#if 0
             appTimerStart(&wspace->timeout, ES_VTMR_TIME_TO_TICK_MS(3000), EVT_LOCAL_CMD_END_TIMEOUT);
 
             return (ES_STATE_HANDLED());
         }
         case EVT_LOCAL_CMD_END_TIMEOUT : {
+#endif
             esEvent *           request;
             esError             error;
 
@@ -248,6 +256,8 @@ static esAction stateCmdEnd(void * space, const esEvent * event) {
                         }
                     }
                 }
+            } else if (((struct evtBtReply *)event)->status == BT_ERR_FAILURE) {
+                return (ES_STATE_TRANSITION(stateIdle));
             }
             return (ES_STATE_TRANSITION(stateIdle));
         }
@@ -355,7 +365,7 @@ static esAction stateSetAudio(void * space, const esEvent * event) {
 
             if (((const struct evtBtReply *)event)->status == BT_ERR_NONE) {
 
-                return (ES_STATE_TRANSITION(stateSetVolume));
+                return (ES_STATE_TRANSITION(stateSetConnectionMask));
             } else {
                 wspace->retry = 1;
 

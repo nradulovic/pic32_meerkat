@@ -133,7 +133,6 @@ static void uartUpdateRxTrigger(
 }
 
 static void readAfterCallback(void) {
-    GlobalHandle->reader(GlobalHandle, UART_ERROR_TIMEOUT, GlobalHandle->readBuffer, GlobalRxCounter);
     uartReadCancel(GlobalHandle);
 }
 

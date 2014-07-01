@@ -37,8 +37,8 @@
     entry(BT_SET_AVRCP,                 "S%,01",    0)                          \
     entry(BT_SET_DEVICE_NAME,           "SN,",      8)                          \
     entry(BT_SET_DISCOVERABLE,          "@,1",      0)                          \
+    entry(BT_DISPLAY_SETTINGS,          "D",        0)                          \
     entry(BT_QUERY,                     "Q",        0)                          \
-    entry(BT_CALL,                      "A,789",        0)                          \
     entry(BT_REBOOT,                    "R,1",      0)
 
 #define BT_DRV_CMD_EXPAND_ID(id, cmd, args)                                     \

@@ -178,7 +178,7 @@ static esAction stateInit (void * space, const esEvent * event) {
         case EVT_LOCAL_TIMEOUT : {
             BT_PWR_HIGH();
 
-            return (ES_STATE_TRANSITION(stateDefToggle0));
+            return (ES_STATE_TRANSITION(stateDefToggle3));
         }
         default : {
 
@@ -263,7 +263,7 @@ static esAction stateDefToggle3(void * space, const esEvent * event) {
         case EVT_LOCAL_TIMEOUT : {
             appTimerStart(&wspace->timeout, ES_VTMR_TIME_TO_TICK_MS(1000u), EVT_LOCAL_INIT_TIMEOUT);
             BT_DEF_HIGH();
-            BT_DEF_INIT_IN();
+            //BT_DEF_INIT_IN();
 
             return (ES_STATE_HANDLED());
         }
@@ -457,7 +457,7 @@ static esAction stateCmdIdle (void * space, const esEvent * event) {
         }
     }
 }
-
+static volatile char buffer[200];
 static esAction stateCmdSend (void * space, const  esEvent * event) {
     struct wspace * wspace = space;
 
@@ -488,7 +488,7 @@ static esAction stateCmdSend (void * space, const  esEvent * event) {
             packet = (const struct evtSerialPacket *)event;
             ES_ENSURE(error = esEventCreate(sizeof(struct evtBtReply [1]) + packet->size,
                 EVT_BT_REPLY, &reply));
-
+memcpy(buffer, packet->data, packet->size);
             if (!error) {
 
                 if ((strncmp(packet->data, BT_CMD_VALID,  sizeof(BT_CMD_VALID)  - 1u) == 0) ||
@@ -545,6 +545,8 @@ static esAction stateCmdSend (void * space, const  esEvent * event) {
     }
 }
 
+
+
 static esAction stateCmdEnd(void * space, const esEvent * event) {
     struct wspace * wspace = space;
     
@@ -557,6 +559,7 @@ static esAction stateCmdEnd(void * space, const esEvent * event) {
             return (ES_STATE_HANDLED());
         }
         case EVT_SERIAL_PACKET : {
+            
             const struct evtSerialPacket * packet;
             esError         error;
             esEvent *       reply;
@@ -565,6 +568,7 @@ static esAction stateCmdEnd(void * space, const esEvent * event) {
             packet = (const struct evtSerialPacket *)event;
 
             ES_ENSURE(error = esEventCreate(sizeof(struct evtBtReply), EVT_BT_REPLY, &reply));
+            memcpy(buffer, packet->data, packet->size);
 
             if (!error) {
                 if (strncmp(packet->data, BT_CMD_END, sizeof(BT_CMD_END) - 1u) == 0) {
