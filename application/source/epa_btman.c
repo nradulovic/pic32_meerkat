@@ -23,17 +23,21 @@
 #define BT_MAN_TABLE(entry)                                                     \
     entry(stateInit,                TOP)                                        \
     entry(stateIdle,                TOP)                                        \
-    entry(stateCmdBegin,            TOP)                                        \
-    entry(stateCmdApply,            TOP)                                        \
-    entry(stateCmdEnd,              TOP)                                        \
+    entry(stateResetCmdBegin,       TOP)                                        \
+    entry(stateResetSettings,       TOP)                                        \
+    entry(stateResetCmdEnd,         TOP)                                        \
+    entry(stateSetCmdBegin,         TOP)                                        \
     entry(stateSetAuth,             TOP)                                        \
     entry(stateSetName,             TOP)                                        \
+    entry(stateSetAudio,            TOP)                                        \
     entry(stateSetConnectionMask,   TOP)                                        \
     entry(stateSetDiscoveryMask,    TOP)                                        \
-    entry(stateSetDiscoverable,     TOP)                                        \
-    entry(stateSetAudio,            TOP)                                        \
-    entry(stateSetVolume,           TOP)                                        \
-    entry(stateSetAvrcp,            TOP)                                        \
+    entry(stateSetCmdEnd,           TOP)                                        \
+    entry(stateActionCmdBegin,      TOP)                                        \
+    entry(stateActionDiscoverable,  TOP)                                        \
+    entry(stateActionVolume,        TOP)                                        \
+    entry(stateActionAvrcp,         TOP)                                        \
+    entry(stateActionCmdEnd,        TOP)                                        \
     entry(stateHartCmdBegin,        TOP)                                        \
     entry(stateHartQuery,           TOP)                                        \
     entry(stateHartCmdEnd,          TOP)                                        \
@@ -48,6 +52,10 @@ enum BtManStateId {
 
 enum localEvents {
     EVT_LOCAL_TIMEOUT = ES_EVENT_LOCAL_ID,
+    EVT_LOCAL_RESET_SETTINGS_TIMEOUT,
+    EVT_LOCAL_RESET_CMD_TIMEOUT,
+    EVT_LOCAL_SET_CMD_TIMEOUT,
+    EVT_LOCAL_ACTION_CMD_TIMEOUT,
     EVT_LOCAL_CMD_END_TIMEOUT
 };
 
@@ -70,17 +78,21 @@ struct wspace {
 
 static esAction stateInit               (void *, const esEvent *);
 static esAction stateIdle               (void *, const esEvent *);
-static esAction stateCmdBegin           (void *, const esEvent *);
-static esAction stateCmdApply           (void *, const esEvent *);
-static esAction stateCmdEnd             (void *, const esEvent *);
+static esAction stateResetCmdBegin      (void *, const esEvent *);
+static esAction stateResetSettings      (void *, const esEvent *);
+static esAction stateResetCmdEnd        (void *, const esEvent *);
+static esAction stateSetCmdBegin        (void *, const esEvent *);
 static esAction stateSetAuth            (void *, const esEvent *);
 static esAction stateSetName            (void *, const esEvent *);
 static esAction stateSetAudio           (void *, const esEvent *);
-static esAction stateSetVolume          (void *, const esEvent *);
-static esAction stateSetAvrcp           (void *, const esEvent *);
 static esAction stateSetConnectionMask  (void *, const esEvent *);
 static esAction stateSetDiscoveryMask   (void *, const esEvent *);
-static esAction stateSetDiscoverable    (void *, const esEvent *);
+static esAction stateSetCmdEnd          (void *, const esEvent *);
+static esAction stateActionCmdBegin     (void *, const esEvent *);
+static esAction stateActionDiscoverable (void *, const esEvent *);
+static esAction stateActionVolume       (void *, const esEvent *);
+static esAction stateActionAvrcp        (void *, const esEvent *);
+static esAction stateActionCmdEnd       (void *, const esEvent *);
 static esAction stateHartBeat           (void *, const esEvent *);
 static esAction stateHartCmdBegin       (void *, const esEvent *);
 static esAction stateHartQuery          (void *, const esEvent *);
@@ -133,7 +145,7 @@ static esAction stateIdle(void * space, const esEvent * event) {
     switch (event->id) {
         case EVT_BT_NOTIFY_READY : {
 
-            return (ES_STATE_TRANSITION(stateCmdBegin));
+            return (ES_STATE_TRANSITION(stateResetCmdBegin));
         }
         default : {
 
@@ -142,13 +154,15 @@ static esAction stateIdle(void * space, const esEvent * event) {
     }
 }
 
-static esAction stateCmdBegin(void * space, const esEvent * event) {
+static esAction stateResetCmdBegin(void * space, const esEvent * event) {
     struct wspace * wspace = space;
 
     switch (event->id) {
         case ES_ENTRY : {
             esEvent *           request;
             esError             error;
+
+            wspace->retry = 0;
 
             ES_ENSURE(error = esEventCreate(sizeof(esEvent), EVT_BT_CMD_MODE_ENTER, &request));
 
@@ -158,14 +172,17 @@ static esAction stateCmdBegin(void * space, const esEvent * event) {
 
             return (ES_STATE_HANDLED());
         }
-        case EVT_BT_NOTIFY_READY : {
-
-            return (ES_STATE_TRANSITION(stateSetAuth));
-        }
         case EVT_BT_REPLY : {
-            wspace->retry = 1;
+            const struct evtBtReply * reply = (const struct evtBtReply *)event;
 
-            return (ES_STATE_TRANSITION(stateCmdEnd));
+            if (reply->status == BT_ERR_NONE) {
+
+                return (ES_STATE_TRANSITION(stateResetSettings));
+            } else {
+                wspace->retry = 1;
+
+                return (ES_STATE_TRANSITION(stateResetCmdEnd));
+            }
         }
         default : {
 
@@ -174,11 +191,54 @@ static esAction stateCmdBegin(void * space, const esEvent * event) {
     }
 }
 
-static esAction stateCmdApply(void * space, const esEvent * event) {
+static esAction stateResetSettings(void * space, const esEvent * event) {
     struct wspace * wspace = space;
 
     switch (event->id) {
-#if 1
+        case ES_ENTRY : {
+            esEvent *           request;
+            esError             error;
+
+            ES_ENSURE(error = esEventCreate(sizeof(struct evtBtReq), EVT_BT_REQ, &request));
+
+            if (!error) {
+                ((struct evtBtReq *)request)->cmd = BT_DEFAULTS;
+                ((struct evtBtReq *)request)->arg = NULL;
+                ((struct evtBtReq *)request)->argSize = 0;
+                ES_ENSURE(esEpaSendEvent(BtDrv, request));
+            }
+
+            return (ES_STATE_HANDLED());
+        }
+        case EVT_LOCAL_RESET_SETTINGS_TIMEOUT : {
+
+            return (ES_STATE_TRANSITION(stateResetCmdEnd));
+        }
+        case EVT_BT_REPLY : {
+            const struct evtBtReply * reply = (const struct evtBtReply *)event;
+
+            if (reply->status == BT_ERR_NONE) {
+                appTimerStart(&wspace->timeout, ES_VTMR_TIME_TO_TICK_MS(30),
+                    EVT_LOCAL_RESET_SETTINGS_TIMEOUT);
+
+                return (ES_STATE_HANDLED());
+            } else {
+                wspace->retry = 1;
+
+                return (ES_STATE_TRANSITION(stateResetCmdEnd));
+            }
+        }
+        default : {
+
+            return (ES_STATE_IGNORED());
+        }
+    }
+}
+
+static esAction stateResetCmdEnd(void * space, const esEvent * event) {
+    struct wspace * wspace = space;
+
+    switch (event->id) {
         case ES_ENTRY : {
             esEvent *           request;
             esError             error;
@@ -194,17 +254,23 @@ static esAction stateCmdApply(void * space, const esEvent * event) {
 
             return (ES_STATE_HANDLED());
         }
-#else
-        case ES_INIT : {
-            return (ES_STATE_TRANSITION(stateCmdEnd));
-        }
-#endif
         case EVT_BT_REPLY : {
+            const struct evtBtReply * reply = (const struct evtBtReply *)event;
 
-            if (((struct evtBtReply *)event)->status != BT_ERR_NONE) {
-                wspace->retry = 1;
+            if (reply->status == BT_ERR_NONE) {
+                if (wspace->retry == 0) {
+                    appTimerStart(&wspace->timeout, ES_VTMR_TIME_TO_TICK_MS(100),
+                        EVT_LOCAL_RESET_CMD_TIMEOUT);
+
+                    return (ES_STATE_HANDLED());
+                }
             }
-            return (ES_STATE_TRANSITION(stateCmdEnd));
+            
+            return (ES_STATE_TRANSITION(stateResetCmdBegin));             /* Retry from beginning */
+        }
+        case EVT_LOCAL_RESET_CMD_TIMEOUT : {
+
+            return (ES_STATE_TRANSITION(stateSetCmdBegin));
         }
         default : {
 
@@ -213,22 +279,17 @@ static esAction stateCmdApply(void * space, const esEvent * event) {
     }
 }
 
-static esAction stateCmdEnd(void * space, const esEvent * event) {
+static esAction stateSetCmdBegin(void * space, const esEvent * event) {
     struct wspace * wspace = space;
 
     switch (event->id) {
         case ES_ENTRY : {
-#if 0
-            appTimerStart(&wspace->timeout, ES_VTMR_TIME_TO_TICK_MS(3000), EVT_LOCAL_CMD_END_TIMEOUT);
-
-            return (ES_STATE_HANDLED());
-        }
-        case EVT_LOCAL_CMD_END_TIMEOUT : {
-#endif
             esEvent *           request;
             esError             error;
 
-            ES_ENSURE(error = esEventCreate(sizeof(esEvent), EVT_BT_CMD_MODE_EXIT, &request));
+            wspace->retry = 0;
+
+            ES_ENSURE(error = esEventCreate(sizeof(esEvent), EVT_BT_CMD_MODE_ENTER, &request));
 
             if (!error) {
                 ES_ENSURE(esEpaSendEvent(BtDrv, request));
@@ -237,29 +298,16 @@ static esAction stateCmdEnd(void * space, const esEvent * event) {
             return (ES_STATE_HANDLED());
         }
         case EVT_BT_REPLY : {
-            esEvent *           request;
-            esError             error;
+            const struct evtBtReply * reply = (const struct evtBtReply *)event;
 
-            if (((struct evtBtReply *)event)->status == BT_ERR_NONE) {
-                ES_ENSURE(error = esEventCreate(sizeof(esEvent), EVT_CODEC_ENABLE_AUDIO, &request));
-                
-                if (!error) {
-                    ES_ENSURE(esEpaSendEvent(Codec, request));
-                    ES_ENSURE(error = esEventCreate(sizeof(esEvent), EVT_SYNC_READY, &request));
+            if (reply->status == BT_ERR_NONE) {
 
-                    if (!error) {
-                        ES_ENSURE(esEpaSendEvent(Sync, request));
-                        wspace->oldState = *(CONFIG_PTT_PORT)->port & (0x1 << CONFIG_PTT_PIN);
+                return (ES_STATE_TRANSITION(stateSetAuth));
+            } else {
+                wspace->retry = 1;
 
-                        if (wspace->retry == 0) {
-                            return (ES_STATE_TRANSITION(stateHartBeat));
-                        }
-                    }
-                }
-            } else if (((struct evtBtReply *)event)->status == BT_ERR_FAILURE) {
-                return (ES_STATE_TRANSITION(stateIdle));
+                return (ES_STATE_TRANSITION(stateSetCmdEnd));
             }
-            return (ES_STATE_TRANSITION(stateIdle));
         }
         default : {
 
@@ -288,14 +336,15 @@ static esAction stateSetAuth(void * space, const esEvent * event) {
             return (ES_STATE_HANDLED());
         }
         case EVT_BT_REPLY : {
+            const struct evtBtReply * reply = (const struct evtBtReply *)event;
 
-            if (((const struct evtBtReply *)event)->status == BT_ERR_NONE) {
+            if (reply->status == BT_ERR_NONE) {
 
                 return (ES_STATE_TRANSITION(stateSetName));
             } else {
                 wspace->retry = 1;
 
-                return (ES_STATE_TRANSITION(stateCmdEnd));
+                return (ES_STATE_TRANSITION(stateSetCmdEnd));
             }
         }
         default : {
@@ -325,14 +374,15 @@ static esAction stateSetName(void * space, const esEvent * event) {
             return (ES_STATE_HANDLED());
         }
         case EVT_BT_REPLY : {
+            const struct evtBtReply * reply = (const struct evtBtReply *)event;
 
-            if (((const struct evtBtReply *)event)->status == BT_ERR_NONE) {
+            if (reply->status == BT_ERR_NONE) {
 
                 return (ES_STATE_TRANSITION(stateSetAudio));
             } else {
                 wspace->retry = 1;
 
-                return (ES_STATE_TRANSITION(stateCmdEnd));
+                return (ES_STATE_TRANSITION(stateSetCmdEnd));
             }
         }
         default : {
@@ -362,88 +412,15 @@ static esAction stateSetAudio(void * space, const esEvent * event) {
             return (ES_STATE_HANDLED());
         }
         case EVT_BT_REPLY : {
+            const struct evtBtReply * reply = (const struct evtBtReply *)event;
 
-            if (((const struct evtBtReply *)event)->status == BT_ERR_NONE) {
-
-                return (ES_STATE_TRANSITION(stateSetConnectionMask));
-            } else {
-                wspace->retry = 1;
-
-                return (ES_STATE_TRANSITION(stateCmdEnd));
-            }
-        }
-        default : {
-
-            return (ES_STATE_IGNORED());
-        }
-    }
-}
-
-static esAction stateSetVolume(void * space, const esEvent * event) {
-    struct wspace * wspace = space;
-
-    switch (event->id) {
-        case ES_ENTRY : {
-            esEvent *           request;
-            esError             error;
-
-            ES_ENSURE(error = esEventCreate(sizeof(struct evtBtReq), EVT_BT_REQ, &request));
-
-            if (!error) {
-                ((struct evtBtReq *)request)->cmd = BT_SET_MUTE_OFF;
-                ((struct evtBtReq *)request)->arg = NULL;
-                ((struct evtBtReq *)request)->argSize = 0;
-                ES_ENSURE(esEpaSendEvent(BtDrv, request));
-            }
-
-            return (ES_STATE_HANDLED());
-        }
-        case EVT_BT_REPLY : {
-
-            if (((const struct evtBtReply *)event)->status == BT_ERR_NONE) {
+            if (reply->status == BT_ERR_NONE) {
 
                 return (ES_STATE_TRANSITION(stateSetConnectionMask));
             } else {
                 wspace->retry = 1;
 
-                return (ES_STATE_TRANSITION(stateCmdEnd));
-            }
-        }
-        default : {
-
-            return (ES_STATE_IGNORED());
-        }
-    }
-}
-
-static esAction stateSetAvrcp(void * space, const esEvent * event) {
-    struct wspace * wspace = space;
-
-    switch (event->id) {
-        case ES_ENTRY : {
-            esEvent *           request;
-            esError             error;
-
-            ES_ENSURE(error = esEventCreate(sizeof(struct evtBtReq), EVT_BT_REQ, &request));
-            
-            if (!error) {
-                ((struct evtBtReq *)request)->cmd = BT_SET_AVRCP;
-                ((struct evtBtReq *)request)->arg = NULL;
-                ((struct evtBtReq *)request)->argSize = 0;
-                ES_ENSURE(esEpaSendEvent(BtDrv, request));
-            }
-
-            return (ES_STATE_HANDLED());
-        }
-        case EVT_BT_REPLY : {
-
-            if (((const struct evtBtReply *)event)->status == BT_ERR_NONE) {
-
-                return (ES_STATE_TRANSITION(stateSetConnectionMask));
-            } else {
-                wspace->retry = 1;
-
-                return (ES_STATE_TRANSITION(stateCmdEnd));
+                return (ES_STATE_TRANSITION(stateSetCmdEnd));
             }
         }
         default : {
@@ -473,14 +450,15 @@ static esAction stateSetConnectionMask(void * space, const esEvent * event) {
             return (ES_STATE_HANDLED());
         }
         case EVT_BT_REPLY : {
+            const struct evtBtReply * reply = (const struct evtBtReply *)event;
 
-            if (((const struct evtBtReply *)event)->status == BT_ERR_NONE) {
+            if (reply->status == BT_ERR_NONE) {
 
                 return (ES_STATE_TRANSITION(stateSetDiscoveryMask));
             } else {
                 wspace->retry = 1;
 
-                return (ES_STATE_TRANSITION(stateCmdEnd));
+                return (ES_STATE_TRANSITION(stateSetCmdEnd));
             }
         }
         default : {
@@ -510,14 +488,93 @@ static esAction stateSetDiscoveryMask(void * space, const esEvent * event) {
             return (ES_STATE_HANDLED());
         }
         case EVT_BT_REPLY : {
+            const struct evtBtReply * reply = (const struct evtBtReply *)event;
 
-            if (((const struct evtBtReply *)event)->status == BT_ERR_NONE) {
+            if (reply->status != BT_ERR_NONE) {
+                wspace->retry = 1;
+            }
 
-                return (ES_STATE_TRANSITION(stateSetDiscoverable));
+            return (ES_STATE_TRANSITION(stateSetCmdEnd));
+        }
+        default : {
+
+            return (ES_STATE_IGNORED());
+        }
+    }
+}
+
+static esAction stateSetCmdEnd(void * space, const esEvent * event) {
+    struct wspace * wspace = space;
+
+    switch (event->id) {
+        case ES_ENTRY : {
+            esEvent *           request;
+            esError             error;
+
+            ES_ENSURE(error = esEventCreate(sizeof(struct evtBtReq), EVT_BT_REQ, &request));
+
+            if (!error) {
+                ((struct evtBtReq *)request)->cmd = BT_REBOOT;
+                ((struct evtBtReq *)request)->arg = NULL;
+                ((struct evtBtReq *)request)->argSize = 0;
+                ES_ENSURE(esEpaSendEvent(BtDrv, request));
+            }
+
+            return (ES_STATE_HANDLED());
+        }
+        case EVT_BT_REPLY : {
+            const struct evtBtReply * reply = (const struct evtBtReply *)event;
+
+            if (reply->status == BT_ERR_NONE) {
+                if (wspace->retry == 0) {
+                    appTimerStart(&wspace->timeout, ES_VTMR_TIME_TO_TICK_MS(100),
+                        EVT_LOCAL_SET_CMD_TIMEOUT);
+
+                    return (ES_STATE_HANDLED());
+                }
+            }
+
+            return (ES_STATE_TRANSITION(stateSetCmdBegin));
+        }
+        case EVT_LOCAL_SET_CMD_TIMEOUT : {
+
+            return (ES_STATE_TRANSITION(stateActionCmdBegin));
+        }
+        default : {
+
+            return (ES_STATE_IGNORED());
+        }
+    }
+}
+
+static esAction stateActionCmdBegin(void * space, const esEvent * event) {
+    struct wspace * wspace = space;
+
+    switch (event->id) {
+        case ES_ENTRY : {
+            esEvent *           request;
+            esError             error;
+
+            wspace->retry = 0;
+
+            ES_ENSURE(error = esEventCreate(sizeof(esEvent), EVT_BT_CMD_MODE_ENTER, &request));
+
+            if (!error) {
+                ES_ENSURE(esEpaSendEvent(BtDrv, request));
+            }
+
+            return (ES_STATE_HANDLED());
+        }
+        case EVT_BT_REPLY : {
+            const struct evtBtReply * reply = (const struct evtBtReply *)event;
+
+            if (reply->status == BT_ERR_NONE) {
+
+                return (ES_STATE_TRANSITION(stateActionDiscoverable));
             } else {
                 wspace->retry = 1;
 
-                return (ES_STATE_TRANSITION(stateCmdEnd));
+                return (ES_STATE_TRANSITION(stateActionCmdEnd));
             }
         }
         default : {
@@ -527,7 +584,7 @@ static esAction stateSetDiscoveryMask(void * space, const esEvent * event) {
     }
 }
 
-static esAction stateSetDiscoverable(void * space, const esEvent * event) {
+static esAction stateActionDiscoverable(void * space, const esEvent * event) {
     struct wspace * wspace = space;
 
     switch (event->id) {
@@ -547,15 +604,147 @@ static esAction stateSetDiscoverable(void * space, const esEvent * event) {
             return (ES_STATE_HANDLED());
         }
         case EVT_BT_REPLY : {
+            const struct evtBtReply * reply = (const struct evtBtReply *)event;
 
-            if (((const struct evtBtReply *)event)->status == BT_ERR_NONE) {
+            if (reply->status == BT_ERR_NONE) {
 
-                return (ES_STATE_TRANSITION(stateCmdApply));
+                return (ES_STATE_TRANSITION(stateActionVolume));
             } else {
                 wspace->retry = 1;
 
-                return (ES_STATE_TRANSITION(stateCmdEnd));
+                return (ES_STATE_TRANSITION(stateActionCmdEnd));
             }
+        }
+        default : {
+
+            return (ES_STATE_IGNORED());
+        }
+    }
+}
+
+static esAction stateActionVolume(void * space, const esEvent * event) {
+    struct wspace * wspace = space;
+
+    switch (event->id) {
+        case ES_ENTRY : {
+            esEvent *           request;
+            esError             error;
+
+            ES_ENSURE(error = esEventCreate(sizeof(struct evtBtReq), EVT_BT_REQ, &request));
+
+            if (!error) {
+                ((struct evtBtReq *)request)->cmd = BT_SET_MUTE_OFF;
+                ((struct evtBtReq *)request)->arg = NULL;
+                ((struct evtBtReq *)request)->argSize = 0;
+                ES_ENSURE(esEpaSendEvent(BtDrv, request));
+            }
+
+            return (ES_STATE_HANDLED());
+        }
+        case EVT_BT_REPLY : {
+            const struct evtBtReply * reply = (const struct evtBtReply *)event;
+
+            if (reply->status == BT_ERR_NONE) {
+
+                return (ES_STATE_TRANSITION(stateActionAvrcp));
+            } else {
+                wspace->retry = 1;
+
+                return (ES_STATE_TRANSITION(stateActionCmdEnd));
+            }
+        }
+        default : {
+
+            return (ES_STATE_IGNORED());
+        }
+    }
+}
+
+static esAction stateActionAvrcp(void * space, const esEvent * event) {
+    struct wspace * wspace = space;
+
+    switch (event->id) {
+        case ES_ENTRY : {
+            esEvent *           request;
+            esError             error;
+
+            ES_ENSURE(error = esEventCreate(sizeof(struct evtBtReq), EVT_BT_REQ, &request));
+
+            if (!error) {
+                ((struct evtBtReq *)request)->cmd = BT_SET_AVRCP;
+                ((struct evtBtReq *)request)->arg = NULL;
+                ((struct evtBtReq *)request)->argSize = 0;
+                ES_ENSURE(esEpaSendEvent(BtDrv, request));
+            }
+
+            return (ES_STATE_HANDLED());
+        }
+        case EVT_BT_REPLY : {
+            const struct evtBtReply * reply = (const struct evtBtReply *)event;
+
+            if (reply->status != BT_ERR_NONE) {
+                wspace->retry = 1;
+            }
+            
+            return (ES_STATE_TRANSITION(stateActionCmdEnd));
+        }
+        default : {
+
+            return (ES_STATE_IGNORED());
+        }
+    }
+}
+
+static esAction stateActionCmdEnd(void * space, const esEvent * event) {
+    struct wspace * wspace = space;
+
+    switch (event->id) {
+        case ES_ENTRY : {
+            esEvent *           request;
+            esError             error;
+
+            ES_ENSURE(error = esEventCreate(sizeof(esEvent), EVT_BT_CMD_MODE_EXIT, &request));
+
+            if (!error) {
+                ES_ENSURE(esEpaSendEvent(BtDrv, request));
+            }
+
+            return (ES_STATE_HANDLED());
+        }
+        case EVT_BT_REPLY : {
+            const struct evtBtReply * reply = (const struct evtBtReply *)event;
+
+            if (reply->status == BT_ERR_NONE) {
+                if (wspace->retry == 0) {
+                    appTimerStart(&wspace->timeout, ES_VTMR_TIME_TO_TICK_MS(100),
+                        EVT_LOCAL_ACTION_CMD_TIMEOUT);
+
+                    return (ES_STATE_HANDLED());
+                }
+            }
+
+            return (ES_STATE_TRANSITION(stateActionCmdBegin));            /* Retry from beginning */
+        }
+        case EVT_LOCAL_ACTION_CMD_TIMEOUT : {
+            esEvent *           request;
+            esError             error;
+            
+            ES_ENSURE(error = esEventCreate(sizeof(esEvent), EVT_CODEC_ENABLE_AUDIO,
+                &request));
+
+            if (!error) {
+                ES_ENSURE(esEpaSendEvent(Codec, request));
+                ES_ENSURE(error = esEventCreate(sizeof(esEvent), EVT_SYNC_READY, &request));
+
+                if (!error) {
+                    ES_ENSURE(esEpaSendEvent(Sync, request));
+                    wspace->oldState = *(CONFIG_PTT_PORT)->port & (0x1 << CONFIG_PTT_PIN);
+
+                    return (ES_STATE_TRANSITION(stateHartBeat));
+                }
+            }
+
+            return (ES_STATE_TRANSITION(stateActionCmdBegin));            /* Retry from beginning */
         }
         default : {
 

@@ -29,14 +29,9 @@ enum localEvents {
     EVT_UART_ERROR_
 };
 
-struct uartEvent_ {
-    struct esEvent      header;
-    size_t              size;
-};
-
 struct wspace {
     struct uartHandle   uart;
-    struct esEpa *      client;
+    struct esEpa *      epa;
     char                replyBuffer[256];
 };
 
@@ -75,7 +70,7 @@ static esAction stateInit(void * space, const esEvent * event) {
 
     switch (event->id) {
         case ES_INIT : {
-            wspace->client = NULL;
+            wspace->epa = NULL;
 
             return (ES_STATE_HANDLED());
         }
@@ -100,46 +95,47 @@ static esAction stateIdle(void * space, const esEvent * event) {
         case ES_ENTRY : {
             memset(&wspace->replyBuffer, 0, sizeof(wspace->replyBuffer));
             uartReadStart(&wspace->uart, &wspace->replyBuffer, sizeof(wspace->replyBuffer),
-                ES_VTMR_TIME_TO_TICK_MS(40));
+                ES_VTMR_TIME_TO_TICK_MS(10));
 
             return (ES_STATE_HANDLED());
         }
         case EVT_SERIAL_CLIENT : {
-            wspace->client = ((const struct evtSerialClient *)event)->client;
+            const struct evtSerialClient * client = (const struct evtSerialClient *)event;
+
+            wspace->epa = client->epa;
 
             return (ES_STATE_HANDLED());
         }
         case EVT_SERIAL_PACKET : {
+            const struct evtSerialPacket * packet = (const struct evtSerialPacket *)event;
 
-            if (event->producer == wspace->client) {
-                while (uartWriteStart(&wspace->uart, ((const struct evtSerialPacket *)event)->data,
-                    ((const struct evtSerialPacket *)event)->size) == UART_ERROR_BUSY);
+            if (event->producer == wspace->epa) {
+                while (uartWriteStart(&wspace->uart, packet->data, packet->size) == UART_ERROR_BUSY);
             }
 
             return (ES_STATE_HANDLED());
         }
         case EVT_UART_RX_RESPONSE_ : {
 
-            if (wspace->client != NULL) {
+            if (wspace->epa != NULL) {
                 esEvent *           packet;
                 esError             error;
 
-                ES_ENSURE(error = esEventCreate(sizeof(struct evtSerialPacket) + 
-                    ((const struct uartEvent_ *)event)->size, EVT_SERIAL_PACKET, &packet));
+                ES_ENSURE(error = esEventCreate(sizeof(struct evtSerialPacket) + event->size,
+                    EVT_SERIAL_PACKET, &packet));
 
                 if (!error) {
                     struct evtSerialPacket * packet_;
 
                     packet_       = (struct evtSerialPacket *)packet;
                     packet_->data = &packet_[1];
-                    packet_->size = ((const struct uartEvent_ *)event)->size;
+                    packet_->size = event->size;
                     memcpy(packet_->data, &wspace->replyBuffer, packet_->size);
-                    ES_ENSURE(esEpaSendEvent(wspace->client, packet));
+                    ES_ENSURE(esEpaSendEvent(wspace->epa, packet));
                 }
             }
-            memset(&wspace->replyBuffer, 0, sizeof(wspace->replyBuffer));
             uartReadStart(&wspace->uart, &wspace->replyBuffer, sizeof(wspace->replyBuffer),
-                ES_VTMR_TIME_TO_TICK_MS(40));
+                ES_VTMR_TIME_TO_TICK_MS(10));
 
             return (ES_STATE_HANDLED());
         }
@@ -151,23 +147,24 @@ static esAction stateIdle(void * space, const esEvent * event) {
 }
 
 static size_t reader(struct uartHandle * handle, enum uartError uartError, void * data, size_t size) {
-    esEvent *           uartEvt;
-    uint16_t            id;
-    esError             error;
+    static esEvent             uartEvt;
 
     (void)data;
-    
-    if ((uartError == UART_ERROR_NONE) || (uartError == UART_ERROR_CANCEL)) {
-        id = EVT_UART_RX_RESPONSE_;
-    } else {
-        id = EVT_UART_ERROR_;
-    }
-    ES_ENSURE(error = esEventCreateI(sizeof(struct uartEvent_), id, &uartEvt));
 
-    if (!error) {
-        ((struct uartEvent_ *)uartEvt)->size = size;
-        ES_ENSURE(esEpaSendAheadEventI(handle->epa, uartEvt));
+    if ((uartError == UART_ERROR_NONE) || (uartError == UART_ERROR_CANCEL)) {
+        uartEvt.id = EVT_UART_RX_RESPONSE_;
+    } else {
+        uartEvt.id = EVT_UART_ERROR_;
     }
+    uartEvt.attrib    = ES_EVENT_CONST_Msk;
+    uartEvt.mem       = NULL;
+    uartEvt.producer  = NULL;
+    uartEvt.size      = size;
+    uartEvt.timestamp = 0;
+#if (CONFIG_API_VALIDATION == 1)
+    uartEvt.signature = ES_EVENT_SIGNATURE;
+#endif
+    ES_ENSURE(esEpaSendAheadEventI(handle->epa, &uartEvt));
 
     return (0u);
 }

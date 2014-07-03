@@ -24,5 +24,7 @@ void userAssert(
     strcpy(file,       dbgReport->modFile);
     strcpy(function,   dbgReport->fnName);
     strcpy(expression, dbgReport->expr);
+
+    while (true);
 }
 

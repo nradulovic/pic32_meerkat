@@ -47,7 +47,7 @@ struct evtSerialOpen {
 
 struct evtSerialClient {
     struct esEvent      event;
-    esEpa *             client;
+    esEpa *             epa;
 };
 
 struct evtSerialPacket {

@@ -84,7 +84,7 @@ static esAction stateInit(void * space, const esEvent * event) {
             if (error) {
                 return (ES_STATE_HANDLED());
             }
-            ((struct evtSerialClient *)request)->client = BtDrv;
+            ((struct evtSerialClient *)request)->epa = BtDrv;
             ES_ENSURE(esEpaSendEvent(SerialBt, request));
             ES_ENSURE(error = esEventCreate(sizeof(struct evtSerialOpen), EVT_SERIAL_OPEN, &request));
 
@@ -110,7 +110,7 @@ static esAction stateInit(void * space, const esEvent * event) {
             if (error) {
                 return (ES_STATE_HANDLED());
             }
-            ((struct evtSerialClient *)request)->client = Radio;
+            ((struct evtSerialClient *)request)->epa = Radio;
             ES_ENSURE(esEpaSendEvent(SerialRadio, request));
             appTimerInit(&wspace->timeout);
             wspace->isBtReady    = false;
@@ -159,7 +159,7 @@ static esAction stateIdle(void * space, const esEvent * event) {
             ES_ENSURE(error = esEventCreate(sizeof(struct evtSerialClient), EVT_SERIAL_CLIENT, &request));
 
             if (!error) {
-                ((struct evtSerialClient *)request)->client = Radio;
+                ((struct evtSerialClient *)request)->epa = Radio;
                 ES_ENSURE(esEpaSendEvent(SerialRadio, request));
                 ES_ENSURE(error = esEventCreate(sizeof(esEvent), EVT_SYNC_TICK, &request));
 
@@ -180,7 +180,7 @@ static esAction stateIdle(void * space, const esEvent * event) {
             ES_ENSURE(error = esEventCreate(sizeof(struct evtSerialClient), EVT_SERIAL_CLIENT, &request));
 
             if (!error) {
-                ((struct evtSerialClient *)request)->client = SerialBt;
+                ((struct evtSerialClient *)request)->epa = SerialBt;
                 ES_ENSURE(esEpaSendEvent(SerialRadio, request));
             }
 
@@ -210,7 +210,7 @@ static esAction stateGive(void * space, const esEvent * event) {
             if (error) {
                 return (ES_STATE_HANDLED());
             }
-            ((struct evtSerialClient *)response)->client = BtMan;
+            ((struct evtSerialClient *)response)->epa = BtMan;
             ES_ENSURE(esEpaSendEvent(SerialBt, response));
             ES_ENSURE(error = esEventCreate(sizeof(esEvent), EVT_SYNC_TICK, &response));
 
@@ -230,7 +230,7 @@ static esAction stateGive(void * space, const esEvent * event) {
             if (error) {
                 return (ES_STATE_HANDLED());
             }
-            ((struct evtSerialClient *)response)->client = SerialRadio;
+            ((struct evtSerialClient *)response)->epa = SerialRadio;
             ES_ENSURE(esEpaSendEvent(SerialBt, response));
 
             return (ES_STATE_TRANSITION(stateIdle));
