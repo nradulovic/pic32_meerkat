@@ -247,8 +247,8 @@ static void startCodec(
     codecWriteReg(
         &wspace->codec,
         CODEC_REG_ADC_GAIN,
-        CODEC_ADC_GAIN_ADMUT_NOT_MUTED | CODEC_ADC_GAIN_ADPGA_0     |
-        CODEC_ADC_GAIN_AGCTG_55        | CODEC_ADC_GAIN_AGCTC_8_100 |
+        CODEC_ADC_GAIN_ADMUT_NOT_MUTED | CODEC_ADC_GAIN_ADPGA(40 * 2) |
+        CODEC_ADC_GAIN_AGCTG_55        | CODEC_ADC_GAIN_AGCTC_8_100   |
         CODEC_ADC_GAIN_AGCEN_OFF);
 
     /*--  DAC settings  ------------------------------------------------------*/
