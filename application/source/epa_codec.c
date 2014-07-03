@@ -224,7 +224,7 @@ static void startCodec(
         CODEC_REG_AUDIO_CTRL_3,
         CODEC_AUDIO_CTRL3_DMSVOL_INDEPENDENT | CODEC_AUDIO_CTRL3_REFFS_48KHZ |
         CODEC_AUDIO_CTRL3_DAXFM_256S         | CODEC_AUDIO_CTRL3_SLVMS_SLAVE |
-        CODEC_AUDIO_CTRL3_DAPK2PK_2633       | CODEC_AUDIO_CTRL3_AGCNL_60DB  |
+        CODEC_AUDIO_CTRL3_DAPK2PK_2192       | CODEC_AUDIO_CTRL3_AGCNL_60DB  |
         CODEC_AUDIO_CTRL3_CLPST_OFF);
 
     /*--  I2S, input, high-pass, Fsaaple settings  ---------------------------*/
@@ -269,7 +269,7 @@ static void startCodec(
     codecWriteReg(
         &wspace->codec,
         CODEC_REG_AUDIO_CTRL_4,
-        0);
+        CODEC_AUDIO_CTRL4_SHCKT_DIS);
 
     coefInvertOneChannel(wspace);
     /*==  Set up input circuitry  ============================================*/

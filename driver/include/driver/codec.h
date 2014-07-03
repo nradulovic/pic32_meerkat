@@ -88,6 +88,7 @@
 
 #define CODEC_AUDIO_CTRL3_CLPST_OFF             (0x0u << 3)
 #define CODEC_AUDIO_CTRL3_AGCNL_60DB            (0x0u << 4)
+#define CODEC_AUDIO_CTRL3_DAPK2PK_2192          (0x1u << 9)
 #define CODEC_AUDIO_CTRL3_DAPK2PK_2402          (0x2u << 9)
 #define CODEC_AUDIO_CTRL3_DAPK2PK_2633          (0x3u << 9)
 #define CODEC_AUDIO_CTRL3_SLVMS_SLAVE           (0x0u << 11)
