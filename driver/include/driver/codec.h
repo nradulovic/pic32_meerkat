@@ -36,7 +36,7 @@
 #define CODEC_ADC_GAIN_AGCEN_OFF            (0x0u << 0)
 #define CODEC_ADC_GAIN_AGCTC_8_100          (0x0u << 1)
 #define CODEC_ADC_GAIN_AGCTG_55             (0x0u << 5)
-#define CODEC_ADC_GAIN_ADPGA_0              (0x0u << 8)
+#define CODEC_ADC_GAIN_ADPGA(val)           ((val) << 8)
 #define CODEC_ADC_GAIN_ADMUT_NOT_MUTED      (0x0u << 15)
 #define CODEC_ADC_GAIN_ADMUT_MUTED          (0x1u << 15)
 #define CODEC_ADC_GAIN_ADMUT_Msk            (0x1u << 15)
@@ -96,6 +96,8 @@
 #define CODEC_AUDIO_CTRL3_DAXFM_256S            (0x1u << 12)
 #define CODEC_AUDIO_CTRL3_REFFS_48KHZ           (0x0u << 13)
 #define CODEC_AUDIO_CTRL3_DMSVOL_INDEPENDENT    (0x0u << 14)
+
+#define CODEC_AUDIO_CTRL4_SHCKT_DIS             (0x1u << 8)
 
 #define CODEC_PLL_1_JVAL_PAR(val)           (((val) & 0x3fu) << 2)
 #define CODEC_PLL_1_PVAL_PAR(val)           (((val) & 0x7u) << 8)
