@@ -71,6 +71,7 @@ struct wspace {
     uint32_t            retry;
     uint32_t            connectedProfiles;
     uint32_t            oldState;
+    bool                isReadyToSend;
     enum pttNotify      notify;
 };
 
@@ -758,50 +759,25 @@ static esAction stateHartBeat(void * space, const esEvent * event) {
 
     switch (event->id) {
         case ES_ENTRY : {
-            esEvent *           request;
-            esError             error;
-
-            ES_ENSURE(error = esEventCreate(sizeof(struct evtBtReq), EVT_SYNC_DONE, &request));
-
-            if (!error) {
-                ES_ENSURE(esEpaSendEvent(Sync, request));
-            }
+            wspace->isReadyToSend = false;
             appTimerStart(&wspace->timeout, ES_VTMR_TIME_TO_TICK_MS(CONFIG_HART_BEAT_PERIOD),
                 EVT_LOCAL_TIMEOUT);
 
             return (ES_STATE_HANDLED());
         }
         case EVT_LOCAL_TIMEOUT : {
-            uint32_t        newState;
+            uint32_t            newState;
             
             newState = *(CONFIG_PTT_PORT)->port & (0x1 << CONFIG_PTT_PIN);
 
             if ((wspace->oldState != 0) && (newState == 0)) {
-                esEvent *           request;
-                esError             error;
-
-                wspace->oldState = newState;
-                wspace->notify   = PTT_PRESSED;
-
-                ES_ENSURE(error = esEventCreate(sizeof(struct evtBtReq), EVT_SYNC_REQUEST_TICK,
-                    &request));
-
-                if (!error) {
-                    ES_ENSURE(esEpaSendEvent(Sync, request));
-                }
+                wspace->oldState      = newState;
+                wspace->notify        = PTT_PRESSED;
+                wspace->isReadyToSend = true;
             } else if ((wspace->oldState == 0) && (newState != 0)) {
-                esEvent *           request;
-                esError             error;
-
-                wspace->oldState = newState;
-                wspace->notify   = PTT_RELEASED;
-
-                ES_ENSURE(error = esEventCreate(sizeof(struct evtBtReq), EVT_SYNC_REQUEST_TICK,
-                    &request));
-
-                if (!error) {
-                    ES_ENSURE(esEpaSendEvent(Sync, request));
-                }
+                wspace->oldState      = newState;
+                wspace->notify        = PTT_RELEASED;
+                wspace->isReadyToSend = true;
             } else {
                 wspace->oldState = newState;
                 appTimerStart(&wspace->timeout, ES_VTMR_TIME_TO_TICK_MS(CONFIG_HART_BEAT_PERIOD),
@@ -811,9 +787,22 @@ static esAction stateHartBeat(void * space, const esEvent * event) {
             return (ES_STATE_HANDLED());
         }
         case EVT_SYNC_TICK : {
-            appTimerCancel(&wspace->timeout);
+            if (wspace->isReadyToSend) {
+                appTimerCancel(&wspace->timeout);
 
-            return (ES_STATE_TRANSITION(stateHartCmdBegin));
+                return (ES_STATE_TRANSITION(stateHartCmdBegin));
+            } else {
+                esEvent *           request;
+                esError             error;
+
+                ES_ENSURE(error = esEventCreate(sizeof(esEvent), EVT_SYNC_DONE, &request));
+
+                if (!error) {
+                    ES_ENSURE(esEpaSendEvent(Sync, request));
+                }
+
+                return (ES_STATE_HANDLED());
+            }
         }
         default : {
 
@@ -843,6 +832,14 @@ static esAction stateHartCmdBegin(void * space, const esEvent * event) {
             return (ES_STATE_TRANSITION(stateHartQuery));
         }
         case EVT_BT_REPLY : {
+            esEvent *           request;
+            esError             error;
+
+            ES_ENSURE(error = esEventCreate(sizeof(esEvent), EVT_SYNC_DONE, &request));
+
+            if (!error) {
+                ES_ENSURE(esEpaSendEvent(Sync, request));
+            }
 
             return (ES_STATE_TRANSITION(stateHartBeat));
         }
@@ -916,6 +913,14 @@ static esAction stateHartCmdEnd(void * space, const esEvent * event) {
 
                 return (ES_STATE_TRANSITION(stateHartSendData));
             } else {
+                esEvent *           request;
+                esError             error;
+
+                ES_ENSURE(error = esEventCreate(sizeof(esEvent), EVT_SYNC_DONE, &request));
+
+                if (!error) {
+                    ES_ENSURE(esEpaSendEvent(Sync, request));
+                }
 
                 return (ES_STATE_TRANSITION(stateHartBeat));
             }
@@ -933,6 +938,7 @@ static esAction stateHartSendData(void * space, const esEvent * event) {
     switch (event->id) {
         case ES_INIT : {
             esEvent *           data;
+            esEvent *           request;
             esError             error;
 
             ES_ENSURE(error = esEventCreate(sizeof(struct evtBtSend), EVT_BT_SEND_DATA, &data));
@@ -946,6 +952,11 @@ static esAction stateHartSendData(void * space, const esEvent * event) {
                     ((struct evtBtSend *)data)->argSize = sizeof(CONFIG_PTT_RELEASED);
                 }
                 ES_ENSURE(esEpaSendEvent(BtDrv, data));
+            }
+            ES_ENSURE(error = esEventCreate(sizeof(esEvent), EVT_SYNC_DONE, &request));
+
+            if (!error) {
+                ES_ENSURE(esEpaSendEvent(Sync, request));
             }
 
             return (ES_STATE_TRANSITION(stateHartBeat));
