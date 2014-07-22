@@ -451,7 +451,7 @@ static esAction stateCmdIdle (void * space, const esEvent * event) {
         }
     }
 }
-static volatile char buffer[200];
+
 static esAction stateCmdSend (void * space, const  esEvent * event) {
     struct wspace * wspace = space;
 
@@ -480,7 +480,6 @@ static esAction stateCmdSend (void * space, const  esEvent * event) {
 
             appTimerCancel(&wspace->timeout);
             packet = (const struct evtSerialPacket *)event;
-            memcpy(buffer, packet->data, packet->size);
 
             if (strncmp(packet->data, BT_CMD_REBOOT, sizeof(BT_CMD_REBOOT) - 1u) == 0) {
                 esError             error;
@@ -577,7 +576,6 @@ static esAction stateCmdEnd(void * space, const esEvent * event) {
             packet = (const struct evtSerialPacket *)event;
 
             ES_ENSURE(error = esEventCreate(sizeof(struct evtBtReply), EVT_BT_REPLY, &reply));
-            memcpy(buffer, packet->data, packet->size);
 
             if (!error) {
                 if (strncmp(packet->data, BT_CMD_END, sizeof(BT_CMD_END) - 1u) == 0) {
