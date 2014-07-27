@@ -365,6 +365,7 @@ void __ISR(_UART1_VECTOR) lldUart1Handler(void) {
             }
 
             if (request == 0u) {
+                GlobalHandle->state &= ~UART_RX_ACTIVE;
                 IEC1CLR = IEC1_U1RX;
             }
         }
@@ -382,23 +383,22 @@ void __ISR(_UART1_VECTOR) lldUart1Handler(void) {
         }
         
         if (GlobalTxCounter == GlobalHandle->writeSize) {
+            size_t  request;
+            
+            request = 0;
+            
             if (GlobalHandle->writer != NULL) {
-                size_t  request;
-
                 request = GlobalHandle->writer(
                     GlobalHandle, 
                     UART_ERROR_NONE,
                     GlobalHandle->writeBuffer,
                     GlobalHandle->writeSize);
                 GlobalHandle->writeSize += request;
-
-                if (request == 0u) {
-                    GlobalHandle->state &= ~UART_TX_ACTIVE;
-                    IEC1CLR = IEC1_U1TX;                                        /* Stop further transmission                                */
-                }
-            } else {
+            }
+            
+            if (request == 0u) {
                 GlobalHandle->state &= ~UART_TX_ACTIVE;
-                IEC1CLR = IEC1_U1TX;                                            /* Stop further transmission                                */
+                IEC1CLR = IEC1_U1TX;                                        /* Stop further transmission                                */
             }
         }
     }
