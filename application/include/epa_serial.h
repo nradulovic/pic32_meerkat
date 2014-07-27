@@ -21,7 +21,7 @@
 /*===============================================================  MACRO's  ==*/
 
 #define CONFIG_SERIAL_PRIORITY           30
-#define CONFIG_SERIAL_QUEUE_SIZE         10
+#define CONFIG_SERIAL_QUEUE_SIZE         20
 #define CONFIG_SERIAL_EVENT_BASE         1500
 
 /*------------------------------------------------------  C++ extern begin  --*/
