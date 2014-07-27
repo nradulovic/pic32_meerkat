@@ -36,7 +36,7 @@ static void idle(
 
 static const ES_MODULE_INFO_CREATE("main", "main loop", "Nenad Radulovic");
 
-static uint8_t          StaticMemBuff[10240];
+static uint8_t          StaticMemBuff[16384];
 
 /*======================================================  GLOBAL VARIABLES  ==*/
 
@@ -66,7 +66,7 @@ static void processEvents(
         &esGlobalHeapMemClass,
         &HeapMem,
         heapBuff,
-        4096,
+        8192,
         0));
 
     /*--  Register a memory to use for events  -------------------------------*/

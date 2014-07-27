@@ -32,7 +32,7 @@ enum localEvents {
 struct wspace {
     struct uartHandle   uart;
     struct esEpa *      epa;
-    char                replyBuffer[2048];
+    char                replyBuffer[4096];
 };
 
 /*=============================================  LOCAL FUNCTION PROTOTYPES  ==*/

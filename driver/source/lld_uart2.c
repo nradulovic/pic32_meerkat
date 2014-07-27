@@ -255,7 +255,7 @@ static void lldUartReadStart(
     {
         esVTimerCancel(&ReadAfterTimeout);
     }
-    U2STACLR = U2STA_OERR;                                                      /* Flush old reveived data                                  */
+    U2STACLR = U2STA_OERR | U2STA_PERR;                                         /* Flush old reveived data                                  */
     IFS1CLR  = IFS1_U2RX;
     IEC1SET  = IEC1_U2RX;
 }
