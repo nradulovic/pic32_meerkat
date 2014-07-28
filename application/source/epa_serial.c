@@ -32,7 +32,7 @@ enum localEvents {
 struct wspace {
     struct uartHandle   uart;
     struct esEpa *      client;
-    char                replyBuffer[4096];
+    char                rx_buffer[4096];
 };
 
 /*=============================================  LOCAL FUNCTION PROTOTYPES  ==*/
@@ -93,8 +93,8 @@ static esAction stateIdle(void * space, const esEvent * event) {
     
     switch (event->id) {
         case ES_ENTRY : {
-            while (uartReadStart(&wspace->uart, &wspace->replyBuffer,
-                sizeof(wspace->replyBuffer), ES_VTMR_TIME_TO_TICK_MS(10)) == UART_ERROR_BUSY) ;
+            while (uartReadStart(&wspace->uart, &wspace->rx_buffer,
+                sizeof(wspace->rx_buffer), ES_VTMR_TIME_TO_TICK_MS(10)) == UART_ERROR_BUSY) ;
 
             return (ES_STATE_HANDLED());
         }
@@ -119,33 +119,38 @@ static esAction stateIdle(void * space, const esEvent * event) {
     }
 }
 
-static size_t reader(struct uartHandle * handle, enum uartError uartError, void * data, size_t size) {
-    esEvent *                   packet;
-    esError                     error;
+static size_t reader(struct uartHandle * handle, enum uartError uartError, void * data, size_t size)
+{
     struct wspace *             serial;
 
-    if (!((uartError == UART_ERROR_NONE) || (uartError == UART_ERROR_CANCEL))) {
-        return (0u);
-    }
     serial = esEpaGetWorkspace(handle->epa);
 
-    if (serial->client == NULL) {
+    if (!((uartError == UART_ERROR_NONE) || (uartError == UART_ERROR_CANCEL))) {
+        uartReadStart(&serial->uart, &serial->rx_buffer,
+                sizeof(serial->rx_buffer), ES_VTMR_TIME_TO_TICK_MS(10));
+        
         return (0u);
     }
-    ES_ENSURE(error = esEventCreateI(sizeof(struct evtSerialPacket) + size,
+    
+    if (serial->client != NULL) {
+        esEvent *               packet;
+        esError                 error;
+
+        ES_ENSURE(error = esEventCreateI(sizeof(struct evtSerialPacket) + size,
         EVT_SERIAL_PACKET, &packet));
 
-    if (!error) {
-        struct evtSerialPacket * packet_;
-        
-        packet_       = (struct evtSerialPacket *)packet;
-        packet_->data = &packet_[1];
-        packet_->size = size;
-        memcpy(packet_->data, data, size);
-        ES_ENSURE(esEpaSendAheadEventI(serial->client, packet));
-    }
+        if (!error) {
+            struct evtSerialPacket * packet_;
 
-    return (0u);
+            packet_       = (struct evtSerialPacket *)packet;
+            packet_->data = &packet_[1];
+            packet_->size = size;
+            memcpy(packet_->data, data, size);
+            ES_ENSURE(esEpaSendAheadEventI(serial->client, packet));
+        }
+    }
+    
+    return (sizeof(serial->rx_buffer));
 }
 
 /*===================================  GLOBAL PRIVATE FUNCTION DEFINITIONS  ==*/

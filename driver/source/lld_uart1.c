@@ -333,6 +333,7 @@ void __ISR(_UART1_VECTOR) lldUart1Handler(void) {
             }
             U1STACLR = U1STA_OERR;                                              /* Flush the rest in fifo buffer                            */
             IEC1CLR  = IEC1_U1RX;
+            GlobalHandle->state &= ~UART_RX_ACTIVE;
             
             if (GlobalHandle->reader != NULL) {
                 (void)GlobalHandle->reader(
