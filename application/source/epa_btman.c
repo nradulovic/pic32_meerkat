@@ -866,7 +866,6 @@ static esAction stateHartQuery(void * space, const esEvent * event) {
     }
 }
 
-
 static esAction stateHartCmdEnd(void * space, const esEvent * event) {
     struct wspace * wspace = space;
 

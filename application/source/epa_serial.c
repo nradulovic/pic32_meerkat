@@ -32,6 +32,7 @@ enum localEvents {
 struct wspace {
     struct uartHandle   uart;
     struct esEpa *      client;
+    const esEvent *     locked_event;
     char                rx_buffer[4096];
 };
 
@@ -41,6 +42,7 @@ static esAction stateInit           (void *, const esEvent *);
 static esAction stateIdle           (void *, const esEvent *);
 
 static size_t reader(struct uartHandle *, enum uartError, void *, size_t);
+static size_t writer(struct uartHandle *, enum uartError, const void *, size_t);
 
 /*=======================================================  LOCAL VARIABLES  ==*/
 
@@ -69,16 +71,13 @@ static esAction stateInit(void * space, const esEvent * event) {
     struct wspace * wspace = space;
 
     switch (event->id) {
-        case ES_INIT : {
-            wspace->client = NULL;
-
-            return (ES_STATE_HANDLED());
-        }
         case EVT_SERIAL_OPEN : {
             uartOpen(&wspace->uart, &((struct evtSerialOpen *)event)->config);
             uartSetClient(&wspace->uart, esEdsGetCurrent());
             uartSetReader(&wspace->uart, reader);
-            wspace->client = event->producer;
+            uartSetWriter(&wspace->uart, writer);
+            wspace->client       = event->producer;
+            wspace->locked_event = NULL;
 
             return (ES_STATE_TRANSITION(stateIdle));
         }
@@ -102,7 +101,10 @@ static esAction stateIdle(void * space, const esEvent * event) {
         case EVT_SERIAL_PACKET : {
             const struct evtSerialPacket * packet = (const struct evtSerialPacket *)event;
 
-            while (uartWriteStart(&wspace->uart, packet->data, packet->size) == UART_ERROR_BUSY);
+            while (wspace->locked_event != NULL);
+            wspace->locked_event = event;
+            esEventLock((esEvent *)event);
+            uartWriteStart(&wspace->uart, packet->data, packet->size);
 
             return (ES_STATE_HANDLED());
         }
@@ -145,8 +147,25 @@ static size_t reader(struct uartHandle * handle, enum uartError uartError, void 
             ES_ENSURE(esEpaSendAheadEventI(serial->client, packet));
         }
     }
+    uartReadStart(&serial->uart, &serial->rx_buffer,
+                sizeof(serial->rx_buffer), ES_VTMR_TIME_TO_TICK_MS(10));
     
     return (sizeof(serial->rx_buffer));
+}
+
+static size_t writer(struct uartHandle * handle, enum uartError uartError, const void * data, size_t size)
+{
+    struct wspace *             serial;
+
+    (void)data;
+    (void)size;
+    (void)uartError;
+
+    serial = esEpaGetWorkspace(handle->epa);
+    esEventUnlockI((esEvent *)serial->locked_event);
+    serial->locked_event = NULL;
+
+    return (0);
 }
 
 /*===================================  GLOBAL PRIVATE FUNCTION DEFINITIONS  ==*/

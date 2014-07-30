@@ -170,30 +170,24 @@ static esAction stateInit (void * space, const esEvent * event) {
 
     switch (event->id) {
         case ES_INIT : {
-            struct eventSyncRegister * syncRegister_;
+            struct eventSyncRegister * sync_register;
             esError             error;
-            esEvent *           syncRegister;
             esEvent *           request;
 
-            initBtDrv(space);
-            BT_PWR_LOW();
-            appTimerStart(&wspace->timeout, ES_VTMR_TIME_TO_TICK_MS(1000u), EVT_LOCAL_TIMEOUT);
-
+            /* Set up SyncBt EPA (Bluetooth UART switcher) -------------------*/
             ES_ENSURE(error = esEventCreate(sizeof(struct eventSyncRegister),
-                EVT_SYNC_REGISTER, &syncRegister));
+                EVT_SYNC_REGISTER, &request));
 
             if (error) {
                 return (ES_STATE_TRANSITION(stateInit));
             }
-            syncRegister_ = (struct eventSyncRegister *)syncRegister;
-            syncRegister_->route.client = esEdsGetCurrent();
-            syncRegister_->route.common = SerialBt;
-            syncRegister_->route.other  = SyncRadio;
-            ES_ENSURE(esEpaSendEvent(SyncBt, syncRegister));
+            sync_register = (struct eventSyncRegister *)request;
+            sync_register->route.client = esEdsGetCurrent();
+            sync_register->route.common = SerialBt;
+            sync_register->route.other  = SyncRadio;
+            ES_ENSURE(esEpaSendEvent(SyncBt, request));
 
-            /*
-             * INICIJALIZACIJA UARTA OVDE
-             */
+            /* Set up SerialBt (Bluetooth UART driver) -----------------------*/
             ES_ENSURE(error = esEventCreate(sizeof(struct evtSerialOpen), EVT_SERIAL_OPEN, &request));
 
             if (error) {
@@ -213,6 +207,7 @@ static esAction stateInit (void * space, const esEvent * event) {
             ((struct evtSerialOpen *)request)->config.remap.rts   = CONFIG_BT_UART_RTS_PIN;
             ES_ENSURE(esEpaSendEvent(SyncBt, request));
 
+            /* Finished COMM with SyncBt -------------------------------------*/
             ES_ENSURE(error = esEventCreate(sizeof(esEvent), EVT_SYNC_DONE,
                 &request));
 
@@ -220,6 +215,11 @@ static esAction stateInit (void * space, const esEvent * event) {
                 return (ES_STATE_TRANSITION(stateInit));
             }
             ES_ENSURE(esEpaSendEvent(SyncBt, request));
+            
+            /* Initialize Bluetooth driver -----------------------------------*/
+            initBtDrv(space);
+            BT_PWR_LOW();
+            appTimerStart(&wspace->timeout, ES_VTMR_TIME_TO_TICK_MS(1000u), EVT_LOCAL_TIMEOUT);
 
             return (ES_STATE_HANDLED());
         }

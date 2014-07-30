@@ -36,8 +36,8 @@ static void idle(
 
 static const ES_MODULE_INFO_CREATE("main", "main loop", "Nenad Radulovic");
 
-static uint8_t          StaticMemBuff[4096];
-static uint8_t          HeapMemBuff[16384];
+static uint8_t          StaticMemBuff[12288];
+static uint8_t          HeapMemBuff[12288];
 
 /*======================================================  GLOBAL VARIABLES  ==*/
 
