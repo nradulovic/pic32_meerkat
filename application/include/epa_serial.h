@@ -33,11 +33,7 @@ extern "C" {
 
 enum serialEvents {
     EVT_SERIAL_OPEN = CONFIG_SERIAL_EVENT_BASE,
-    EVT_SERIAL_CLIENT,
-    EVT_SERIAL_PACKET,
-    EVT_SERIAL_RECV,
-    EVT_SERIAL_SEND_CANCEL,
-    EVT_SERIAL_RECV_CANCEL
+    EVT_SERIAL_PACKET
 };
 
 struct evtSerialOpen {

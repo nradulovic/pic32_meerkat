@@ -86,10 +86,10 @@ static esAction stateInit(void * space, const esEvent * event) {
             netwLowLimit  = -90;
             netwHighLimit = -87;
             appTimerInit(&wspace->timeout);
-            ES_ENSURE(error = esEventCreate(sizeof(esEvent), EVT_SYNC_READY, &request));
+            ES_ENSURE(error = esEventCreate(sizeof(esEvent), EVT_SYNC_REGISTER, &request));
 
             if (!error) {
-                ES_ENSURE(esEpaSendEvent(Sync, request));
+                ES_ENSURE(esEpaSendEvent(SyncBt, request));
             }
 
             return (ES_STATE_TRANSITION(stateDisableEcho));
@@ -112,7 +112,7 @@ static esAction stateDisableEcho(void * space, const esEvent * event) {
             ES_ENSURE(error = esEventCreate(sizeof(esEvent), EVT_SYNC_DONE, &request));
 
             if (!error) {
-                ES_ENSURE(esEpaSendEvent(Sync, request));
+                ES_ENSURE(esEpaSendEvent(SyncBt, request));
             }
 
             return (ES_STATE_HANDLED());
@@ -179,7 +179,7 @@ static esAction statePoll(void * space, const esEvent * event) {
             ES_ENSURE(error = esEventCreate(sizeof(esEvent), EVT_SYNC_DONE, &request));
 
             if (!error) {
-                ES_ENSURE(esEpaSendEvent(Sync, request));
+                ES_ENSURE(esEpaSendEvent(SyncBt, request));
             }
 
             return (ES_STATE_HANDLED());

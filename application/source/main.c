@@ -36,7 +36,8 @@ static void idle(
 
 static const ES_MODULE_INFO_CREATE("main", "main loop", "Nenad Radulovic");
 
-static uint8_t          StaticMemBuff[16384];
+static uint8_t          StaticMemBuff[4096];
+static uint8_t          HeapMemBuff[16384];
 
 /*======================================================  GLOBAL VARIABLES  ==*/
 
@@ -47,8 +48,6 @@ esMem                   HeapMem   = ES_MEM_INITIALIZER();
 
 static void processEvents(
     void) {
-    void *              heapBuff;
-
     /*--  Initialize virtual timers  -----------------------------------------*/
     esModuleVTimerInit();
 
@@ -61,12 +60,11 @@ static void processEvents(
         0));
 
     /*--  Initialize heap memory allocator  ----------------------------------*/
-    ES_ENSURE(esMemAlloc(&StaticMem, 4096, &heapBuff));
     ES_ENSURE(esMemInit(
         &esGlobalHeapMemClass,
         &HeapMem,
-        heapBuff,
-        8192,
+        HeapMemBuff,
+        sizeof(HeapMemBuff),
         0));
 
     /*--  Register a memory to use for events  -------------------------------*/
@@ -86,7 +84,8 @@ static void processEvents(
     ES_ENSURE(esEpaCreate(&NotificationEpa, &NotificationSm, &StaticMem, &Notification));
     ES_ENSURE(esEpaCreate(&SerialEpa,       &SerialSm,       &StaticMem, &SerialBt));
     ES_ENSURE(esEpaCreate(&SerialEpa,       &SerialSm,       &StaticMem, &SerialRadio));
-    ES_ENSURE(esEpaCreate(&SyncEpa,         &SyncSm,         &StaticMem, &Sync));
+    ES_ENSURE(esEpaCreate(&SyncEpa,         &SyncSm,         &StaticMem, &SyncBt));
+    ES_ENSURE(esEpaCreate(&SyncEpa,         &SyncSm,         &StaticMem, &SyncRadio));
 
     /*--  Start EPA execution  -----------------------------------------------*/
     ES_ENSURE(esEdsStart());

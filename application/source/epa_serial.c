@@ -78,6 +78,7 @@ static esAction stateInit(void * space, const esEvent * event) {
             uartOpen(&wspace->uart, &((struct evtSerialOpen *)event)->config);
             uartSetClient(&wspace->uart, esEdsGetCurrent());
             uartSetReader(&wspace->uart, reader);
+            wspace->client = event->producer;
 
             return (ES_STATE_TRANSITION(stateIdle));
         }
@@ -95,13 +96,6 @@ static esAction stateIdle(void * space, const esEvent * event) {
         case ES_ENTRY : {
             while (uartReadStart(&wspace->uart, &wspace->rx_buffer,
                 sizeof(wspace->rx_buffer), ES_VTMR_TIME_TO_TICK_MS(10)) == UART_ERROR_BUSY) ;
-
-            return (ES_STATE_HANDLED());
-        }
-        case EVT_SERIAL_CLIENT : {
-            const struct evtSerialClient * client = (const struct evtSerialClient *)event;
-
-            wspace->client = client->epa;
 
             return (ES_STATE_HANDLED());
         }
@@ -126,10 +120,11 @@ static size_t reader(struct uartHandle * handle, enum uartError uartError, void 
     serial = esEpaGetWorkspace(handle->epa);
 
     if (!((uartError == UART_ERROR_NONE) || (uartError == UART_ERROR_CANCEL))) {
+        /* Force UART to continue working even after an error has been detected */
         uartReadStart(&serial->uart, &serial->rx_buffer,
                 sizeof(serial->rx_buffer), ES_VTMR_TIME_TO_TICK_MS(10));
         
-        return (0u);
+        return (0u); /* Ignored in this case */
     }
     
     if (serial->client != NULL) {
@@ -137,14 +132,15 @@ static size_t reader(struct uartHandle * handle, enum uartError uartError, void 
         esError                 error;
 
         ES_ENSURE(error = esEventCreateI(sizeof(struct evtSerialPacket) + size,
-        EVT_SERIAL_PACKET, &packet));
+            EVT_SERIAL_PACKET, &packet));
 
         if (!error) {
             struct evtSerialPacket * packet_;
 
-            packet_       = (struct evtSerialPacket *)packet;
-            packet_->data = &packet_[1];
-            packet_->size = size;
+            packet_                 = (struct evtSerialPacket *)packet;
+            packet_->event.producer = handle->epa;
+            packet_->data           = &packet_[1];
+            packet_->size           = size;
             memcpy(packet_->data, data, size);
             ES_ENSURE(esEpaSendAheadEventI(serial->client, packet));
         }

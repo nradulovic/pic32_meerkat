@@ -15,6 +15,7 @@
 #include "driver/gpio.h"
 #include "vtimer/vtimer.h"
 #include "app_timer.h"
+#include "config/config_project.h"
 
 /*=========================================================  LOCAL MACRO's  ==*/
 
@@ -169,9 +170,56 @@ static esAction stateInit (void * space, const esEvent * event) {
 
     switch (event->id) {
         case ES_INIT : {
+            struct eventSyncRegister * syncRegister_;
+            esError             error;
+            esEvent *           syncRegister;
+            esEvent *           request;
+
             initBtDrv(space);
             BT_PWR_LOW();
             appTimerStart(&wspace->timeout, ES_VTMR_TIME_TO_TICK_MS(1000u), EVT_LOCAL_TIMEOUT);
+
+            ES_ENSURE(error = esEventCreate(sizeof(struct eventSyncRegister),
+                EVT_SYNC_REGISTER, &syncRegister));
+
+            if (error) {
+                return (ES_STATE_TRANSITION(stateInit));
+            }
+            syncRegister_ = (struct eventSyncRegister *)syncRegister;
+            syncRegister_->route.client = esEdsGetCurrent();
+            syncRegister_->route.common = SerialBt;
+            syncRegister_->route.other  = SyncRadio;
+            ES_ENSURE(esEpaSendEvent(SyncBt, syncRegister));
+
+            /*
+             * INICIJALIZACIJA UARTA OVDE
+             */
+            ES_ENSURE(error = esEventCreate(sizeof(struct evtSerialOpen), EVT_SERIAL_OPEN, &request));
+
+            if (error) {
+                return (ES_STATE_TRANSITION(stateInit));
+            }
+            ((struct evtSerialOpen *)request)->config.id          = CONFIG_BT_UART;
+            ((struct evtSerialOpen *)request)->config.flags       = UART_TX_ENABLE   |
+                                                                    UART_RX_ENABLE   |
+                                                                    UART_DATA_BITS_8 |
+                                                                    UART_STOP_BITS_1 |
+                                                                    UART_PARITY_NONE;
+            ((struct evtSerialOpen *)request)->config.speed       = CONFIG_BT_UART_SPEED;
+            ((struct evtSerialOpen *)request)->config.isrPriority = ES_INTR_DEFAULT_ISR_PRIO;
+            ((struct evtSerialOpen *)request)->config.remap.tx    = CONFIG_BT_UART_TX_PIN;
+            ((struct evtSerialOpen *)request)->config.remap.rx    = CONFIG_BT_UART_RX_PIN;
+            ((struct evtSerialOpen *)request)->config.remap.cts   = CONFIG_BT_UART_CTS_PIN;
+            ((struct evtSerialOpen *)request)->config.remap.rts   = CONFIG_BT_UART_RTS_PIN;
+            ES_ENSURE(esEpaSendEvent(SyncBt, request));
+
+            ES_ENSURE(error = esEventCreate(sizeof(esEvent), EVT_SYNC_DONE,
+                &request));
+
+            if (error) {
+                return (ES_STATE_TRANSITION(stateInit));
+            }
+            ES_ENSURE(esEpaSendEvent(SyncBt, request));
 
             return (ES_STATE_HANDLED());
         }
@@ -288,6 +336,19 @@ static esAction stateIdle(void * space, const esEvent * event) {
     struct wspace * wspace = space;
 
     switch (event->id) {
+        case ES_ENTRY : {
+            esError             error;
+            esEvent *           request;
+
+            ES_ENSURE(error = esEventCreate(sizeof(esEvent), EVT_SYNC_DONE,
+                &request));
+
+            if (!error) {
+                ES_ENSURE(esEpaSendEvent(SyncBt, request));
+            }
+
+            return (ES_STATE_HANDLED());
+        }
         case EVT_BT_CMD_MODE_ENTER : {
             wspace->client  = event->producer;
 
@@ -308,16 +369,16 @@ static esAction stateIdle(void * space, const esEvent * event) {
             esEvent *           request;
             esError             error;
 
-            ES_ENSURE(error = esEventCreate(sizeof(struct evtSerialPacket), EVT_SERIAL_PACKET, 
-                &request));
+            ES_ENSURE(error = esEventCreate(sizeof(struct evtSerialPacket),
+                EVT_SERIAL_PACKET, &request));
             
             if (!error) {
                 ((struct evtSerialPacket *)request)->data = ((struct evtBtSend *)event)->arg;
                 ((struct evtSerialPacket *)request)->size = ((struct evtBtSend *)event)->argSize;
-                ES_ENSURE(esEpaSendEvent(SerialBt, request));
+                ES_ENSURE(esEpaSendEvent(SyncBt, request));
             }
 
-            return (ES_STATE_HANDLED());
+            return (ES_STATE_TRANSITION(stateIdle));
         }
         default : {
 
@@ -331,6 +392,19 @@ static esAction stateCmdBegin(void * space, const esEvent * event) {
 
     switch (event->id) {
         case ES_ENTRY : {
+            esError             error;
+            esEvent *           request;
+
+            ES_ENSURE(error = esEventCreate(sizeof(esEvent), EVT_SYNC_REQUEST,
+                &request));
+
+            if (!error) {
+                ES_ENSURE(esEpaSendEvent(SyncBt, request));
+            }
+
+            return (ES_STATE_HANDLED());
+        }
+        case EVT_SYNC_GRANTED : {
             appTimerStart(&wspace->timeout, ES_VTMR_TIME_TO_TICK_MS(CONFIG_BT_TIMEOUT_MS),
                 EVT_LOCAL_CMD_BEGIN_TIMEOUT);
             BT_CMD_LOW();
@@ -456,7 +530,7 @@ static esAction stateCmdSend (void * space, const  esEvent * event) {
     struct wspace * wspace = space;
 
     switch (event->id) {
-        case ES_INIT : {
+        case ES_ENTRY : {
             esEvent *           packet;
             esError             error;
             appTimerStart(&wspace->timeout, ES_VTMR_TIME_TO_TICK_MS(CONFIG_BT_TIMEOUT_MS),
@@ -469,7 +543,7 @@ static esAction stateCmdSend (void * space, const  esEvent * event) {
             }
             ((struct evtSerialPacket *)packet)->data = wspace->reqBuffer;
             ((struct evtSerialPacket *)packet)->size = wspace->reqSize;
-            ES_ENSURE(esEpaSendEvent(SerialBt, packet));
+            ES_ENSURE(esEpaSendEvent(SyncBt, packet));
             
             return (ES_STATE_HANDLED());
         }
@@ -499,7 +573,6 @@ static esAction stateCmdSend (void * space, const  esEvent * event) {
             }
             ES_ENSURE(error = esEventCreate(sizeof(struct evtBtReply [1]) + packet->size,
                 EVT_BT_REPLY, &reply));
-
             
             if (!error) {
                 if (strncmp(packet->data, BT_CMD_VALID,  sizeof(BT_CMD_VALID)  - 1u) == 0) {
@@ -588,7 +661,6 @@ static esAction stateCmdEnd(void * space, const esEvent * event) {
                 ES_ENSURE(esEpaSendEvent(wspace->client, reply));
             }
             
-
             return (ES_STATE_TRANSITION(stateIdle));
         }
         case EVT_LOCAL_CMD_END_TIMEOUT : {

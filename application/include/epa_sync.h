@@ -20,14 +20,25 @@ extern "C" {
 
 enum syncEventId {
     EVT_SYNC_TICK = CONFIG_SYNC_EVENT_BASE,
-    EVT_SYNC_READY,
-    EVT_SYNC_REQUEST_TICK,
+    EVT_SYNC_REGISTER,
+    EVT_SYNC_REQUEST,
+    EVT_SYNC_GRANTED,
     EVT_SYNC_DONE
+};
+
+struct eventSyncRegister {
+    esEvent             super;
+    struct syncRoute {
+        esEpa *             client;
+        esEpa *             other;
+        esEpa *             common;
+    }                   route;
 };
 
 extern const struct esEpaDefine SyncEpa;
 extern const struct esSmDefine  SyncSm;
-extern struct esEpa *   Sync;
+extern struct esEpa *           SyncBt;
+extern struct esEpa *           SyncRadio;
 
 #ifdef	__cplusplus
 }
