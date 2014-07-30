@@ -31,7 +31,8 @@ extern "C" {
 
 enum codecEvents {
     EVT_CODEC_NOTIFY_READY = CONFIG_CODEC_EVENT_BASE,
-    EVT_CODEC_ENABLE_AUDIO
+    EVT_CODEC_ENABLE_AUDIO,
+    EVT_CODEC_DISABLE_AUDIO
 };
 
 /*======================================================  GLOBAL VARIABLES  ==*/

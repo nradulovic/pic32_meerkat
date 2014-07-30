@@ -48,7 +48,14 @@ extern "C" {
 /*============================================================  DATA TYPES  ==*/
 
 enum BtManEvents {
-    EVT_BT_MAN_NOTIFY_READY = CONFIG_BT_MAN_EVENT_BASE
+    EVT_BT_MAN_NOTIFY_READY = CONFIG_BT_MAN_EVENT_BASE,
+    EVT_BT_MAN_SEND
+};
+
+struct eventBtManSend {
+    esEvent                     super;
+    const void *                data;
+    size_t                      size;
 };
 
 /*======================================================  GLOBAL VARIABLES  ==*/

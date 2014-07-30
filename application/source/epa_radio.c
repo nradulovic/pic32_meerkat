@@ -209,6 +209,7 @@ static esAction stateDisableEcho(void * space, const esEvent * event) {
 
             if (!error) {
                 ES_ENSURE(esEpaSendEvent(Notification, notify));
+                ES_ENSURE(esEpaSendEvent(Control,      notify));
             }
 
             return (ES_STATE_TRANSITION(stateDisableEchoPause));
@@ -305,14 +306,6 @@ static esAction statePoll(void * space, const esEvent * event) {
             return (ES_STATE_HANDLED());
         }
         case EVT_LOCAL_POLL_WAIT: {
-            esError             error;
-            esEvent *           notify;
-
-            ES_ENSURE(error = esEventCreate(sizeof(esEvent), EVT_RADIO_NO_DEVICE, &notify));
-
-            if (!error) {
-                ES_ENSURE(esEpaSendEvent(Notification, notify));
-            }
 
             return (ES_STATE_TRANSITION(stateDisableEcho));
         }
@@ -334,12 +327,14 @@ static esAction statePoll(void * space, const esEvent * event) {
 
                     if (!error) {
                         ES_ENSURE(esEpaSendEvent(Notification, notify));
+                        ES_ENSURE(esEpaSendEvent(Control,      notify));
                     }
                 } else if (strength < g_netwLowLimit) {
                     ES_ENSURE(error = esEventCreate(sizeof(esEvent), EVT_RADIO_NET_LOW, &notify));
 
                     if (!error) {
                         ES_ENSURE(esEpaSendEvent(Notification, notify));
+                        ES_ENSURE(esEpaSendEvent(Control,      notify));
                     }
                 }
             } else {
@@ -347,6 +342,7 @@ static esAction statePoll(void * space, const esEvent * event) {
 
                 if (!error) {
                     ES_ENSURE(esEpaSendEvent(Notification, notify));
+                    ES_ENSURE(esEpaSendEvent(Control,      notify));
                 }
             }
             

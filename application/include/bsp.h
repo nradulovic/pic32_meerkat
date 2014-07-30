@@ -52,10 +52,10 @@ bool isBatteryCharging(
 void initAudioSwitch(
     void);
 
-void audioSwitchSpeaker(
+void audioSwitchToRadio(
     void);
 
-void audioSwitchCodec(
+void audioSwitchToCodec(
     void);
 
 void initNotifyLed(

@@ -17,8 +17,6 @@
 
 /*=========================================================  LOCAL MACRO's  ==*/
 
-#define CONFIG_PTT_PRESSED            "+PTT=P\r\n"
-#define CONFIG_PTT_RELEASED           "+PTT=R\r\n"
 
 #define BT_MAN_TABLE(entry)                                                     \
     entry(stateInit,                TOP)                                        \
@@ -59,20 +57,12 @@ enum localEvents {
     EVT_LOCAL_CMD_END_TIMEOUT
 };
 
-enum pttNotify {
-    PTT_PRESSED,
-    PTT_RELEASED
-}; 
-
 /**@brief       Epa workspace
  */
 struct wspace {
     struct appTimer     timeout;
     uint32_t            retry;
     uint32_t            connectedProfiles;
-    uint32_t            oldState;
-    bool                isReadyToSend;
-    enum pttNotify      notify;
 };
 
 /*=============================================  LOCAL FUNCTION PROTOTYPES  ==*/
@@ -129,7 +119,6 @@ static esAction stateInit(void * space, const esEvent * event) {
         case ES_INIT : {
             appTimerInit(&wspace->timeout);
             wspace->retry = 0;
-            *(CONFIG_PTT_PORT)->tris |= (0x1 << CONFIG_PTT_PIN);
 
             return (ES_STATE_TRANSITION(stateIdle));
         }
@@ -735,7 +724,6 @@ static esAction stateActionCmdEnd(void * space, const esEvent * event) {
 
             if (!error) {
                 ES_ENSURE(esEpaSendEvent(Codec, request));
-                wspace->oldState = *(CONFIG_PTT_PORT)->port & (0x1 << CONFIG_PTT_PIN);
 
                 return (ES_STATE_TRANSITION(stateHartBeat));
             }
@@ -750,39 +738,22 @@ static esAction stateActionCmdEnd(void * space, const esEvent * event) {
 }
 
 static esAction stateHartBeat(void * space, const esEvent * event) {
-    struct wspace * wspace = space;
+    (void)space;
 
     switch (event->id) {
-        case ES_ENTRY : {
-            wspace->isReadyToSend = false;
-            appTimerStart(&wspace->timeout, ES_VTMR_TIME_TO_TICK_MS(CONFIG_HART_BEAT_PERIOD),
-                EVT_LOCAL_TIMEOUT);
+        case EVT_BT_MAN_SEND : {
+            struct eventBtManSend * send = (struct eventBtManSend *)event;
+            esEvent *           data;
+            esError             error;
 
-            return (ES_STATE_HANDLED());
-        }
-        case EVT_LOCAL_TIMEOUT : {
-            uint32_t            newState;
-            
-            newState = *(CONFIG_PTT_PORT)->port & (0x1 << CONFIG_PTT_PIN);
+            ES_ENSURE(error = esEventCreate(sizeof(struct evtBtSend),
+                EVT_BT_SEND_DATA, &data));
 
-            if ((wspace->oldState != 0) && (newState == 0)) {
-                wspace->oldState      = newState;
-                wspace->notify        = PTT_PRESSED;
-                wspace->isReadyToSend = true;
-
-                return (ES_STATE_TRANSITION(stateHartCmdBegin));
-            } else if ((wspace->oldState == 0) && (newState != 0)) {
-                wspace->oldState      = newState;
-                wspace->notify        = PTT_RELEASED;
-                wspace->isReadyToSend = true;
-
-                return (ES_STATE_TRANSITION(stateHartCmdBegin));
-            } else {
-                wspace->oldState = newState;
-                appTimerStart(&wspace->timeout, ES_VTMR_TIME_TO_TICK_MS(CONFIG_HART_BEAT_PERIOD),
-                    EVT_LOCAL_TIMEOUT);
-
-                return (ES_STATE_HANDLED());
+            if (!error) {
+                struct evtBtSend * data_ = (struct evtBtSend *)data;
+                data_->arg               = (char *)send->data;
+                data_->argSize           = send->size;
+                ES_ENSURE(esEpaSendEvent(BtDrv, data));
             }
         }
         default : {
@@ -900,28 +871,9 @@ static esAction stateHartCmdEnd(void * space, const esEvent * event) {
 }
 
 static esAction stateHartSendData(void * space, const esEvent * event) {
-    struct wspace * wspace = space;
+    (void)space;
 
     switch (event->id) {
-        case ES_INIT : {
-            esEvent *           data;
-            esError             error;
-
-            ES_ENSURE(error = esEventCreate(sizeof(struct evtBtSend), EVT_BT_SEND_DATA, &data));
-
-            if (!error) {
-                if (wspace->notify == PTT_PRESSED) {
-                    ((struct evtBtSend *)data)->arg     =        CONFIG_PTT_PRESSED;
-                    ((struct evtBtSend *)data)->argSize = sizeof(CONFIG_PTT_PRESSED);
-                } else {
-                    ((struct evtBtSend *)data)->arg     =        CONFIG_PTT_RELEASED;
-                    ((struct evtBtSend *)data)->argSize = sizeof(CONFIG_PTT_RELEASED);
-                }
-                ES_ENSURE(esEpaSendEvent(BtDrv, data));
-            }
-
-            return (ES_STATE_TRANSITION(stateHartBeat));
-        }
         default : {
 
             return (ES_STATE_IGNORED());

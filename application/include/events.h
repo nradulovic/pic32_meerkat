@@ -17,6 +17,7 @@
 #include "epa_serial.h"
 #include "epa_sync.h"
 #include "epa_notification.h"
+#include "epa_control.h"
 
 /*===============================================================  MACRO's  ==*/
 

@@ -62,6 +62,10 @@ extern "C" {
 
 #define CONFIG_PTT_PORT                 &GpioA
 #define CONFIG_PTT_PIN                  1
+
+#define CONFIG_RADIO_PTT_PORT           &GpioC
+#define CONFIG_RADIO_PTT_PIN            7
+
 #endif
 
 #ifdef	__cplusplus

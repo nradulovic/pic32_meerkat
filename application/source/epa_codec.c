@@ -18,12 +18,10 @@
 
 /*=========================================================  LOCAL MACRO's  ==*/
 
-#define CONFIG_CODEC_POLL               1000
-
 #define CODEC_TABLE(entry)                                                      \
     entry(stateInit,                TOP)                                        \
-    entry(stateReset,               TOP)                                        \
-    entry(stateIdle,                TOP)
+    entry(stateIdle,                TOP)                                        \
+    entry(stateActive,              TOP)
 
 /*======================================================  LOCAL DATA TYPES  ==*/
 
@@ -32,7 +30,7 @@ enum codecStateId {
 };
 
 enum codecLocalId {
-    EVT_TIMEOUT_ = ES_EVENT_LOCAL_ID
+    EVT_LOCAL_TIMEOUT = ES_EVENT_LOCAL_ID
 };
 
 struct wspace {
@@ -43,8 +41,8 @@ struct wspace {
 /*=============================================  LOCAL FUNCTION PROTOTYPES  ==*/
 
 static esAction stateInit           (void *, const esEvent *);
-static esAction stateReset          (void *, const esEvent *);
 static esAction stateIdle           (void *, const esEvent *);
+static esAction stateActive         (void *, const esEvent *);
 
 /*--  Support functions  -----------------------------------------------------*/
 
@@ -84,7 +82,7 @@ static esAction stateInit(void * space, const esEvent * event) {
             initCodec(wspace);
             codecPowerDown();
 
-            return (ES_STATE_TRANSITION(stateReset));
+            return (ES_STATE_TRANSITION(stateIdle));
         }
         
         default : {
@@ -94,25 +92,19 @@ static esAction stateInit(void * space, const esEvent * event) {
     }
 }
 
-static esAction stateReset(void * space, const esEvent * event) {
-    struct wspace * wspace = space;
+static esAction stateIdle(void * space, const esEvent * event) {
+    (void)space;
 
     switch (event->id) {
         case ES_ENTRY : {
-            codecPowerUp();
+            audioSwitchToRadio();
+            codecPowerDown();
             codecResetEnable();
-            appTimerStart(&wspace->timeout, ES_VTMR_TIME_TO_TICK_MS(100), EVT_TIMEOUT_);
 
             return (ES_STATE_HANDLED());
         }
-        case EVT_TIMEOUT_ : {
-            codecResetDisable();
-            codecClockEnable();
-            startCodec(wspace);
-            cpumpEnable();
-            audioSwitchCodec();
-
-            return (ES_STATE_TRANSITION(stateIdle));
+        case EVT_CODEC_ENABLE_AUDIO : {
+            return (ES_STATE_TRANSITION(stateActive));
         }
         default : {
 
@@ -121,51 +113,28 @@ static esAction stateReset(void * space, const esEvent * event) {
     }
 }
 
-static esAction stateIdle(void * space, const esEvent * event) {
+static esAction stateActive(void * space, const esEvent * event) {
     struct wspace * wspace = space;
 
     switch (event->id) {
         case ES_ENTRY : {
-#if 0
-            esEvent *   notify;
-
-            ES_ENSURE(esEventCreate(
-                sizeof(esEvent),
-                EVT_CODEC_NOTIFY_READY,
-                &notify));
-            ES_ENSURE(esEpaSendEvent(notify))
-#endif
-            appTimerStart(&wspace->timeout, ES_VTMR_TIME_TO_TICK_MS(CONFIG_CODEC_POLL),
-                EVT_TIMEOUT_);
+            codecPowerUp();
+            codecResetEnable();
+            appTimerStart(&wspace->timeout, ES_VTMR_TIME_TO_TICK_MS(100), EVT_LOCAL_TIMEOUT);
 
             return (ES_STATE_HANDLED());
         }
-        case EVT_TIMEOUT_ : {
-            appTimerStart(&wspace->timeout, ES_VTMR_TIME_TO_TICK_MS(CONFIG_CODEC_POLL),
-                EVT_TIMEOUT_);
-            
-#if (CONFIG_DEBUG == 1)
-            {
-                volatile uint16_t reg;
+        case EVT_LOCAL_TIMEOUT : {
+            codecResetDisable();
+            codecClockEnable();
+            startCodec(wspace);
+            cpumpEnable();
+            audioSwitchToCodec();
 
-                reg = codecReadReg(&wspace->codec, CODEC_REG_AUDIO_CTRL_1);
-                reg = codecReadReg(&wspace->codec, CODEC_REG_ADC_GAIN);
-                reg = codecReadReg(&wspace->codec, CODEC_REG_DAC_GAIN);
-                reg = codecReadReg(&wspace->codec, CODEC_REG_SIDETONE);
-                reg = codecReadReg(&wspace->codec, CODEC_REG_AUDIO_CTRL_2);
-                reg = codecReadReg(&wspace->codec, CODEC_REG_POWER_CTRL);
-                reg = codecReadReg(&wspace->codec, CODEC_REG_AUDIO_CTRL_3);
-                reg = codecReadReg(&wspace->codec, CODEC_REG_PLL_1);
-                reg = codecReadReg(&wspace->codec, CODEC_REG_PLL_2);
-                reg = codecReadReg(&wspace->codec, CODEC_REG_AUDIO_CTRL_4);
-                reg = codecReadReg(&wspace->codec, CODEC_REG_AUDIO_CTRL_5);
-            }
-#endif
             return (ES_STATE_HANDLED());
         }
-        case EVT_CODEC_ENABLE_AUDIO : {
-
-            return (ES_STATE_HANDLED());
+        case EVT_CODEC_DISABLE_AUDIO : {
+            return (ES_STATE_TRANSITION(stateIdle));
         }
         default : {
 
@@ -323,7 +292,7 @@ static void startCodec(
         CODEC_POWER_CTRL_EFFCTL_Msk,
         CODEC_POWER_CTRL_EFFCTL_ON);
 
-#if (CONFIG_DEBUG == 1)
+#if 0
     {
         volatile uint16_t reg;
 

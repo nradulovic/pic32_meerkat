@@ -21,6 +21,7 @@
 #include "driver/adc.h"
 #include "driver/systick.h"
 #include "config/config_pins.h"
+#include "app_pdetector.h"
 
 /*=========================================================  LOCAL MACRO's  ==*/
 /*======================================================  LOCAL DATA TYPES  ==*/
@@ -50,6 +51,7 @@ void initBsp(
     initBattChargerDriver();
     initAudioSwitch();
     initNotifyLed();
+    initPdetectorModule();
 }
 
 /*--  Charge pump control  ---------------------------------------------------*/
@@ -144,13 +146,14 @@ void initAudioSwitch(
     *(CONFIG_AUDIO_MUX_CB2_PORT)->clr   =  (0x1u << CONFIG_AUDIO_MUX_CB2_PIN);
 }
 
-void audioSwitchSpeaker(
+void audioSwitchToRadio(
     void) {
 
-    *(CONFIG_AUDIO_MUX_CB1_PORT)->set = (0x1u << CONFIG_AUDIO_MUX_CB1_PIN);
+    *(CONFIG_AUDIO_MUX_CB1_PORT)->clr = (0x1u << CONFIG_AUDIO_MUX_CB1_PIN);
+    *(CONFIG_AUDIO_MUX_CB2_PORT)->set = (0x1u << CONFIG_AUDIO_MUX_CB2_PIN);
 }
 
-void audioSwitchCodec(
+void audioSwitchToCodec(
     void) {
 
     *(CONFIG_AUDIO_MUX_CB1_PORT)->set   =  (0x1u << CONFIG_AUDIO_MUX_CB1_PIN);
