@@ -76,7 +76,7 @@ static esAction stateInit(void * space, const esEvent * event) {
             uartSetClient(&wspace->uart, esEdsGetCurrent());
             uartSetReader(&wspace->uart, reader);
             uartSetWriter(&wspace->uart, writer);
-            wspace->client       = event->producer;
+            wspace->client       = ((struct evtSerialOpen *)event)->client;
             wspace->locked_event = NULL;
 
             return (ES_STATE_TRANSITION(stateIdle));

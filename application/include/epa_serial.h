@@ -39,11 +39,7 @@ enum serialEvents {
 struct evtSerialOpen {
     struct esEvent      event;
     struct uartConfig   config;
-};
-
-struct evtSerialClient {
-    struct esEvent      event;
-    esEpa *             epa;
+    struct esEpa *      client;
 };
 
 struct evtSerialPacket {

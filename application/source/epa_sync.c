@@ -11,7 +11,7 @@
 #include "epa_btman.h"
 #include "eds/queue.h"
 
-#define CONFIG_BLOCK_TIMEOUT                100
+#define CONFIG_BLOCK_TIMEOUT                1000
 
 #define SYNC_TABLE(entry)                                                                           \
     entry(stateInit,            TOP)                                                                \
@@ -33,7 +33,6 @@ struct wspace {
     struct esEventQ     wait;
     void *              waitStorage[CONFIG_SYNC_QUEUE_SIZE];
     struct syncRoute    route;
-    volatile int        protector;
 };
 
 static esAction stateInit           (void *, const esEvent *);
@@ -65,7 +64,6 @@ static esAction stateInit(void * space, const esEvent * event) {
     switch (event->id) {
         case ES_INIT : {
             appTimerInit(&wspace->timeout);
-            wspace->protector = 0xdeaddead;
             esQueueInit(&wspace->wait, &wspace->waitStorage[0], CONFIG_SYNC_QUEUE_SIZE);
 
             return (ES_STATE_HANDLED());
@@ -91,6 +89,10 @@ static esAction stateIdle(void * space, const esEvent * event) {
     struct wspace *     wspace = space;
 
     switch (event->id) {
+        case ES_INIT :
+        case ES_EXIT : {
+            return (ES_STATE_HANDLED());
+        }
         case ES_ENTRY : {
             if (esQueueFlush(&wspace->wait) != ES_ERROR_NONE) {
                 appTimerStart(&wspace->timeout,
@@ -127,14 +129,17 @@ static esAction stateIdle(void * space, const esEvent * event) {
         }
         default : {
             if (event->producer == wspace->route.client) {
+                ((esEvent *)event)->producer = esEdsGetCurrent();
                 esEpaSendEvent(wspace->route.common, (esEvent *)event);
 
                 return (ES_STATE_TRANSITION(stateClient));
             } else if (event->producer == wspace->route.common) {
+                ((esEvent *)event)->producer = esEdsGetCurrent();
                 esEpaSendEvent(wspace->route.other, (esEvent *)event);
 
                 return (ES_STATE_TRANSITION(stateOther));
             } else if (event->producer == wspace->route.other) {
+                ((esEvent *)event)->producer = esEdsGetCurrent();
                 esEpaSendEvent(wspace->route.common, (esEvent *)event);
 
                 return (ES_STATE_TRANSITION(stateOther));
@@ -149,6 +154,10 @@ static esAction stateOther(void * space, const esEvent * event) {
     struct wspace *     wspace = space;
 
     switch (event->id) {
+        case ES_INIT :
+        case ES_EXIT : {
+            return (ES_STATE_HANDLED());
+        }
         case ES_ENTRY : {
             appTimerStart(&wspace->timeout,
                 ES_VTMR_TIME_TO_TICK_MS(CONFIG_BLOCK_TIMEOUT), EVT_LOCAL_TIMEOUT);
@@ -169,10 +178,12 @@ static esAction stateOther(void * space, const esEvent * event) {
 
                 return (ES_STATE_HANDLED());
             } else if (event->producer == wspace->route.common) {
+                ((esEvent *)event)->producer = esEdsGetCurrent();
                 esEpaSendEvent(wspace->route.other, (esEvent *)event);
                 
                 return (ES_STATE_TRANSITION(stateOther));
             } else if (event->producer == wspace->route.other) {
+                ((esEvent *)event)->producer = esEdsGetCurrent();
                 esEpaSendEvent(wspace->route.common, (esEvent *)event);
 
                 return (ES_STATE_TRANSITION(stateOther));
@@ -187,6 +198,12 @@ static esAction stateClient(void * space, const esEvent * event) {
     struct wspace *     wspace = space;
 
     switch (event->id) {
+        case ES_INIT :
+        case ES_ENTRY:
+        case ES_EXIT : {
+            
+            return (ES_STATE_HANDLED());
+        }
         case EVT_SYNC_DONE : {
 
             return (ES_STATE_TRANSITION(stateIdle));
@@ -197,10 +214,12 @@ static esAction stateClient(void * space, const esEvent * event) {
         }
         default : {
             if (event->producer == wspace->route.client) {
+                ((esEvent *)event)->producer = esEdsGetCurrent();
                 esEpaSendEvent(wspace->route.common, (esEvent *)event);
 
                 return (ES_STATE_HANDLED());
             } else if (event->producer == wspace->route.common) {
+                ((esEvent *)event)->producer = esEdsGetCurrent();
                 esEpaSendEvent(wspace->route.client, (esEvent *)event);
 
                 return (ES_STATE_HANDLED());

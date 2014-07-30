@@ -193,6 +193,7 @@ static esAction stateInit (void * space, const esEvent * event) {
             if (error) {
                 return (ES_STATE_TRANSITION(stateInit));
             }
+            ((struct evtSerialOpen *)request)->client             = SyncBt;
             ((struct evtSerialOpen *)request)->config.id          = CONFIG_BT_UART;
             ((struct evtSerialOpen *)request)->config.flags       = UART_TX_ENABLE   |
                                                                     UART_RX_ENABLE   |

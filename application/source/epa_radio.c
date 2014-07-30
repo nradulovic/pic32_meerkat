@@ -13,7 +13,8 @@
 
 /*=========================================================  LOCAL MACRO's  ==*/
 
-#define CONFIG_RADIO_WAIT_PERIOD        200
+#define CONFIG_RADIO_WAIT_PERIOD        400
+#define CONFIG_RADIO_PAUSE_PERIOD       1100
 
 #define RADIO_CMD_ECHO_DISABLE          "ATE0\r\n"
 #define RADIO_RESPONSE_ECHO_DISABLE_E   "ATE0\r\r\nOK\r\n"
@@ -114,6 +115,7 @@ static esAction stateInit(void * space, const esEvent * event) {
             if (error) {
                 return (ES_STATE_TRANSITION(stateInit));
             }
+            ((struct evtSerialOpen *)request)->client       = SyncRadio;
             ((struct evtSerialOpen *)request)->config.id    = CONFIG_RADIO_UART;
             ((struct evtSerialOpen *)request)->config.flags = UART_TX_ENABLE |
                                                               UART_RX_ENABLE |
@@ -156,6 +158,19 @@ static esAction stateDisableEcho(void * space, const esEvent * event) {
     
     switch (event->id) {
         case ES_ENTRY : {
+            esEvent *           request;
+            esError             error;
+
+            ES_ENSURE(error = esEventCreate(sizeof(esEvent), EVT_SYNC_REQUEST,
+                &request));
+
+            if (!error) {
+                ES_ENSURE(esEpaSendEvent(SyncRadio, request));
+            }
+
+            return (ES_STATE_HANDLED());
+        }
+        case EVT_SYNC_GRANTED : {
             esEvent *           request;
             esError             error;
 
@@ -227,7 +242,7 @@ static esAction stateDisableEchoPause(void * space, const esEvent * event)
     switch (event->id) {
         case ES_ENTRY : {
             appTimerStart(&wspace->timeout,
-                ES_VTMR_TIME_TO_TICK_MS(CONFIG_RADIO_WAIT_PERIOD * 2),
+                ES_VTMR_TIME_TO_TICK_MS(CONFIG_RADIO_PAUSE_PERIOD),
                 EVT_LOCAL_DISABLE_ECHO_PAUSE);
 
             return (ES_STATE_HANDLED());
@@ -248,6 +263,19 @@ static esAction statePoll(void * space, const esEvent * event) {
 
     switch (event->id) {
         case ES_ENTRY : {
+            esEvent *           request;
+            esError             error;
+
+            ES_ENSURE(error = esEventCreate(sizeof(esEvent), EVT_SYNC_REQUEST,
+                &request));
+
+            if (!error) {
+                ES_ENSURE(esEpaSendEvent(SyncRadio, request));
+            }
+
+            return (ES_STATE_HANDLED());
+        }
+        case EVT_SYNC_GRANTED : {
             esEvent *           request;
             esError             error;
 
@@ -322,7 +350,7 @@ static esAction statePoll(void * space, const esEvent * event) {
                 }
             }
             
-            return (ES_STATE_TRANSITION(statePoll));
+            return (ES_STATE_TRANSITION(statePollPause));
         }
         default : {
 
@@ -337,7 +365,7 @@ static esAction statePollPause(void * space, const esEvent* event) {
     switch (event->id) {
         case ES_ENTRY : {
             appTimerStart(&wspace->timeout,
-                ES_VTMR_TIME_TO_TICK_MS(CONFIG_RADIO_WAIT_PERIOD * 2),
+                ES_VTMR_TIME_TO_TICK_MS(CONFIG_RADIO_PAUSE_PERIOD),
                 EVT_LOCAL_POLL_PAUSE);
 
             return (ES_STATE_HANDLED());
