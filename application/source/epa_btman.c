@@ -30,6 +30,7 @@
     entry(stateSetAudio,            TOP)                                        \
     entry(stateSetConnectionMask,   TOP)                                        \
     entry(stateSetDiscoveryMask,    TOP)                                        \
+    entry(stateSetSpeakerVolume,    TOP)                                        \
     entry(stateSetCmdEnd,           TOP)                                        \
     entry(stateActionCmdBegin,      TOP)                                        \
     entry(stateActionDiscoverable,  TOP)                                        \
@@ -78,6 +79,7 @@ static esAction stateSetName            (void *, const esEvent *);
 static esAction stateSetAudio           (void *, const esEvent *);
 static esAction stateSetConnectionMask  (void *, const esEvent *);
 static esAction stateSetDiscoveryMask   (void *, const esEvent *);
+static esAction stateSetSpeakerVolume   (void *, const esEvent *);
 static esAction stateSetCmdEnd          (void *, const esEvent *);
 static esAction stateActionCmdBegin     (void *, const esEvent *);
 static esAction stateActionDiscoverable (void *, const esEvent *);
@@ -382,6 +384,8 @@ static esAction stateSetName(void * space, const esEvent * event) {
     }
 }
 
+#define CONFIG_AUDIO_PATH               "0102"
+
 static esAction stateSetAudio(void * space, const esEvent * event) {
     struct wspace * wspace = space;
 
@@ -393,9 +397,9 @@ static esAction stateSetAudio(void * space, const esEvent * event) {
             ES_ENSURE(error = esEventCreate(sizeof(struct evtBtReq), EVT_BT_REQ, &request));
 
             if (!error) {
-                ((struct evtBtReq *)request)->cmd = BT_SET_AUDIO_I2S;
-                ((struct evtBtReq *)request)->arg = NULL;
-                ((struct evtBtReq *)request)->argSize = 0;
+                ((struct evtBtReq *)request)->cmd = BT_SET_AUDIO_PATH;
+                ((struct evtBtReq *)request)->arg = CONFIG_AUDIO_PATH;
+                ((struct evtBtReq *)request)->argSize = sizeof(CONFIG_AUDIO_PATH) - 1u;
                 ES_ENSURE(esEpaSendEvent(BtDrv, request));
             }
 
@@ -472,6 +476,47 @@ static esAction stateSetDiscoveryMask(void * space, const esEvent * event) {
                 ((struct evtBtReq *)request)->cmd = BT_SET_DISCOVERY_MASK;
                 ((struct evtBtReq *)request)->arg = CONFIG_BT_PROFILE;
                 ((struct evtBtReq *)request)->argSize = sizeof(CONFIG_BT_PROFILE) - 1u;
+                ES_ENSURE(esEpaSendEvent(BtDrv, request));
+            }
+
+            return (ES_STATE_HANDLED());
+        }
+        case EVT_BT_REPLY : {
+            const struct evtBtReply * reply = (const struct evtBtReply *)event;
+
+            if (reply->status != BT_ERR_NONE) {
+                wspace->retry = 1;
+            }
+
+            return (ES_STATE_TRANSITION(stateSetCmdEnd));
+            /* BT does not recognize this command */
+#if 0
+            return (ES_STATE_TRANSITION(stateSetSpeakerVolume));
+#endif
+        }
+        default : {
+
+            return (ES_STATE_IGNORED());
+        }
+    }
+}
+
+#define CONFIG_SPEAKER_VOLUME           "0A"
+
+static esAction stateSetSpeakerVolume(void * space, const esEvent * event) {
+    struct wspace * wspace = space;
+
+    switch (event->id) {
+        case ES_ENTRY : {
+            esEvent *           request;
+            esError             error;
+
+            ES_ENSURE(error = esEventCreate(sizeof(struct evtBtReq), EVT_BT_REQ, &request));
+
+            if (!error) {
+                ((struct evtBtReq *)request)->cmd = BT_SET_SPEAKER_VOLUME;
+                ((struct evtBtReq *)request)->arg = CONFIG_SPEAKER_VOLUME;
+                ((struct evtBtReq *)request)->argSize = sizeof(CONFIG_SPEAKER_VOLUME) - 1u;
                 ES_ENSURE(esEpaSendEvent(BtDrv, request));
             }
 
