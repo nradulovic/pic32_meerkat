@@ -40,6 +40,8 @@
  */
 #define CONFIG_HART_BEAT_PERIOD         100u
 
+#define CONFIG_SPEAKER_VOLUME           "0A"
+
 /*------------------------------------------------------  C++ extern begin  --*/
 #ifdef	__cplusplus
 extern "C" {
