@@ -10,47 +10,18 @@
 
 #include <string.h>
 
+#include "neon_eds.h"
 #include "events.h"
 #include "conv.h"
 #include "driver/gpio.h"
 #include "app_timer.h"
 
 /*=========================================================  LOCAL MACRO's  ==*/
-
-
-#define BT_MAN_TABLE(entry)                                                     \
-    entry(stateInit,                TOP)                                        \
-    entry(stateIdle,                TOP)                                        \
-    entry(stateResetCmdBegin,       TOP)                                        \
-    entry(stateResetSettings,       TOP)                                        \
-    entry(stateResetCmdEnd,         TOP)                                        \
-    entry(stateSetCmdBegin,         TOP)                                        \
-    entry(stateSetAuth,             TOP)                                        \
-    entry(stateSetName,             TOP)                                        \
-    entry(stateSetAudio,            TOP)                                        \
-    entry(stateSetConnectionMask,   TOP)                                        \
-    entry(stateSetDiscoveryMask,    TOP)                                        \
-    entry(stateSetSpeakerVolume,    TOP)                                        \
-    entry(stateSetCmdEnd,           TOP)                                        \
-    entry(stateActionCmdBegin,      TOP)                                        \
-    entry(stateActionDiscoverable,  TOP)                                        \
-    entry(stateActionVolume,        TOP)                                        \
-    entry(stateActionAvrcp,         TOP)                                        \
-    entry(stateActionCmdEnd,        TOP)                                        \
-    entry(stateHartCmdBegin,        TOP)                                        \
-    entry(stateHartQuery,           TOP)                                        \
-    entry(stateHartCmdEnd,          TOP)                                        \
-    entry(stateHartSendData,        TOP)                                        \
-    entry(stateHartBeat,            TOP)
-
 /*======================================================  LOCAL DATA TYPES  ==*/
 
-enum BtManStateId {
-    ES_STATE_ID_INIT(BT_MAN_TABLE)
-};
-
-enum localEvents {
-    EVT_LOCAL_TIMEOUT = ES_EVENT_LOCAL_ID,
+enum local_events 
+{
+    EVT_LOCAL_TIMEOUT = NEVENT_USER_ID,
     EVT_LOCAL_RESET_SETTINGS_TIMEOUT,
     EVT_LOCAL_RESET_CMD_TIMEOUT,
     EVT_LOCAL_SET_CMD_TIMEOUT,
@@ -60,13 +31,35 @@ enum localEvents {
 
 /**@brief       Epa workspace
  */
-struct wspace {
-    struct appTimer     timeout;
+struct wspace 
+{
+	struct netimer		timeout;
     uint32_t            retry;
-    uint32_t            connectedProfiles;
+    uint32_t            connected_profiles;
 };
 
 /*=============================================  LOCAL FUNCTION PROTOTYPES  ==*/
+
+static naction state_init(struct nsm *, const struct nevent *);
+static naction state_idle(struct nsm *, const struct nevent *);
+static naction state_reset_cmd_begin(struct nsm *, const struct nevent *);
+static naction state_reset_settings(struct nsm *, const struct nevent *);
+static naction state_reset_cmd_end(struct nsm *, const struct nevent *);
+static naction state_set_cmd_begin(struct nsm *, const struct nevent *);
+static naction state_set_auth(struct nsm *, const struct nevent *);
+static naction state_set_name(struct nsm *, const struct nevent *);
+static naction state_set_audio(struct nsm *, const struct nevent *);
+static naction state_set_connection_mask(struct nsm *, const struct nevent *);
+static naction state_set_discovery_mask(struct nsm *, const struct nevent *);
+static naction state_set_speaker_volume(struct nsm *, const struct nevent *);
+static naction state_set_cmd_end(struct nsm *, const struct nevent *);
+static naction state_action_cmd_begin(struct nsm *, const struct nevent *);
+static naction state_action_discoverable(struct nsm *, const struct nevent *);
+static naction state_action_volume(struct nsm *, const struct nevent *);
+static naction state_action_avrcp(struct nsm *, const struct nevent *);
+static naction state_action_cmd_end(struct nsm *, const struct nevent *);
+static naction state_heart_beat(struct nsm *, const struct nevent *);
+static naction state_heart_cmd_begin(struct nsm *, const struct nevent *);
 
 static esAction stateInit               (void *, const esEvent *);
 static esAction stateIdle               (void *, const esEvent *);

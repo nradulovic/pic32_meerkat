@@ -24,7 +24,7 @@
 /*======================================================  LOCAL DATA TYPES  ==*/
 /*=============================================  LOCAL FUNCTION PROTOTYPES  ==*/
 
-static void processEvents(
+static void process_events(
     void);
 
 /**@brief       Idle routine
@@ -33,65 +33,43 @@ static void idle(
     void);
 
 /*=======================================================  LOCAL VARIABLES  ==*/
-
-static const ES_MODULE_INFO_CREATE("main", "main loop", "Nenad Radulovic");
-
-static uint8_t          StaticMemBuff[12288];
-static uint8_t          HeapMemBuff[12288];
-
 /*======================================================  GLOBAL VARIABLES  ==*/
 
-esMem                   StaticMem = ES_MEM_INITIALIZER();
-esMem                   HeapMem   = ES_MEM_INITIALIZER();
+static nheap 					g_event_mem;
+static uint8_t					g_event_mem_storage[12288];
 
 /*============================================  LOCAL FUNCTION DEFINITIONS  ==*/
 
-static void processEvents(
-    void) {
-    /*--  Initialize virtual timers  -----------------------------------------*/
-    esModuleVTimerInit();
-
-    /*--  Initialize static memory allocator  --------------------------------*/
-    ES_ENSURE(esMemInit(
-        &esGlobalStaticMemClass,
-        &StaticMem,
-        StaticMemBuff,
-        sizeof(StaticMemBuff),
-        0));
-
+static void process_events(void) 
+{
+	ncore_init();
+    
+	/*--  Initialize virtual timers  -----------------------------------------*/
+	ncore_timer_enable();
+	nsched_init();
     /*--  Initialize heap memory allocator  ----------------------------------*/
-    ES_ENSURE(esMemInit(
-        &esGlobalHeapMemClass,
-        &HeapMem,
-        HeapMemBuff,
-        sizeof(HeapMemBuff),
-        0));
-
+	nheap_init(&g_event_mem, g_event_mem_storage, sizeof(g_event_mem_storage));
     /*--  Register a memory to use for events  -------------------------------*/
-    ES_ENSURE(esEventRegisterMem(&HeapMem));
-
-    /*--  Initialize EDS kernel  ---------------------------------------------*/
-    ES_ENSURE(esEdsInit());
-
+	nevent_registerm_mem(&g_event_mem.mem_class);
     /*--  Set application idle routine  --------------------------------------*/
-    esEdsSetIdle(idle);
+	neds_set_idle(NULL);
 
     /*-- Create all required EPAs  -------------------------------------------*/
-    ES_ENSURE(esEpaCreate(&BtDrvEpa,        &BtDrvSm,        &StaticMem, &BtDrv));
-    ES_ENSURE(esEpaCreate(&BtManEpa,        &BtManSm,        &StaticMem, &BtMan));
-    ES_ENSURE(esEpaCreate(&CodecEpa,        &CodecSm,        &StaticMem, &Codec));
-    ES_ENSURE(esEpaCreate(&RadioEpa,        &RadioSm,        &StaticMem, &Radio));
-    ES_ENSURE(esEpaCreate(&NotificationEpa, &NotificationSm, &StaticMem, &Notification));
-    ES_ENSURE(esEpaCreate(&SerialEpa,       &SerialSm,       &StaticMem, &SerialBt));
-    ES_ENSURE(esEpaCreate(&SerialEpa,       &SerialSm,       &StaticMem, &SerialRadio));
-    ES_ENSURE(esEpaCreate(&SyncEpa,         &SyncSm,         &StaticMem, &SyncBt));
-    ES_ENSURE(esEpaCreate(&SyncEpa,         &SyncSm,         &StaticMem, &SyncRadio));
-    ES_ENSURE(esEpaCreate(&ControlEpa,      &ControlSm,      &StaticMem, &Control));
+	nepa_init(&g_bt_drv_epa, 		&g_bt_drv_define);
+	nepa_init(&g_bt_man_epa, 		&g_bt_man_define);
+	nepa_init(&g_codec_epa,  		&g_codec_define);
+	nepa_init(&g_radio_epa,  		&g_radio_define);
+	nepa_init(&g_notify_epa, 		&g_notify_define);
+	nepa_init(&g_serial_bt_epa, 	&g_serial_bt_define);
+	nepa_init(&g_serial_radio_epa, 	&g_serial_radio_define);
+	nepa_init(&g_sync_bt_epa,       &g_sync_bt_define);
+	nepa_init(&g_sync_radio_epa,    &g_sync_radio_define);
+	nepa_init(&g_sync_radio_epa,    &g_sync_radio_define);
 
     /*--  Start EPA execution  -----------------------------------------------*/
-    ES_ENSURE(esEdsStart());
-    ES_ENSURE(esMemTerm(&HeapMem));
+	neds_run();
 }
+
 
 static void idle(
     void) {
@@ -110,8 +88,8 @@ int main(
     (void)argc;
     (void)argv;
     
-    initBsp();                                                                  /* Initialize Board Support Package module                  */
-    processEvents();
+    bsp_init();
+	process_events();
 
     return (EXIT_SUCCESS);
 }
