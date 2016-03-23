@@ -6,8 +6,8 @@
 CND_BASEDIR=`pwd`
 # default configuration
 CND_ARTIFACT_DIR_default=dist/default/production
-CND_ARTIFACT_NAME_default=meerkat.X.production.hex
-CND_ARTIFACT_PATH_default=dist/default/production/meerkat.X.production.hex
+CND_ARTIFACT_NAME_default=meerkat.production.hex
+CND_ARTIFACT_PATH_default=dist/default/production/meerkat.production.hex
 CND_PACKAGE_DIR_default=${CND_DISTDIR}/default/package
-CND_PACKAGE_NAME_default=meerkat.x.tar
-CND_PACKAGE_PATH_default=${CND_DISTDIR}/default/package/meerkat.x.tar
+CND_PACKAGE_NAME_default=meerkat.tar
+CND_PACKAGE_PATH_default=${CND_DISTDIR}/default/package/meerkat.tar

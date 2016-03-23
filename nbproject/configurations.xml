@@ -9,173 +9,154 @@
           <itemPath>application/include/config/config_project.h</itemPath>
         </logicalFolder>
         <itemPath>application/include/conv.h</itemPath>
-        <itemPath>application/include/epa_btdrv.h</itemPath>
         <itemPath>application/include/events.h</itemPath>
         <itemPath>application/include/bsp.h</itemPath>
-        <itemPath>application/include/epa_btman.h</itemPath>
-        <itemPath>application/include/epa_codec.h</itemPath>
         <itemPath>application/include/main.h</itemPath>
-        <itemPath>application/include/epa_radio.h</itemPath>
         <itemPath>application/include/support.h</itemPath>
-        <itemPath>application/include/app_timer.h</itemPath>
-        <itemPath>application/include/epa_notification.h</itemPath>
-        <itemPath>application/include/epa_serial.h</itemPath>
-        <itemPath>application/include/epa_sync.h</itemPath>
+        <itemPath>application/include/neon_eds_app_config.h</itemPath>
       </logicalFolder>
       <logicalFolder name="source" displayName="source" projectFiles="true">
-        <itemPath>application/source/epa_btman.c</itemPath>
         <itemPath>application/source/bsp.c</itemPath>
-        <itemPath>application/source/epa_codec.c</itemPath>
         <itemPath>application/source/main.c</itemPath>
-        <itemPath>application/source/epa_btdrv.c</itemPath>
         <itemPath>application/source/support.c</itemPath>
-        <itemPath>application/source/conv.c</itemPath>
-        <itemPath>application/source/epa_radio.c</itemPath>
-        <itemPath>application/source/app_timer.c</itemPath>
-        <itemPath>application/source/epa_notification.c</itemPath>
-        <itemPath>application/source/epa_serial.c</itemPath>
-        <itemPath>application/source/epa_sync.c</itemPath>
       </logicalFolder>
     </logicalFolder>
     <logicalFolder name="driver" displayName="driver" projectFiles="true">
       <logicalFolder name="include" displayName="include" projectFiles="true">
         <logicalFolder name="driver" displayName="driver" projectFiles="true">
-          <itemPath>driver/include/driver/lld_spi2.h</itemPath>
-          <itemPath>driver/include/driver/lld_spi1.h</itemPath>
-          <itemPath>driver/include/driver/adc.h</itemPath>
-          <itemPath>driver/include/driver/lld_spis.h</itemPath>
-          <itemPath>driver/include/driver/intr.h</itemPath>
-          <itemPath>driver/include/driver/gpio.h</itemPath>
-          <itemPath>driver/include/driver/rtc.h</itemPath>
-          <itemPath>driver/include/driver/spi.h</itemPath>
-          <itemPath>driver/include/driver/systick.h</itemPath>
           <itemPath>driver/include/driver/clock.h</itemPath>
-          <itemPath>driver/include/driver/s25fl.h</itemPath>
-          <itemPath>driver/include/driver/codec.h</itemPath>
-          <itemPath>driver/include/driver/uart.h</itemPath>
-          <itemPath>driver/include/driver/lld_uart1.h</itemPath>
-          <itemPath>driver/include/driver/lld_uart2.h</itemPath>
         </logicalFolder>
       </logicalFolder>
       <logicalFolder name="source" displayName="source" projectFiles="true">
-        <itemPath>driver/source/adc.c</itemPath>
-        <itemPath>driver/source/i2c.c</itemPath>
-        <itemPath>driver/source/lld_spis.c</itemPath>
-        <itemPath>driver/source/lld_spi2.c</itemPath>
         <itemPath>driver/source/clock.c</itemPath>
-        <itemPath>driver/source/gpio.c</itemPath>
-        <itemPath>driver/source/s25fl.c</itemPath>
-        <itemPath>driver/source/lld_spi1.c</itemPath>
-        <itemPath>driver/source/rtc.c</itemPath>
-        <itemPath>driver/source/spi.c</itemPath>
-        <itemPath>driver/source/intr.c</itemPath>
-        <itemPath>driver/source/systick.c</itemPath>
-        <itemPath>driver/source/codec.c</itemPath>
-        <itemPath>driver/source/lld_uart1.c</itemPath>
-        <itemPath>driver/source/uart.c</itemPath>
-        <itemPath>driver/source/lld_uart2.c</itemPath>
-      </logicalFolder>
-    </logicalFolder>
-    <logicalFolder name="esolid-base" displayName="esolid-base" projectFiles="true">
-      <logicalFolder name="inc" displayName="inc" projectFiles="true">
-        <logicalFolder name="base" displayName="base" projectFiles="true">
-          <itemPath>esolid-base/inc/base/base.h</itemPath>
-          <itemPath>esolid-base/inc/base/queue.h</itemPath>
-          <itemPath>esolid-base/inc/base/error.h</itemPath>
-          <itemPath>esolid-base/inc/base/prio_queue.h</itemPath>
-          <itemPath>esolid-base/inc/base/debug.h</itemPath>
-          <itemPath>esolid-base/inc/base/bitop.h</itemPath>
-          <itemPath>esolid-base/inc/base/debug_config.h</itemPath>
-          <itemPath>esolid-base/inc/base/prio_queue_config.h</itemPath>
-          <itemPath>esolid-base/inc/base/list.h</itemPath>
-        </logicalFolder>
-      </logicalFolder>
-      <logicalFolder name="port" displayName="port" projectFiles="true">
-        <logicalFolder name="pic32-none-gcc"
-                       displayName="pic32-none-gcc"
-                       projectFiles="true">
-          <logicalFolder name="common" displayName="common" projectFiles="true">
-            <logicalFolder name="plat" displayName="plat" projectFiles="true">
-              <itemPath>esolid-base/port/pic32-none-gcc/common/plat/critical.h</itemPath>
-              <itemPath>esolid-base/port/pic32-none-gcc/common/plat/compiler.h</itemPath>
-            </logicalFolder>
-          </logicalFolder>
-          <logicalFolder name="mips-m4k" displayName="mips-m4k" projectFiles="true">
-            <logicalFolder name="arch" displayName="arch" projectFiles="true">
-              <itemPath>esolid-base/port/pic32-none-gcc/mips-m4k/arch/intr_config.h</itemPath>
-              <itemPath>esolid-base/port/pic32-none-gcc/mips-m4k/arch/systimer_config.h</itemPath>
-              <itemPath>esolid-base/port/pic32-none-gcc/mips-m4k/arch/intr.h</itemPath>
-              <itemPath>esolid-base/port/pic32-none-gcc/mips-m4k/arch/cpu.h</itemPath>
-              <itemPath>esolid-base/port/pic32-none-gcc/mips-m4k/arch/systimer.h</itemPath>
-            </logicalFolder>
-            <itemPath>esolid-base/port/pic32-none-gcc/mips-m4k/cpu.c</itemPath>
-            <itemPath>esolid-base/port/pic32-none-gcc/mips-m4k/intr.c</itemPath>
-            <itemPath>esolid-base/port/pic32-none-gcc/mips-m4k/systimer.c</itemPath>
-          </logicalFolder>
-          <logicalFolder name="pic32mx150f128d"
-                         displayName="pic32mx150f128d"
-                         projectFiles="true">
-            <logicalFolder name="family" displayName="family" projectFiles="true">
-              <itemPath>esolid-base/port/pic32-none-gcc/pic32mx150f128d/family/profile.h</itemPath>
-            </logicalFolder>
-          </logicalFolder>
-        </logicalFolder>
-      </logicalFolder>
-      <logicalFolder name="src" displayName="src" projectFiles="true">
-        <itemPath>esolid-base/src/debug.c</itemPath>
-        <itemPath>esolid-base/src/base.c</itemPath>
-        <itemPath>esolid-base/src/error.c</itemPath>
-        <itemPath>esolid-base/src/prio_queue.c</itemPath>
-      </logicalFolder>
-    </logicalFolder>
-    <logicalFolder name="esolid-eds" displayName="esolid-eds" projectFiles="true">
-      <logicalFolder name="inc" displayName="inc" projectFiles="true">
-        <logicalFolder name="eds" displayName="eds" projectFiles="true">
-          <itemPath>esolid-eds/inc/eds/smp.h</itemPath>
-          <itemPath>esolid-eds/inc/eds/epa_config.h</itemPath>
-          <itemPath>esolid-eds/inc/eds/epa.h</itemPath>
-          <itemPath>esolid-eds/inc/eds/event_config.h</itemPath>
-          <itemPath>esolid-eds/inc/eds/event.h</itemPath>
-          <itemPath>esolid-eds/inc/eds/smp_config.h</itemPath>
-        </logicalFolder>
-      </logicalFolder>
-      <logicalFolder name="src" displayName="src" projectFiles="true">
-        <itemPath>esolid-eds/src/smp.c</itemPath>
-        <itemPath>esolid-eds/src/event.c</itemPath>
-        <itemPath>esolid-eds/src/epa.c</itemPath>
-      </logicalFolder>
-    </logicalFolder>
-    <logicalFolder name="esolid-mem" displayName="esolid-mem" projectFiles="true">
-      <logicalFolder name="inc" displayName="inc" projectFiles="true">
-        <logicalFolder name="mem" displayName="mem" projectFiles="true">
-          <itemPath>esolid-mem/inc/mem/pool.h</itemPath>
-          <itemPath>esolid-mem/inc/mem/mem_class.h</itemPath>
-          <itemPath>esolid-mem/inc/mem/heap.h</itemPath>
-          <itemPath>esolid-mem/inc/mem/static.h</itemPath>
-        </logicalFolder>
-      </logicalFolder>
-      <logicalFolder name="src" displayName="src" projectFiles="true">
-        <itemPath>esolid-mem/src/mem_class.c</itemPath>
-        <itemPath>esolid-mem/src/heap.c</itemPath>
-        <itemPath>esolid-mem/src/static.c</itemPath>
-        <itemPath>esolid-mem/src/pool.c</itemPath>
-      </logicalFolder>
-    </logicalFolder>
-    <logicalFolder name="esolid-vtimer"
-                   displayName="esolid-vtimer"
-                   projectFiles="true">
-      <logicalFolder name="inc" displayName="inc" projectFiles="true">
-        <logicalFolder name="vtimer" displayName="vtimer" projectFiles="true">
-          <itemPath>esolid-vtimer/inc/vtimer/vtimer.h</itemPath>
-        </logicalFolder>
-      </logicalFolder>
-      <logicalFolder name="src" displayName="src" projectFiles="true">
-        <itemPath>esolid-vtimer/src/vtimer.c</itemPath>
       </logicalFolder>
     </logicalFolder>
     <logicalFolder name="LinkerScript"
                    displayName="Linker Files"
                    projectFiles="true">
+    </logicalFolder>
+    <logicalFolder name="neon" displayName="neon" projectFiles="true">
+      <logicalFolder name="drivers" displayName="drivers" projectFiles="true">
+        <logicalFolder name="include" displayName="include" projectFiles="true">
+          <logicalFolder name="flash" displayName="flash" projectFiles="true">
+            <itemPath>neon/drivers/include/flash/flash_class.h</itemPath>
+            <itemPath>neon/drivers/include/flash/s25fl.h</itemPath>
+          </logicalFolder>
+          <logicalFolder name="fram" displayName="fram" projectFiles="true">
+            <itemPath>neon/drivers/include/fram/fram.h</itemPath>
+          </logicalFolder>
+          <logicalFolder name="lcd" displayName="lcd" projectFiles="true">
+            <itemPath>neon/drivers/include/lcd/ili9341.h</itemPath>
+          </logicalFolder>
+          <logicalFolder name="mcu" displayName="mcu" projectFiles="true">
+            <itemPath>neon/drivers/include/mcu/config.h</itemPath>
+            <itemPath>neon/drivers/include/mcu/gpio.h</itemPath>
+            <itemPath>neon/drivers/include/mcu/i2c.h</itemPath>
+            <itemPath>neon/drivers/include/mcu/i2c_bus.h</itemPath>
+            <itemPath>neon/drivers/include/mcu/mux.h</itemPath>
+            <itemPath>neon/drivers/include/mcu/peripheral.h</itemPath>
+            <itemPath>neon/drivers/include/mcu/profile.h</itemPath>
+            <itemPath>neon/drivers/include/mcu/spi.h</itemPath>
+            <itemPath>neon/drivers/include/mcu/uart.h</itemPath>
+          </logicalFolder>
+          <logicalFolder name="power_sense" displayName="power_sense" projectFiles="true">
+            <itemPath>neon/drivers/include/power_sense/ina219.h</itemPath>
+          </logicalFolder>
+          <logicalFolder name="rtc" displayName="rtc" projectFiles="true">
+            <itemPath>neon/drivers/include/rtc/ab_rtcmc_32768_eoz9.h</itemPath>
+            <itemPath>neon/drivers/include/rtc/rtc_class.h</itemPath>
+          </logicalFolder>
+          <logicalFolder name="xio" displayName="xio" projectFiles="true">
+            <itemPath>neon/drivers/include/xio/mcp23017.h</itemPath>
+            <itemPath>neon/drivers/include/xio/xio_class.h</itemPath>
+          </logicalFolder>
+        </logicalFolder>
+        <logicalFolder name="port" displayName="port" projectFiles="true">
+        </logicalFolder>
+      </logicalFolder>
+      <logicalFolder name="eds" displayName="eds" projectFiles="true">
+        <logicalFolder name="include" displayName="include" projectFiles="true">
+          <logicalFolder name="base" displayName="base" projectFiles="true">
+            <itemPath>neon/eds/include/base/bias_list.h</itemPath>
+            <itemPath>neon/eds/include/base/bitop.h</itemPath>
+            <itemPath>neon/eds/include/base/component.h</itemPath>
+            <itemPath>neon/eds/include/base/config.h</itemPath>
+            <itemPath>neon/eds/include/base/debug.h</itemPath>
+            <itemPath>neon/eds/include/base/error.h</itemPath>
+            <itemPath>neon/eds/include/base/list.h</itemPath>
+            <itemPath>neon/eds/include/base/queue.h</itemPath>
+          </logicalFolder>
+          <logicalFolder name="ep" displayName="ep" projectFiles="true">
+            <itemPath>neon/eds/include/ep/epa.h</itemPath>
+            <itemPath>neon/eds/include/ep/equeue.h</itemPath>
+            <itemPath>neon/eds/include/ep/etimer.h</itemPath>
+            <itemPath>neon/eds/include/ep/event.h</itemPath>
+            <itemPath>neon/eds/include/ep/smp.h</itemPath>
+          </logicalFolder>
+          <logicalFolder name="mm" displayName="mm" projectFiles="true">
+            <itemPath>neon/eds/include/mm/heap.h</itemPath>
+            <itemPath>neon/eds/include/mm/mem.h</itemPath>
+            <itemPath>neon/eds/include/mm/pool.h</itemPath>
+            <itemPath>neon/eds/include/mm/static.h</itemPath>
+            <itemPath>neon/eds/include/mm/stdheap.h</itemPath>
+          </logicalFolder>
+          <logicalFolder name="port" displayName="port" projectFiles="true">
+            <itemPath>neon/eds/include/port/compiler.h</itemPath>
+            <itemPath>neon/eds/include/port/core.h</itemPath>
+            <itemPath>neon/eds/include/port/os.h</itemPath>
+          </logicalFolder>
+          <logicalFolder name="sched" displayName="sched" projectFiles="true">
+            <itemPath>neon/eds/include/sched/prio_queue.h</itemPath>
+            <itemPath>neon/eds/include/sched/sched.h</itemPath>
+          </logicalFolder>
+          <logicalFolder name="timer" displayName="timer" projectFiles="true">
+            <itemPath>neon/eds/include/timer/timer.h</itemPath>
+          </logicalFolder>
+          <itemPath>neon/eds/include/neon_eds.h</itemPath>
+        </logicalFolder>
+        <logicalFolder name="port" displayName="port" projectFiles="true">
+          <logicalFolder name="pic32-none-gcc"
+                         displayName="pic32-none-gcc"
+                         projectFiles="true">
+            <logicalFolder name="arch" displayName="arch" projectFiles="true">
+              <itemPath>neon/eds/port/pic32-none-gcc/arch/p_compiler.h</itemPath>
+              <itemPath>neon/eds/port/pic32-none-gcc/arch/p_core.h</itemPath>
+            </logicalFolder>
+            <itemPath>neon/eds/port/pic32-none-gcc/p_core.c</itemPath>
+          </logicalFolder>
+        </logicalFolder>
+        <logicalFolder name="source" displayName="source" projectFiles="true">
+          <itemPath>neon/eds/source/epa.c</itemPath>
+          <itemPath>neon/eds/source/equeue.c</itemPath>
+          <itemPath>neon/eds/source/etimer.c</itemPath>
+          <itemPath>neon/eds/source/event.c</itemPath>
+          <itemPath>neon/eds/source/heap.c</itemPath>
+          <itemPath>neon/eds/source/mem.c</itemPath>
+          <itemPath>neon/eds/source/pool.c</itemPath>
+          <itemPath>neon/eds/source/sched.c</itemPath>
+          <itemPath>neon/eds/source/smp.c</itemPath>
+          <itemPath>neon/eds/source/static.c</itemPath>
+          <itemPath>neon/eds/source/timer.c</itemPath>
+        </logicalFolder>
+      </logicalFolder>
+      <logicalFolder name="lib" displayName="lib" projectFiles="true">
+        <logicalFolder name="include" displayName="include" projectFiles="true">
+          <logicalFolder name="lib" displayName="lib" projectFiles="true">
+            <logicalFolder name="string" displayName="string" projectFiles="true">
+              <itemPath>neon/lib/include/lib/string/num_conv.h</itemPath>
+            </logicalFolder>
+            <itemPath>neon/lib/include/lib/bits.h</itemPath>
+            <itemPath>neon/lib/include/lib/checksum.h</itemPath>
+          </logicalFolder>
+        </logicalFolder>
+        <logicalFolder name="source" displayName="source" projectFiles="true">
+          <logicalFolder name="string" displayName="string" projectFiles="true">
+            <itemPath>neon/lib/source/string/num_conv.c</itemPath>
+          </logicalFolder>
+          <itemPath>neon/lib/source/bits.c</itemPath>
+          <itemPath>neon/lib/source/checksum.c</itemPath>
+        </logicalFolder>
+      </logicalFolder>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
@@ -193,6 +174,7 @@
     <Elem>include</Elem>
     <Elem>driver</Elem>
     <Elem>application</Elem>
+    <Elem>neon</Elem>
   </sourceRootList>
   <projectmakefile>Makefile</projectmakefile>
   <confs>
@@ -205,15 +187,18 @@
         <platformTool>ICD3PlatformTool</platformTool>
         <languageToolchain>XC32</languageToolchain>
         <languageToolchainVersion>1.31</languageToolchainVersion>
-        <platform>2</platform>
+        <platform>3</platform>
       </toolsSet>
       <compileType>
         <linkerTool>
           <linkerLibItems>
           </linkerLibItems>
         </linkerTool>
+        <archiverTool>
+        </archiverTool>
         <loading>
           <useAlternateLoadableFile>false</useAlternateLoadableFile>
+          <parseOnProdLoad>false</parseOnProdLoad>
           <alternateLoadableFile></alternateLoadableFile>
         </loading>
       </compileType>
@@ -234,7 +219,7 @@
         <property key="enable-unroll-loops" value="false"/>
         <property key="exclude-floating-point" value="true"/>
         <property key="extra-include-directories"
-                  value="driver/include;application/include;esolid-base/inc;esolid-base/port/pic32-none-gcc/common;esolid-base/port/pic32-none-gcc/mips-m4k;esolid-base/port/pic32-none-gcc/pic32mx150f128d;esolid-eds/inc;esolid-mem/inc;esolid-vtimer/inc"/>
+                  value="driver/include;application/include;neon\eds\include;neon\eds\port\pic32-none-gcc;neon\lib\include;neon\drivers\include"/>
         <property key="generate-16-bit-code" value="true"/>
         <property key="generate-micro-compressed-code" value="false"/>
         <property key="isolate-each-function" value="true"/>
@@ -251,6 +236,9 @@
         <property key="use-indirect-calls" value="false"/>
         <appendMe value="-Wextra"/>
       </C32>
+      <C32-AR>
+        <property key="additional-options-chop-files" value="false"/>
+      </C32-AR>
       <C32-AS>
         <property key="assembler-symbols" value=""/>
         <property key="enable-symbols" value="true"/>
@@ -327,7 +315,10 @@
         <property key="use-indirect-calls" value="false"/>
       </C32CPP>
       <C32Global>
+        <property key="common-include-directories" value=""/>
+        <property key="gp-relative-option" value=""/>
         <property key="legacy-libc" value="false"/>
+        <property key="relaxed-math" value="false"/>
         <property key="save-temps" value="false"/>
         <property key="wpo-lto" value="false"/>
       </C32Global>
@@ -367,756 +358,41 @@
         <property key="ToolFirmwareOption.UseLatestFirmware" value="true"/>
         <property key="UART1" value="true"/>
         <property key="UART2" value="true"/>
+        <property key="USB" value="true"/>
         <property key="debugoptions.useswbreakpoints" value="false"/>
-        <property key="firmware.download.all" value="false"/>
         <property key="hwtoolclock.frcindebug" value="false"/>
         <property key="memories.aux" value="false"/>
         <property key="memories.bootflash" value="false"/>
         <property key="memories.configurationmemory" value="true"/>
+        <property key="memories.configurationmemory2" value="true"/>
+        <property key="memories.dataflash" value="true"/>
         <property key="memories.eeprom" value="true"/>
         <property key="memories.flashdata" value="true"/>
         <property key="memories.id" value="true"/>
         <property key="memories.programmemory" value="true"/>
         <property key="memories.programmemory.end" value="0x1d01ffff"/>
+        <property key="memories.programmemory.partition2" value="true"/>
+        <property key="memories.programmemory.partition2.end"
+                  value="${memories.programmemory.partition2.end.value}"/>
+        <property key="memories.programmemory.partition2.start"
+                  value="${memories.programmemory.partition2.start.value}"/>
         <property key="memories.programmemory.start" value="0x1d000000"/>
         <property key="poweroptions.powerenable" value="false"/>
+        <property key="programoptions.donoteraseauxmem" value="false"/>
         <property key="programoptions.eraseb4program" value="true"/>
+        <property key="programoptions.preservedataflash" value="false"/>
         <property key="programoptions.preserveeeprom" value="false"/>
         <property key="programoptions.preserveprogramrange" value="false"/>
         <property key="programoptions.preserveprogramrange.end" value="0x1d01ffff"/>
         <property key="programoptions.preserveprogramrange.start" value="0x1d000000"/>
         <property key="programoptions.preserveuserid" value="false"/>
+        <property key="programoptions.programcalmem" value="false"/>
+        <property key="programoptions.programuserotp" value="false"/>
         <property key="programoptions.testmodeentrymethod" value="VPPFirst"/>
         <property key="programoptions.usehighvoltageonmclr" value="false"/>
         <property key="programoptions.uselvpprogramming" value="false"/>
         <property key="voltagevalue" value="3.25"/>
       </ICD3PlatformTool>
-      <item path="driver/source/lld_uart1.c" ex="false" overriding="true">
-        <C32>
-          <property key="additional-warnings" value="true"/>
-          <property key="enable-app-io" value="false"/>
-          <property key="enable-omit-frame-pointer" value="false"/>
-          <property key="enable-symbols" value="true"/>
-          <property key="enable-unroll-loops" value="false"/>
-          <property key="exclude-floating-point" value="true"/>
-          <property key="extra-include-directories"
-                    value="driver/include;application/include;esolid-base/inc;esolid-base/port/pic32-none-gcc/common;esolid-base/port/pic32-none-gcc/mips-m4k;esolid-base/port/pic32-none-gcc/pic32mx150f128d;esolid-eds/inc;esolid-mem/inc;esolid-vtimer/inc"/>
-          <property key="generate-16-bit-code" value="true"/>
-          <property key="generate-micro-compressed-code" value="false"/>
-          <property key="isolate-each-function" value="true"/>
-          <property key="make-warnings-into-errors" value="false"/>
-          <property key="optimization-level" value="-O1"/>
-          <property key="place-data-into-section" value="true"/>
-          <property key="post-instruction-scheduling" value="default"/>
-          <property key="pre-instruction-scheduling" value="default"/>
-          <property key="preprocessor-macros" value="_PLIB_DISABLE_LEGACY"/>
-          <property key="strict-ansi" value="true"/>
-          <property key="support-ansi" value="false"/>
-          <property key="use-cci" value="false"/>
-          <property key="use-iar" value="false"/>
-          <property key="use-indirect-calls" value="false"/>
-          <appendMe value="-Wextra"/>
-        </C32>
-        <C32-LD>
-          <property key="additional-options-use-response-files" value="false"/>
-          <property key="enable-check-sections" value="false"/>
-          <property key="exclude-floating-point-library" value="true"/>
-          <property key="exclude-standard-libraries" value="false"/>
-          <property key="extra-lib-directories" value=""/>
-          <property key="fill-flash-options-addr" value=""/>
-          <property key="fill-flash-options-const" value=""/>
-          <property key="fill-flash-options-how" value="0"/>
-          <property key="fill-flash-options-inc-const" value="1"/>
-          <property key="fill-flash-options-increment" value=""/>
-          <property key="fill-flash-options-seq" value=""/>
-          <property key="fill-flash-options-what" value="0"/>
-          <property key="generate-16-bit-code" value="false"/>
-          <property key="generate-cross-reference-file" value="false"/>
-          <property key="generate-micro-compressed-code" value="false"/>
-          <property key="heap-size" value=""/>
-          <property key="input-libraries" value=""/>
-          <property key="linker-symbols" value=""/>
-          <property key="map-file" value="${DISTDIR}/${PROJECTNAME}.${IMAGE_TYPE}.map"/>
-          <property key="no-startup-files" value="false"/>
-          <property key="oXC32ld-extra-opts" value=""/>
-          <property key="optimization-level" value="-Os"/>
-          <property key="preprocessor-macros" value=""/>
-          <property key="remove-unused-sections" value="true"/>
-          <property key="report-memory-usage" value="true"/>
-          <property key="stack-size" value="4096"/>
-          <property key="symbol-stripping" value=""/>
-          <property key="trace-symbols" value=""/>
-          <property key="warn-section-align" value="true"/>
-        </C32-LD>
-        <C32CPP>
-          <property key="additional-warnings" value="false"/>
-          <property key="check-new" value="false"/>
-          <property key="eh-specs" value="true"/>
-          <property key="enable-app-io" value="false"/>
-          <property key="enable-omit-frame-pointer" value="false"/>
-          <property key="enable-symbols" value="true"/>
-          <property key="enable-unroll-loops" value="false"/>
-          <property key="exceptions" value="true"/>
-          <property key="exclude-floating-point" value="false"/>
-          <property key="extra-include-directories" value=""/>
-          <property key="generate-16-bit-code" value="false"/>
-          <property key="generate-micro-compressed-code" value="false"/>
-          <property key="isolate-each-function" value="false"/>
-          <property key="make-warnings-into-errors" value="false"/>
-          <property key="optimization-level" value=""/>
-          <property key="place-data-into-section" value="false"/>
-          <property key="post-instruction-scheduling" value="default"/>
-          <property key="pre-instruction-scheduling" value="default"/>
-          <property key="preprocessor-macros" value=""/>
-          <property key="rtti" value="true"/>
-          <property key="strict-ansi" value="false"/>
-          <property key="use-cci" value="false"/>
-          <property key="use-iar" value="false"/>
-          <property key="use-indirect-calls" value="false"/>
-        </C32CPP>
-        <C32Global>
-          <property key="legacy-libc" value="false"/>
-          <property key="save-temps" value="false"/>
-          <property key="wpo-lto" value="false"/>
-        </C32Global>
-      </item>
-      <item path="esolid-base/src/prio_queue.c" ex="false" overriding="true">
-        <C32>
-          <property key="additional-warnings" value="true"/>
-          <property key="enable-app-io" value="false"/>
-          <property key="enable-omit-frame-pointer" value="false"/>
-          <property key="enable-symbols" value="true"/>
-          <property key="enable-unroll-loops" value="false"/>
-          <property key="exclude-floating-point" value="true"/>
-          <property key="extra-include-directories"
-                    value="driver/include;application/include;esolid-base/inc;esolid-base/port/pic32-none-gcc/common;esolid-base/port/pic32-none-gcc/mips-m4k;esolid-base/port/pic32-none-gcc/pic32mx150f128d;esolid-eds/inc;esolid-mem/inc;esolid-vtimer/inc"/>
-          <property key="generate-16-bit-code" value="true"/>
-          <property key="generate-micro-compressed-code" value="false"/>
-          <property key="isolate-each-function" value="true"/>
-          <property key="make-warnings-into-errors" value="false"/>
-          <property key="optimization-level" value="-O1"/>
-          <property key="place-data-into-section" value="true"/>
-          <property key="post-instruction-scheduling" value="default"/>
-          <property key="pre-instruction-scheduling" value="default"/>
-          <property key="preprocessor-macros" value="_PLIB_DISABLE_LEGACY"/>
-          <property key="strict-ansi" value="true"/>
-          <property key="support-ansi" value="false"/>
-          <property key="use-cci" value="false"/>
-          <property key="use-iar" value="false"/>
-          <property key="use-indirect-calls" value="false"/>
-          <appendMe value="-Wextra"/>
-        </C32>
-        <C32-AS>
-        </C32-AS>
-        <C32-LD>
-          <property key="additional-options-use-response-files" value="false"/>
-          <property key="enable-check-sections" value="false"/>
-          <property key="exclude-floating-point-library" value="true"/>
-          <property key="exclude-standard-libraries" value="false"/>
-          <property key="extra-lib-directories" value=""/>
-          <property key="fill-flash-options-addr" value=""/>
-          <property key="fill-flash-options-const" value=""/>
-          <property key="fill-flash-options-how" value="0"/>
-          <property key="fill-flash-options-inc-const" value="1"/>
-          <property key="fill-flash-options-increment" value=""/>
-          <property key="fill-flash-options-seq" value=""/>
-          <property key="fill-flash-options-what" value="0"/>
-          <property key="generate-16-bit-code" value="false"/>
-          <property key="generate-cross-reference-file" value="false"/>
-          <property key="generate-micro-compressed-code" value="false"/>
-          <property key="heap-size" value=""/>
-          <property key="input-libraries" value=""/>
-          <property key="linker-symbols" value=""/>
-          <property key="map-file" value="${DISTDIR}/${PROJECTNAME}.${IMAGE_TYPE}.map"/>
-          <property key="no-startup-files" value="false"/>
-          <property key="oXC32ld-extra-opts" value=""/>
-          <property key="optimization-level" value="-Os"/>
-          <property key="preprocessor-macros" value=""/>
-          <property key="remove-unused-sections" value="true"/>
-          <property key="report-memory-usage" value="true"/>
-          <property key="stack-size" value="4096"/>
-          <property key="symbol-stripping" value=""/>
-          <property key="trace-symbols" value=""/>
-          <property key="warn-section-align" value="true"/>
-        </C32-LD>
-        <C32CPP>
-          <property key="additional-warnings" value="false"/>
-          <property key="check-new" value="false"/>
-          <property key="eh-specs" value="true"/>
-          <property key="enable-app-io" value="false"/>
-          <property key="enable-omit-frame-pointer" value="false"/>
-          <property key="enable-symbols" value="true"/>
-          <property key="enable-unroll-loops" value="false"/>
-          <property key="exceptions" value="true"/>
-          <property key="exclude-floating-point" value="false"/>
-          <property key="extra-include-directories" value=""/>
-          <property key="generate-16-bit-code" value="false"/>
-          <property key="generate-micro-compressed-code" value="false"/>
-          <property key="isolate-each-function" value="false"/>
-          <property key="make-warnings-into-errors" value="false"/>
-          <property key="optimization-level" value=""/>
-          <property key="place-data-into-section" value="false"/>
-          <property key="post-instruction-scheduling" value="default"/>
-          <property key="pre-instruction-scheduling" value="default"/>
-          <property key="preprocessor-macros" value=""/>
-          <property key="rtti" value="true"/>
-          <property key="strict-ansi" value="false"/>
-          <property key="use-cci" value="false"/>
-          <property key="use-iar" value="false"/>
-          <property key="use-indirect-calls" value="false"/>
-        </C32CPP>
-        <C32Global>
-          <property key="legacy-libc" value="false"/>
-          <property key="save-temps" value="false"/>
-          <property key="wpo-lto" value="false"/>
-        </C32Global>
-      </item>
-      <item path="esolid-eds/src/epa.c" ex="false" overriding="true">
-        <C32>
-          <property key="additional-warnings" value="true"/>
-          <property key="enable-app-io" value="false"/>
-          <property key="enable-omit-frame-pointer" value="false"/>
-          <property key="enable-symbols" value="true"/>
-          <property key="enable-unroll-loops" value="false"/>
-          <property key="exclude-floating-point" value="true"/>
-          <property key="extra-include-directories"
-                    value="driver/include;application/include;esolid-base/inc;esolid-base/port/pic32-none-gcc/common;esolid-base/port/pic32-none-gcc/mips-m4k;esolid-base/port/pic32-none-gcc/pic32mx150f128d;esolid-eds/inc;esolid-mem/inc;esolid-vtimer/inc"/>
-          <property key="generate-16-bit-code" value="true"/>
-          <property key="generate-micro-compressed-code" value="false"/>
-          <property key="isolate-each-function" value="true"/>
-          <property key="make-warnings-into-errors" value="false"/>
-          <property key="optimization-level" value="-O1"/>
-          <property key="place-data-into-section" value="true"/>
-          <property key="post-instruction-scheduling" value="default"/>
-          <property key="pre-instruction-scheduling" value="default"/>
-          <property key="preprocessor-macros" value="_PLIB_DISABLE_LEGACY"/>
-          <property key="strict-ansi" value="true"/>
-          <property key="support-ansi" value="false"/>
-          <property key="use-cci" value="false"/>
-          <property key="use-iar" value="false"/>
-          <property key="use-indirect-calls" value="false"/>
-          <appendMe value="-Wextra"/>
-        </C32>
-        <C32-AS>
-        </C32-AS>
-        <C32-LD>
-          <property key="additional-options-use-response-files" value="false"/>
-          <property key="enable-check-sections" value="false"/>
-          <property key="exclude-floating-point-library" value="true"/>
-          <property key="exclude-standard-libraries" value="false"/>
-          <property key="extra-lib-directories" value=""/>
-          <property key="fill-flash-options-addr" value=""/>
-          <property key="fill-flash-options-const" value=""/>
-          <property key="fill-flash-options-how" value="0"/>
-          <property key="fill-flash-options-inc-const" value="1"/>
-          <property key="fill-flash-options-increment" value=""/>
-          <property key="fill-flash-options-seq" value=""/>
-          <property key="fill-flash-options-what" value="0"/>
-          <property key="generate-16-bit-code" value="false"/>
-          <property key="generate-cross-reference-file" value="false"/>
-          <property key="generate-micro-compressed-code" value="false"/>
-          <property key="heap-size" value=""/>
-          <property key="input-libraries" value=""/>
-          <property key="linker-symbols" value=""/>
-          <property key="map-file" value="${DISTDIR}/${PROJECTNAME}.${IMAGE_TYPE}.map"/>
-          <property key="no-startup-files" value="false"/>
-          <property key="oXC32ld-extra-opts" value=""/>
-          <property key="optimization-level" value="-Os"/>
-          <property key="preprocessor-macros" value=""/>
-          <property key="remove-unused-sections" value="true"/>
-          <property key="report-memory-usage" value="true"/>
-          <property key="stack-size" value="4096"/>
-          <property key="symbol-stripping" value=""/>
-          <property key="trace-symbols" value=""/>
-          <property key="warn-section-align" value="true"/>
-        </C32-LD>
-        <C32CPP>
-          <property key="additional-warnings" value="false"/>
-          <property key="check-new" value="false"/>
-          <property key="eh-specs" value="true"/>
-          <property key="enable-app-io" value="false"/>
-          <property key="enable-omit-frame-pointer" value="false"/>
-          <property key="enable-symbols" value="true"/>
-          <property key="enable-unroll-loops" value="false"/>
-          <property key="exceptions" value="true"/>
-          <property key="exclude-floating-point" value="false"/>
-          <property key="extra-include-directories" value=""/>
-          <property key="generate-16-bit-code" value="false"/>
-          <property key="generate-micro-compressed-code" value="false"/>
-          <property key="isolate-each-function" value="false"/>
-          <property key="make-warnings-into-errors" value="false"/>
-          <property key="optimization-level" value=""/>
-          <property key="place-data-into-section" value="false"/>
-          <property key="post-instruction-scheduling" value="default"/>
-          <property key="pre-instruction-scheduling" value="default"/>
-          <property key="preprocessor-macros" value=""/>
-          <property key="rtti" value="true"/>
-          <property key="strict-ansi" value="false"/>
-          <property key="use-cci" value="false"/>
-          <property key="use-iar" value="false"/>
-          <property key="use-indirect-calls" value="false"/>
-        </C32CPP>
-        <C32Global>
-          <property key="legacy-libc" value="false"/>
-          <property key="save-temps" value="false"/>
-          <property key="wpo-lto" value="false"/>
-        </C32Global>
-      </item>
-      <item path="esolid-eds/src/event.c" ex="false" overriding="true">
-        <C32>
-          <property key="additional-warnings" value="true"/>
-          <property key="enable-app-io" value="false"/>
-          <property key="enable-omit-frame-pointer" value="false"/>
-          <property key="enable-symbols" value="true"/>
-          <property key="enable-unroll-loops" value="false"/>
-          <property key="exclude-floating-point" value="true"/>
-          <property key="extra-include-directories"
-                    value="driver/include;application/include;esolid-base/inc;esolid-base/port/pic32-none-gcc/common;esolid-base/port/pic32-none-gcc/mips-m4k;esolid-base/port/pic32-none-gcc/pic32mx150f128d;esolid-eds/inc;esolid-mem/inc;esolid-vtimer/inc"/>
-          <property key="generate-16-bit-code" value="true"/>
-          <property key="generate-micro-compressed-code" value="false"/>
-          <property key="isolate-each-function" value="true"/>
-          <property key="make-warnings-into-errors" value="false"/>
-          <property key="optimization-level" value="-O1"/>
-          <property key="place-data-into-section" value="true"/>
-          <property key="post-instruction-scheduling" value="default"/>
-          <property key="pre-instruction-scheduling" value="default"/>
-          <property key="preprocessor-macros" value="_PLIB_DISABLE_LEGACY"/>
-          <property key="strict-ansi" value="true"/>
-          <property key="support-ansi" value="false"/>
-          <property key="use-cci" value="false"/>
-          <property key="use-iar" value="false"/>
-          <property key="use-indirect-calls" value="false"/>
-          <appendMe value="-Wextra"/>
-        </C32>
-        <C32-AS>
-        </C32-AS>
-        <C32-LD>
-          <property key="additional-options-use-response-files" value="false"/>
-          <property key="enable-check-sections" value="false"/>
-          <property key="exclude-floating-point-library" value="true"/>
-          <property key="exclude-standard-libraries" value="false"/>
-          <property key="extra-lib-directories" value=""/>
-          <property key="fill-flash-options-addr" value=""/>
-          <property key="fill-flash-options-const" value=""/>
-          <property key="fill-flash-options-how" value="0"/>
-          <property key="fill-flash-options-inc-const" value="1"/>
-          <property key="fill-flash-options-increment" value=""/>
-          <property key="fill-flash-options-seq" value=""/>
-          <property key="fill-flash-options-what" value="0"/>
-          <property key="generate-16-bit-code" value="false"/>
-          <property key="generate-cross-reference-file" value="false"/>
-          <property key="generate-micro-compressed-code" value="false"/>
-          <property key="heap-size" value=""/>
-          <property key="input-libraries" value=""/>
-          <property key="linker-symbols" value=""/>
-          <property key="map-file" value="${DISTDIR}/${PROJECTNAME}.${IMAGE_TYPE}.map"/>
-          <property key="no-startup-files" value="false"/>
-          <property key="oXC32ld-extra-opts" value=""/>
-          <property key="optimization-level" value="-Os"/>
-          <property key="preprocessor-macros" value=""/>
-          <property key="remove-unused-sections" value="true"/>
-          <property key="report-memory-usage" value="true"/>
-          <property key="stack-size" value="4096"/>
-          <property key="symbol-stripping" value=""/>
-          <property key="trace-symbols" value=""/>
-          <property key="warn-section-align" value="true"/>
-        </C32-LD>
-        <C32CPP>
-          <property key="additional-warnings" value="false"/>
-          <property key="check-new" value="false"/>
-          <property key="eh-specs" value="true"/>
-          <property key="enable-app-io" value="false"/>
-          <property key="enable-omit-frame-pointer" value="false"/>
-          <property key="enable-symbols" value="true"/>
-          <property key="enable-unroll-loops" value="false"/>
-          <property key="exceptions" value="true"/>
-          <property key="exclude-floating-point" value="false"/>
-          <property key="extra-include-directories" value=""/>
-          <property key="generate-16-bit-code" value="false"/>
-          <property key="generate-micro-compressed-code" value="false"/>
-          <property key="isolate-each-function" value="false"/>
-          <property key="make-warnings-into-errors" value="false"/>
-          <property key="optimization-level" value=""/>
-          <property key="place-data-into-section" value="false"/>
-          <property key="post-instruction-scheduling" value="default"/>
-          <property key="pre-instruction-scheduling" value="default"/>
-          <property key="preprocessor-macros" value=""/>
-          <property key="rtti" value="true"/>
-          <property key="strict-ansi" value="false"/>
-          <property key="use-cci" value="false"/>
-          <property key="use-iar" value="false"/>
-          <property key="use-indirect-calls" value="false"/>
-        </C32CPP>
-        <C32Global>
-          <property key="legacy-libc" value="false"/>
-          <property key="save-temps" value="false"/>
-          <property key="wpo-lto" value="false"/>
-        </C32Global>
-      </item>
-      <item path="esolid-eds/src/smp.c" ex="false" overriding="true">
-        <C32>
-          <property key="additional-warnings" value="true"/>
-          <property key="enable-app-io" value="false"/>
-          <property key="enable-omit-frame-pointer" value="false"/>
-          <property key="enable-symbols" value="true"/>
-          <property key="enable-unroll-loops" value="false"/>
-          <property key="exclude-floating-point" value="true"/>
-          <property key="extra-include-directories"
-                    value="driver/include;application/include;esolid-base/inc;esolid-base/port/pic32-none-gcc/common;esolid-base/port/pic32-none-gcc/mips-m4k;esolid-base/port/pic32-none-gcc/pic32mx150f128d;esolid-eds/inc;esolid-mem/inc;esolid-vtimer/inc"/>
-          <property key="generate-16-bit-code" value="true"/>
-          <property key="generate-micro-compressed-code" value="false"/>
-          <property key="isolate-each-function" value="true"/>
-          <property key="make-warnings-into-errors" value="false"/>
-          <property key="optimization-level" value="-O1"/>
-          <property key="place-data-into-section" value="true"/>
-          <property key="post-instruction-scheduling" value="default"/>
-          <property key="pre-instruction-scheduling" value="default"/>
-          <property key="preprocessor-macros" value="_PLIB_DISABLE_LEGACY"/>
-          <property key="strict-ansi" value="true"/>
-          <property key="support-ansi" value="false"/>
-          <property key="use-cci" value="false"/>
-          <property key="use-iar" value="false"/>
-          <property key="use-indirect-calls" value="false"/>
-          <appendMe value="-Wextra"/>
-        </C32>
-        <C32-AS>
-        </C32-AS>
-        <C32-LD>
-          <property key="additional-options-use-response-files" value="false"/>
-          <property key="enable-check-sections" value="false"/>
-          <property key="exclude-floating-point-library" value="true"/>
-          <property key="exclude-standard-libraries" value="false"/>
-          <property key="extra-lib-directories" value=""/>
-          <property key="fill-flash-options-addr" value=""/>
-          <property key="fill-flash-options-const" value=""/>
-          <property key="fill-flash-options-how" value="0"/>
-          <property key="fill-flash-options-inc-const" value="1"/>
-          <property key="fill-flash-options-increment" value=""/>
-          <property key="fill-flash-options-seq" value=""/>
-          <property key="fill-flash-options-what" value="0"/>
-          <property key="generate-16-bit-code" value="false"/>
-          <property key="generate-cross-reference-file" value="false"/>
-          <property key="generate-micro-compressed-code" value="false"/>
-          <property key="heap-size" value=""/>
-          <property key="input-libraries" value=""/>
-          <property key="linker-symbols" value=""/>
-          <property key="map-file" value="${DISTDIR}/${PROJECTNAME}.${IMAGE_TYPE}.map"/>
-          <property key="no-startup-files" value="false"/>
-          <property key="oXC32ld-extra-opts" value=""/>
-          <property key="optimization-level" value="-Os"/>
-          <property key="preprocessor-macros" value=""/>
-          <property key="remove-unused-sections" value="true"/>
-          <property key="report-memory-usage" value="true"/>
-          <property key="stack-size" value="4096"/>
-          <property key="symbol-stripping" value=""/>
-          <property key="trace-symbols" value=""/>
-          <property key="warn-section-align" value="true"/>
-        </C32-LD>
-        <C32CPP>
-          <property key="additional-warnings" value="false"/>
-          <property key="check-new" value="false"/>
-          <property key="eh-specs" value="true"/>
-          <property key="enable-app-io" value="false"/>
-          <property key="enable-omit-frame-pointer" value="false"/>
-          <property key="enable-symbols" value="true"/>
-          <property key="enable-unroll-loops" value="false"/>
-          <property key="exceptions" value="true"/>
-          <property key="exclude-floating-point" value="false"/>
-          <property key="extra-include-directories" value=""/>
-          <property key="generate-16-bit-code" value="false"/>
-          <property key="generate-micro-compressed-code" value="false"/>
-          <property key="isolate-each-function" value="false"/>
-          <property key="make-warnings-into-errors" value="false"/>
-          <property key="optimization-level" value=""/>
-          <property key="place-data-into-section" value="false"/>
-          <property key="post-instruction-scheduling" value="default"/>
-          <property key="pre-instruction-scheduling" value="default"/>
-          <property key="preprocessor-macros" value=""/>
-          <property key="rtti" value="true"/>
-          <property key="strict-ansi" value="false"/>
-          <property key="use-cci" value="false"/>
-          <property key="use-iar" value="false"/>
-          <property key="use-indirect-calls" value="false"/>
-        </C32CPP>
-        <C32Global>
-          <property key="legacy-libc" value="false"/>
-          <property key="save-temps" value="false"/>
-          <property key="wpo-lto" value="false"/>
-        </C32Global>
-      </item>
-      <item path="esolid-mem/src/heap.c" ex="false" overriding="true">
-        <C32>
-          <property key="additional-warnings" value="true"/>
-          <property key="enable-app-io" value="false"/>
-          <property key="enable-omit-frame-pointer" value="false"/>
-          <property key="enable-symbols" value="true"/>
-          <property key="enable-unroll-loops" value="false"/>
-          <property key="exclude-floating-point" value="true"/>
-          <property key="extra-include-directories"
-                    value="driver/include;application/include;esolid-base/inc;esolid-base/port/pic32-none-gcc/common;esolid-base/port/pic32-none-gcc/mips-m4k;esolid-base/port/pic32-none-gcc/pic32mx150f128d;esolid-eds/inc;esolid-mem/inc;esolid-vtimer/inc"/>
-          <property key="generate-16-bit-code" value="true"/>
-          <property key="generate-micro-compressed-code" value="false"/>
-          <property key="isolate-each-function" value="true"/>
-          <property key="make-warnings-into-errors" value="false"/>
-          <property key="optimization-level" value="-O1"/>
-          <property key="place-data-into-section" value="true"/>
-          <property key="post-instruction-scheduling" value="default"/>
-          <property key="pre-instruction-scheduling" value="default"/>
-          <property key="preprocessor-macros" value="_PLIB_DISABLE_LEGACY"/>
-          <property key="strict-ansi" value="true"/>
-          <property key="support-ansi" value="false"/>
-          <property key="use-cci" value="false"/>
-          <property key="use-iar" value="false"/>
-          <property key="use-indirect-calls" value="false"/>
-          <appendMe value="-Wextra"/>
-        </C32>
-        <C32-AS>
-        </C32-AS>
-        <C32-LD>
-          <property key="additional-options-use-response-files" value="false"/>
-          <property key="enable-check-sections" value="false"/>
-          <property key="exclude-floating-point-library" value="true"/>
-          <property key="exclude-standard-libraries" value="false"/>
-          <property key="extra-lib-directories" value=""/>
-          <property key="fill-flash-options-addr" value=""/>
-          <property key="fill-flash-options-const" value=""/>
-          <property key="fill-flash-options-how" value="0"/>
-          <property key="fill-flash-options-inc-const" value="1"/>
-          <property key="fill-flash-options-increment" value=""/>
-          <property key="fill-flash-options-seq" value=""/>
-          <property key="fill-flash-options-what" value="0"/>
-          <property key="generate-16-bit-code" value="false"/>
-          <property key="generate-cross-reference-file" value="false"/>
-          <property key="generate-micro-compressed-code" value="false"/>
-          <property key="heap-size" value=""/>
-          <property key="input-libraries" value=""/>
-          <property key="linker-symbols" value=""/>
-          <property key="map-file" value="${DISTDIR}/${PROJECTNAME}.${IMAGE_TYPE}.map"/>
-          <property key="no-startup-files" value="false"/>
-          <property key="oXC32ld-extra-opts" value=""/>
-          <property key="optimization-level" value="-Os"/>
-          <property key="preprocessor-macros" value=""/>
-          <property key="remove-unused-sections" value="true"/>
-          <property key="report-memory-usage" value="true"/>
-          <property key="stack-size" value="4096"/>
-          <property key="symbol-stripping" value=""/>
-          <property key="trace-symbols" value=""/>
-          <property key="warn-section-align" value="true"/>
-        </C32-LD>
-        <C32CPP>
-          <property key="additional-warnings" value="false"/>
-          <property key="check-new" value="false"/>
-          <property key="eh-specs" value="true"/>
-          <property key="enable-app-io" value="false"/>
-          <property key="enable-omit-frame-pointer" value="false"/>
-          <property key="enable-symbols" value="true"/>
-          <property key="enable-unroll-loops" value="false"/>
-          <property key="exceptions" value="true"/>
-          <property key="exclude-floating-point" value="false"/>
-          <property key="extra-include-directories" value=""/>
-          <property key="generate-16-bit-code" value="false"/>
-          <property key="generate-micro-compressed-code" value="false"/>
-          <property key="isolate-each-function" value="false"/>
-          <property key="make-warnings-into-errors" value="false"/>
-          <property key="optimization-level" value=""/>
-          <property key="place-data-into-section" value="false"/>
-          <property key="post-instruction-scheduling" value="default"/>
-          <property key="pre-instruction-scheduling" value="default"/>
-          <property key="preprocessor-macros" value=""/>
-          <property key="rtti" value="true"/>
-          <property key="strict-ansi" value="false"/>
-          <property key="use-cci" value="false"/>
-          <property key="use-iar" value="false"/>
-          <property key="use-indirect-calls" value="false"/>
-        </C32CPP>
-        <C32Global>
-          <property key="legacy-libc" value="false"/>
-          <property key="save-temps" value="false"/>
-          <property key="wpo-lto" value="false"/>
-        </C32Global>
-      </item>
-      <item path="esolid-mem/src/mem_class.c" ex="false" overriding="false">
-        <C32>
-          <property key="additional-warnings" value="true"/>
-          <property key="enable-app-io" value="false"/>
-          <property key="enable-omit-frame-pointer" value="false"/>
-          <property key="enable-symbols" value="true"/>
-          <property key="enable-unroll-loops" value="false"/>
-          <property key="exclude-floating-point" value="true"/>
-          <property key="extra-include-directories"
-                    value="driver/include;application/include;esolid-base/inc;esolid-base/port/pic32-none-gcc/common;esolid-base/port/pic32-none-gcc/mips-m4k;esolid-base/port/pic32-none-gcc/pic32mx150f128d;esolid-eds/inc;esolid-mem/inc;esolid-vtimer/inc"/>
-          <property key="generate-16-bit-code" value="true"/>
-          <property key="generate-micro-compressed-code" value="false"/>
-          <property key="isolate-each-function" value="true"/>
-          <property key="make-warnings-into-errors" value="false"/>
-          <property key="optimization-level" value="-O1"/>
-          <property key="place-data-into-section" value="true"/>
-          <property key="post-instruction-scheduling" value="default"/>
-          <property key="pre-instruction-scheduling" value="default"/>
-          <property key="preprocessor-macros" value="_PLIB_DISABLE_LEGACY"/>
-          <property key="strict-ansi" value="true"/>
-          <property key="support-ansi" value="false"/>
-          <property key="use-cci" value="false"/>
-          <property key="use-iar" value="false"/>
-          <property key="use-indirect-calls" value="false"/>
-          <appendMe value="-Wextra"/>
-        </C32>
-        <C32-AS>
-        </C32-AS>
-        <C32-LD>
-          <property key="additional-options-use-response-files" value="false"/>
-          <property key="enable-check-sections" value="false"/>
-          <property key="exclude-floating-point-library" value="true"/>
-          <property key="exclude-standard-libraries" value="false"/>
-          <property key="extra-lib-directories" value=""/>
-          <property key="fill-flash-options-addr" value=""/>
-          <property key="fill-flash-options-const" value=""/>
-          <property key="fill-flash-options-how" value="0"/>
-          <property key="fill-flash-options-inc-const" value="1"/>
-          <property key="fill-flash-options-increment" value=""/>
-          <property key="fill-flash-options-seq" value=""/>
-          <property key="fill-flash-options-what" value="0"/>
-          <property key="generate-16-bit-code" value="false"/>
-          <property key="generate-cross-reference-file" value="false"/>
-          <property key="generate-micro-compressed-code" value="false"/>
-          <property key="heap-size" value=""/>
-          <property key="input-libraries" value=""/>
-          <property key="linker-symbols" value=""/>
-          <property key="map-file" value="${DISTDIR}/${PROJECTNAME}.${IMAGE_TYPE}.map"/>
-          <property key="no-startup-files" value="false"/>
-          <property key="oXC32ld-extra-opts" value=""/>
-          <property key="optimization-level" value="-Os"/>
-          <property key="preprocessor-macros" value=""/>
-          <property key="remove-unused-sections" value="true"/>
-          <property key="report-memory-usage" value="true"/>
-          <property key="stack-size" value="4096"/>
-          <property key="symbol-stripping" value=""/>
-          <property key="trace-symbols" value=""/>
-          <property key="warn-section-align" value="true"/>
-        </C32-LD>
-        <C32CPP>
-          <property key="additional-warnings" value="false"/>
-          <property key="check-new" value="false"/>
-          <property key="eh-specs" value="true"/>
-          <property key="enable-app-io" value="false"/>
-          <property key="enable-omit-frame-pointer" value="false"/>
-          <property key="enable-symbols" value="true"/>
-          <property key="enable-unroll-loops" value="false"/>
-          <property key="exceptions" value="true"/>
-          <property key="exclude-floating-point" value="false"/>
-          <property key="extra-include-directories" value=""/>
-          <property key="generate-16-bit-code" value="false"/>
-          <property key="generate-micro-compressed-code" value="false"/>
-          <property key="isolate-each-function" value="false"/>
-          <property key="make-warnings-into-errors" value="false"/>
-          <property key="optimization-level" value=""/>
-          <property key="place-data-into-section" value="false"/>
-          <property key="post-instruction-scheduling" value="default"/>
-          <property key="pre-instruction-scheduling" value="default"/>
-          <property key="preprocessor-macros" value=""/>
-          <property key="rtti" value="true"/>
-          <property key="strict-ansi" value="false"/>
-          <property key="use-cci" value="false"/>
-          <property key="use-iar" value="false"/>
-          <property key="use-indirect-calls" value="false"/>
-        </C32CPP>
-        <C32Global>
-          <property key="legacy-libc" value="false"/>
-          <property key="save-temps" value="false"/>
-          <property key="wpo-lto" value="false"/>
-        </C32Global>
-      </item>
-      <item path="esolid-vtimer/src/vtimer.c" ex="false" overriding="true">
-        <C32>
-          <property key="additional-warnings" value="true"/>
-          <property key="enable-app-io" value="false"/>
-          <property key="enable-omit-frame-pointer" value="false"/>
-          <property key="enable-symbols" value="true"/>
-          <property key="enable-unroll-loops" value="false"/>
-          <property key="exclude-floating-point" value="true"/>
-          <property key="extra-include-directories"
-                    value="driver/include;application/include;esolid-base/inc;esolid-base/port/pic32-none-gcc/common;esolid-base/port/pic32-none-gcc/mips-m4k;esolid-base/port/pic32-none-gcc/pic32mx150f128d;esolid-eds/inc;esolid-mem/inc;esolid-vtimer/inc"/>
-          <property key="generate-16-bit-code" value="true"/>
-          <property key="generate-micro-compressed-code" value="false"/>
-          <property key="isolate-each-function" value="true"/>
-          <property key="make-warnings-into-errors" value="false"/>
-          <property key="optimization-level" value="-O1"/>
-          <property key="place-data-into-section" value="true"/>
-          <property key="post-instruction-scheduling" value="default"/>
-          <property key="pre-instruction-scheduling" value="default"/>
-          <property key="preprocessor-macros" value="_PLIB_DISABLE_LEGACY"/>
-          <property key="strict-ansi" value="true"/>
-          <property key="support-ansi" value="false"/>
-          <property key="use-cci" value="false"/>
-          <property key="use-iar" value="false"/>
-          <property key="use-indirect-calls" value="false"/>
-          <appendMe value="-Wextra"/>
-        </C32>
-        <C32-AS>
-        </C32-AS>
-        <C32-LD>
-          <property key="additional-options-use-response-files" value="false"/>
-          <property key="enable-check-sections" value="false"/>
-          <property key="exclude-floating-point-library" value="true"/>
-          <property key="exclude-standard-libraries" value="false"/>
-          <property key="extra-lib-directories" value=""/>
-          <property key="fill-flash-options-addr" value=""/>
-          <property key="fill-flash-options-const" value=""/>
-          <property key="fill-flash-options-how" value="0"/>
-          <property key="fill-flash-options-inc-const" value="1"/>
-          <property key="fill-flash-options-increment" value=""/>
-          <property key="fill-flash-options-seq" value=""/>
-          <property key="fill-flash-options-what" value="0"/>
-          <property key="generate-16-bit-code" value="false"/>
-          <property key="generate-cross-reference-file" value="false"/>
-          <property key="generate-micro-compressed-code" value="false"/>
-          <property key="heap-size" value=""/>
-          <property key="input-libraries" value=""/>
-          <property key="linker-symbols" value=""/>
-          <property key="map-file" value="${DISTDIR}/${PROJECTNAME}.${IMAGE_TYPE}.map"/>
-          <property key="no-startup-files" value="false"/>
-          <property key="oXC32ld-extra-opts" value=""/>
-          <property key="optimization-level" value="-Os"/>
-          <property key="preprocessor-macros" value=""/>
-          <property key="remove-unused-sections" value="true"/>
-          <property key="report-memory-usage" value="true"/>
-          <property key="stack-size" value="4096"/>
-          <property key="symbol-stripping" value=""/>
-          <property key="trace-symbols" value=""/>
-          <property key="warn-section-align" value="true"/>
-        </C32-LD>
-        <C32CPP>
-          <property key="additional-warnings" value="false"/>
-          <property key="check-new" value="false"/>
-          <property key="eh-specs" value="true"/>
-          <property key="enable-app-io" value="false"/>
-          <property key="enable-omit-frame-pointer" value="false"/>
-          <property key="enable-symbols" value="true"/>
-          <property key="enable-unroll-loops" value="false"/>
-          <property key="exceptions" value="true"/>
-          <property key="exclude-floating-point" value="false"/>
-          <property key="extra-include-directories" value=""/>
-          <property key="generate-16-bit-code" value="false"/>
-          <property key="generate-micro-compressed-code" value="false"/>
-          <property key="isolate-each-function" value="false"/>
-          <property key="make-warnings-into-errors" value="false"/>
-          <property key="optimization-level" value=""/>
-          <property key="place-data-into-section" value="false"/>
-          <property key="post-instruction-scheduling" value="default"/>
-          <property key="pre-instruction-scheduling" value="default"/>
-          <property key="preprocessor-macros" value=""/>
-          <property key="rtti" value="true"/>
-          <property key="strict-ansi" value="false"/>
-          <property key="use-cci" value="false"/>
-          <property key="use-iar" value="false"/>
-          <property key="use-indirect-calls" value="false"/>
-        </C32CPP>
-        <C32Global>
-          <property key="legacy-libc" value="false"/>
-          <property key="save-temps" value="false"/>
-          <property key="wpo-lto" value="false"/>
-        </C32Global>
-      </item>
     </conf>
   </confs>
 </configurationDescriptor>
