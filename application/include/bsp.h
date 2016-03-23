@@ -27,48 +27,9 @@ extern "C" {
 /**@brief       Initialize Board Support Package
  * @details     This function will initialize basic system clocks
  */
-void initBsp(
+void bsp_init(
     void);
 
-void initCPumpDriver(
-    void);
-void cpumpEnable(
-    void);
-void cpumpDisable(
-    void);
-
-void initRadioChargerDriver(
-    void);
-void radioChargerEnable(
-    void);
-void radioChargerDisable(
-    void);
-
-void initBattChargerDriver(
-    void);
-bool isBatteryCharging(
-    void);
-
-void initAudioSwitch(
-    void);
-
-void audioSwitchToRadio(
-    void);
-
-void audioSwitchToCodec(
-    void);
-
-void initNotifyLed(
-    void);
-
-void notifyLedRed(
-    void);
-
-void notifyLedGreen(
-    void);
-
-void notifyLedOff(
-    void);
 
 /*--------------------------------------------------------  C++ extern end  --*/
 #ifdef __cplusplus

@@ -10,14 +10,7 @@
 
 /*=========================================================  INCLUDE FILES  ==*/
 
-#include "epa_btdrv.h"
-#include "epa_btman.h"
-#include "epa_codec.h"
-#include "epa_radio.h"
-#include "epa_serial.h"
-#include "epa_sync.h"
-#include "epa_notification.h"
-#include "epa_control.h"
+#include "neon_eds.h"
 
 /*===============================================================  MACRO's  ==*/
 

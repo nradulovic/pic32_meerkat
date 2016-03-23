@@ -9,12 +9,8 @@
 #include <string.h>
 #include <xc.h>
 
-#include "app_timer.h"
 #include "base/debug.h"
 
-static char file[100];
-static char function[100];
-static char expression[100];
 
 static volatile unsigned int _excep_code;
 static volatile unsigned int _excep_addr;
@@ -23,14 +19,21 @@ static volatile unsigned int _excep_vaddr;
 /* NOTE: This function will be called when an error is detected within the
  *       eSolid packages. For details please see base/debug.h
  */
-void userAssert(
-    const struct esDebugReport * dbgReport) {
-
-    strcpy(file,       dbgReport->modFile);
-    strcpy(function,   dbgReport->fnName);
-    strcpy(expression, dbgReport->expr);
-
-    while (true);
+PORT_C_NORETURN
+void hook_at_assert(
+    const struct ncomponent_info * component_info,
+    const char *     			fn,
+    uint32_t                    line,
+    const char *     			expr,
+    const char *     			msg)
+{
+    (void)component_info;
+    (void)fn;
+    (void)line;
+    (void)expr;
+    (void)msg;
+    
+    for (;;);
 }
 
 void _general_exception_handler(void) 
